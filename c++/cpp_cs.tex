@@ -1,4 +1,4 @@
-\documentclass[a4paper,10pt]{article}
+\documentclass[a4paper,11pt]{article}
 \usepackage[margin=1.5cm]{geometry}
 \usepackage{multicol}
 \usepackage{listings}
@@ -16,25 +16,62 @@
     {\Large \textbf{Formulario C++}}\\
 \end{center}
 
-\begin{multicols}{2}
+% \begin{multicols}{2}
 
 \section*{Estructura básica}
-\begin{lstlisting}
-#include <iostream>
+\begin{multicols}{2}
+    %lstlisting muestra código fuente 
+\begin{lstlisting}  
+  
+#include <iostream> 
+#include "iostream"
 using namespace std;
-
 int main() {
     cout << "Hola";
     return 0;
 }
 \end{lstlisting}
 
-\section*{Tipos}
-\begin{itemize}
-    \item \texttt{int, float, double}
-    \item \texttt{char, bool}
-    \item \texttt{std::string}
-\end{itemize}
+\columnbreak
+
+La diferencia entre 
+\begin{lstlisting}
+#include <iostream> y #include "filename" 
+\end{lstlisting}
+
+es la forma en la que el compilador busca los archivos. 
+Con \textbf{$<$ $>$} el compilador busca el archivo en una dirección estandar, 
+mientras que con \textbf{$"$ $"$}, el archivo se busca primero en el directorio del proyecto.
+Si no se encuentra ahí, entonces lo busca como con \textbf{$<$ $>$}.
+
+\end{multicols}
+
+
+\section*{Tipos de Datos}
+\begin{center}
+\begin{tabular}{| c | c | c | c |}
+        \hline
+        Type & Size (bytes) & Ejemplo & Descripción\\
+        \hline\hline
+        int & 4 bytes & int x = 10 & Números enteros \\
+        \hline
+        char & 1 byte & char c = 'A' & Un sólo caracter \\
+        \hline
+        short & 2 bytes & short s = 100 & Entero pequeño \\
+        \hline
+        long & 4-8 bytes & long l = 100000 & Entero grande \\
+        \hline
+        float & 4 bytes & float f = 10.5 & Decimal Single-precision \\
+        \hline 
+        double & 8 bytes & double d = 10.55 & Decimal Double-precision \\
+        \hline
+        bool & 1 byte & bool b = true & True/False Values \\
+        \hline
+        pointer & 4-8 bytes & int * p = \&v ('v' being a int-type) & Guarda dirección de memoria de una variable\\
+        \hline
+\end{tabular}
+\end{center}
+    
 
 \section*{Control}
 \begin{lstlisting}
@@ -73,5 +110,5 @@ public:
     \item \texttt{g++ -std=c++17 file.cpp}
 \end{itemize}
 
-\end{multicols}
+% \end{multicols}
 \end{document}
