@@ -1,0 +1,61 @@
+\documentclass[a4paper,10pt]{article}
+\usepackage[margin=1.5cm]{geometry}
+\usepackage{multicol}
+\usepackage{listings}
+
+\begin{document}
+\begin{center}
+{\Large \textbf{Multithreading en C++}}
+\end{center}
+
+\begin{multicols}{2}
+
+\section*{Headers}
+\texttt{<thread>, <mutex>, <atomic>, <condition\_variable>}
+
+\section*{Crear un hilo}
+\begin{lstlisting}
+#include <thread>
+
+void f() {}
+
+int main() {
+    std::thread t(f);
+    t.join();
+}
+\end{lstlisting}
+
+\section*{Lambda}
+\begin{lstlisting}
+std::thread t([](){
+    // codigo
+});
+\end{lstlisting}
+
+\section*{Mutex}
+\begin{lstlisting}
+std::mutex m;
+m.lock();
+m.unlock();
+\end{lstlisting}
+
+\section*{Lock guard}
+\begin{lstlisting}
+std::lock_guard<std::mutex> g(m);
+\end{lstlisting}
+
+\section*{Atomic}
+\begin{lstlisting}
+std::atomic<int> x{0};
+x++;
+\end{lstlisting}
+
+\section*{Condition Variable}
+\begin{lstlisting}
+std::condition_variable cv;
+cv.wait(lock);
+cv.notify_one();
+\end{lstlisting}
+
+\end{multicols}
+\end{document}

@@ -1,0 +1,68 @@
+\documentclass[a4paper,10pt]{article}
+\usepackage[margin=1.5cm]{geometry}
+\usepackage{multicol}
+\usepackage{listings}
+\usepackage{xcolor}
+
+\lstset{
+  basicstyle=\ttfamily\small,
+  keywordstyle=\color{blue},
+  commentstyle=\color{gray}
+}
+
+\begin{document}
+
+\begin{center}
+    {\Large \textbf{Formulario Python}}\\
+\end{center}
+
+\begin{multicols}{2}
+
+\section*{Sintaxis básica}
+\begin{lstlisting}
+x = 5
+print(x)
+\end{lstlisting}
+
+\section*{Estructuras}
+\begin{lstlisting}
+if x > 0:
+    pass
+
+for i in range(10):
+    pass
+\end{lstlisting}
+
+\section*{Funciones}
+\begin{lstlisting}
+def suma(a, b):
+    return a + b
+\end{lstlisting}
+
+\section*{Listas y diccionarios}
+\begin{lstlisting}
+lst = [1,2,3]
+d = {"a": 1}
+\end{lstlisting}
+
+\section*{Comprensiones}
+\begin{lstlisting}
+[x*x for x in range(5)]
+\end{lstlisting}
+
+\section*{Clases}
+\begin{lstlisting}
+class A:
+    def __init__(self, x):
+        self.x = x
+\end{lstlisting}
+
+\section*{Entornos y paquetes}
+\begin{itemize}
+    \item \texttt{pip install pkg}
+    \item \texttt{python -m venv venv}
+    \item \texttt{source venv/bin/activate}
+\end{itemize}
+
+\end{multicols}
+\end{document}

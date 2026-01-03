@@ -1,0 +1,77 @@
+\documentclass[a4paper,10pt]{article}
+\usepackage[margin=1.5cm]{geometry}
+\usepackage{multicol}
+\usepackage{listings}
+\usepackage{xcolor}
+
+\lstset{
+  basicstyle=\ttfamily\small,
+  keywordstyle=\color{blue},
+  commentstyle=\color{gray}
+}
+
+\begin{document}
+
+\begin{center}
+    {\Large \textbf{Formulario C++}}\\
+\end{center}
+
+\begin{multicols}{2}
+
+\section*{Estructura básica}
+\begin{lstlisting}
+#include <iostream>
+using namespace std;
+
+int main() {
+    cout << "Hola";
+    return 0;
+}
+\end{lstlisting}
+
+\section*{Tipos}
+\begin{itemize}
+    \item \texttt{int, float, double}
+    \item \texttt{char, bool}
+    \item \texttt{std::string}
+\end{itemize}
+
+\section*{Control}
+\begin{lstlisting}
+if (x > 0) {}
+for (int i=0;i<n;i++) {}
+while(cond) {}
+\end{lstlisting}
+
+\section*{Funciones}
+\begin{lstlisting}
+int suma(int a, int b) {
+    return a + b;
+}
+\end{lstlisting}
+
+\section*{Clases}
+\begin{lstlisting}
+class A {
+public:
+    int x;
+    A(int v): x(v) {}
+};
+\end{lstlisting}
+
+\section*{STL}
+\begin{itemize}
+    \item \texttt{vector<T>}
+    \item \texttt{map<K,V>}
+    \item \texttt{set<T>}
+    \item \texttt{unordered\_map}
+\end{itemize}
+
+\section*{Compilación}
+\begin{itemize}
+    \item \texttt{g++ main.cpp -o main}
+    \item \texttt{g++ -std=c++17 file.cpp}
+\end{itemize}
+
+\end{multicols}
+\end{document}

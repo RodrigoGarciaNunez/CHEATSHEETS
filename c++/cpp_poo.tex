@@ -1,0 +1,52 @@
+\documentclass[a4paper,10pt]{article}
+\usepackage[margin=1.5cm]{geometry}
+\usepackage{multicol}
+\usepackage{listings}
+
+\begin{document}
+\begin{center}
+{\Large \textbf{POO en C++}}
+\end{center}
+
+\begin{multicols}{2}
+
+\section*{Clase}
+\begin{lstlisting}
+class A {
+public:
+    int x;
+    A(int v): x(v) {}
+};
+\end{lstlisting}
+
+\section*{Encapsulación}
+\begin{itemize}
+\item public
+\item private
+\item protected
+\end{itemize}
+
+\section*{Herencia}
+\begin{lstlisting}
+class B : public A {};
+\end{lstlisting}
+
+\section*{Virtual}
+\begin{lstlisting}
+virtual void f();
+override
+\end{lstlisting}
+
+\section*{Destructor}
+\begin{lstlisting}
+virtual ~A() {}
+\end{lstlisting}
+
+\section*{Polimorfismo}
+\begin{itemize}
+\item Punteros a base
+\item Métodos virtuales
+\end{itemize}
+
+\end{multicols}
+\end{document}

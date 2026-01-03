@@ -1,0 +1,58 @@
+\documentclass[a4paper,10pt]{article}
+\usepackage[margin=1.5cm]{geometry}
+\usepackage{multicol}
+\usepackage{hyperref}
+\usepackage{enumitem}
+\setlength{\parindent}{0pt}
+
+\begin{document}
+
+\begin{center}
+    {\Large \textbf{Formulario de Comandos Linux}}\\
+\end{center}
+
+\begin{multicols}{2}
+
+\section*{Archivos y Directorios}
+\begin{itemize}[leftmargin=*]
+    \item \texttt{ls} — listar archivos
+    \item \texttt{cd dir} — cambiar directorio
+    \item \texttt{pwd} — ruta actual
+    \item \texttt{mkdir dir} — crear directorio
+    \item \texttt{rm -r dir} — borrar directorio
+    \item \texttt{cp src dst} — copiar
+    \item \texttt{mv src dst} — mover/renombrar
+\end{itemize}
+
+\section*{Permisos}
+\begin{itemize}[leftmargin=*]
+    \item \texttt{chmod 755 file}
+    \item \texttt{chown user:group file}
+    \item \texttt{ls -l}
+\end{itemize}
+
+\section*{Procesos}
+\begin{itemize}[leftmargin=*]
+    \item \texttt{ps aux}
+    \item \texttt{top / htop}
+    \item \texttt{kill PID}
+    \item \texttt{kill -9 PID}
+\end{itemize}
+
+\section*{Red}
+\begin{itemize}[leftmargin=*]
+    \item \texttt{ip a}
+    \item \texttt{ping host}
+    \item \texttt{ss -tulpn}
+    \item \texttt{curl url}
+\end{itemize}
+
+\section*{Compresión}
+\begin{itemize}[leftmargin=*]
+    \item \texttt{tar -czf file.tar.gz dir}
+    \item \texttt{tar -xzf file.tar.gz}
+    \item \texttt{zip -r file.zip dir}
+\end{itemize}
+
+\end{multicols}
+\end{document}

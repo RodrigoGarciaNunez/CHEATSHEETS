@@ -1,0 +1,47 @@
+\documentclass[a4paper,10pt]{article}
+\usepackage[margin=1.5cm]{geometry}
+\usepackage{multicol}
+\usepackage{listings}
+
+\begin{document}
+\begin{center}
+{\Large \textbf{Multithreading en Python}}
+\end{center}
+
+\begin{multicols}{2}
+
+\section*{Módulo}
+\texttt{threading}
+
+\section*{Thread básico}
+\begin{lstlisting}
+import threading
+
+def f():
+    pass
+
+t = threading.Thread(target=f)
+t.start()
+t.join()
+\end{lstlisting}
+
+\section*{Lock}
+\begin{lstlisting}
+lock = threading.Lock()
+with lock:
+    pass
+\end{lstlisting}
+
+\section*{GIL}
+\begin{itemize}
+\item Solo un hilo ejecuta bytecode
+\item CPU-bound: usar multiprocessing
+\end{itemize}
+
+\section*{Daemon}
+\begin{lstlisting}
+t.daemon = True
+\end{lstlisting}
+
+\end{multicols}
+\end{document}

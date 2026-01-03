@@ -1,0 +1,45 @@
+\documentclass[a4paper,10pt]{article}
+\usepackage[margin=1.5cm]{geometry}
+\usepackage{multicol}
+\usepackage{listings}
+
+\begin{document}
+\begin{center}
+{\Large \textbf{POO en Python}}
+\end{center}
+
+\begin{multicols}{2}
+
+\section*{Clase}
+\begin{lstlisting}
+class A:
+    def __init__(self, x):
+        self.x = x
+\end{lstlisting}
+
+\section*{Herencia}
+\begin{lstlisting}
+class B(A):
+    pass
+\end{lstlisting}
+
+\section*{Métodos}
+\begin{lstlisting}
+@staticmethod
+@classmethod
+\end{lstlisting}
+
+\section*{Encapsulación}
+\begin{itemize}
+\item \_protegido
+\item \_\_privado
+\end{itemize}
+
+\section*{Polimorfismo}
+\begin{itemize}
+\item Duck typing
+\item No interfaces estrictas
+\end{itemize}
+
+\end{multicols}
+\end{document}
