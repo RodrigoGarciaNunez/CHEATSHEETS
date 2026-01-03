@@ -13,7 +13,7 @@
 \begin{document}
 
 \begin{center}
-    {\Large \textbf{Formulario C++}}\\
+    {\Large \textbf{Formulario C++ Básico}}\\
 \end{center}
 
 % \begin{multicols}{2}
@@ -67,17 +67,64 @@ Si no se encuentra ahí, entonces lo busca como con \textbf{$<$ $>$}.
         \hline
         bool & 1 byte & bool b = true & True/False Values \\
         \hline
-        pointer & 4-8 bytes & int * p = \&v ('v' being a int-type) & Guarda dirección de memoria de una variable\\
+        pointer & 4-8 bytes & int * p = \&v ('v' being an int type) & Guarda dirección de memoria de una variable\\
         \hline
 \end{tabular}
 \end{center}
     
+\section*{Operaciones Aritméticas}
+\begin{center}
+    \begin{tabular}{| c | c | c | c |}
+        \hline
+        Operación & Símbolo & Ejemplo & Asignación Compuesta \\
+        \hline\hline
+        Suma & + & a + b & a+=b $\rightarrow$  a = a+b\\
+        \hline
+        Resta & - & a - b & a-=b $\rightarrow$ a = a-b\\
+        \hline
+        Multiplicación & * &  a * b & a*=b $\rightarrow$ a = a*b\\
+        \hline
+        División & / & a / b & a/=b $\rightarrow$ a = a/b\\
+        \hline
+        Modulo & \% & a \% b & a\%=b $\rightarrow$ a = a\%b\\
+        \hline
+    \end{tabular}
+\end{center}
+
+\section*{Comparadores}
+\begin{center}
+    \begin{tabular}{| c | c |}
+        \hline
+        Operador & Descripción \\
+        \hline\hline
+        == & Igual a \\
+        \hline
+        != & NO igual a \\
+        \hline
+        $<$ & Menor que \\
+        \hline
+        $>$ & Mayor que \\
+        \hline
+        $<$= & Menor o igual que \\
+        \hline
+        $>$= & Mayor o igual que \\
+        \hline
+    \end{tabular}
+\end{center}
+
+\section*{Operaciones lógicas}
+\begin{center}
+    \begin{tabular}{| c | c | c |}
+    
+    \end{tabular}
+\end{center}
+
 
 \section*{Control}
 \begin{lstlisting}
-if (x > 0) {}
+if (COND) {}
 for (int i=0;i<n;i++) {}
-while(cond) {}
+while(COND) {}
 \end{lstlisting}
 
 \section*{Funciones}
