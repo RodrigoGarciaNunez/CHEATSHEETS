@@ -36,7 +36,7 @@ int main() {
 
 La diferencia entre 
 \begin{lstlisting}
-#include <iostream> y #include "filename" 
+#include <iostream> e #include "filename" 
 \end{lstlisting}
 
 es la forma en la que el compilador busca los archivos. 
@@ -68,6 +68,8 @@ Si no se encuentra ahí, entonces lo busca como con \textbf{$<$ $>$}.
         bool & 1 byte & bool b = true & True/False Values \\
         \hline
         pointer & 4-8 bytes & int * p = \&v ('v' being an int type) & Guarda dirección de memoria de una variable\\
+        \hline
+        void & - & - & Representa la falta de valor \\
         \hline
 \end{tabular}
 \end{center}
@@ -119,6 +121,35 @@ Si no se encuentra ahí, entonces lo busca como con \textbf{$<$ $>$}.
     \end{tabular}
 \end{center}
 
+\section*{Operaciones lógicas BITWISE (Sólo variables enteras)}
+\begin{center}
+    \begin{tabular}{| c | c | c |}
+    \hline
+    Operador & Operación lógica & Ejemplo a 8 bits \\
+    \hline\hline 
+    \& & Bitwise AND & 00001100 (12) \& 00011001 (25) = 00001000 (8) \\
+    \hline
+    $|$ & Bitwise OR &  00001100 (12) $|$ 00011001 (25) = 00011101 (29) \\
+    \hline
+    $\wedge$ & Bitwise XOR &  00001100 (12) $\wedge$ 00011001 (25) = 00010101 (21) \\
+    \hline
+    $\sim$  & Bitwise Complemento  & $\sim$ 00001100 (12) = 11110011 (-13)\\
+    \hline
+    $<<$ & Left Shift & 00001100 (12) $<<$ 1 = 00011000 (24)\\
+    \hline
+    $>>$ & Right Shift &  00001100 (12) $>>$ 1 = 00001100 (6) \\
+    \hline
+    \end{tabular}
+\end{center}
+
+Con estos operadores también se puede hacer la Asignación Compuesta.\\
+
+Por sí solo, C++ no permite usar estos operadores con floats o doubles, pero se puede hacer
+utilizando \begin{lstlisting}
+    std::bitcast (C++ 20, <bit>)
+\end{lstlisting} 
+para obtner la representación binaria del número real y poder usar los 
+operadores de BITWISE (No es común, pero se puede).
 
 \section*{Control}
 \begin{lstlisting}
