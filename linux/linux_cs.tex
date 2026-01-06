@@ -11,9 +11,75 @@
     {\Large \textbf{Formulario de Comandos Linux}}\\
 \end{center}
 
-\begin{multicols}{2}
+
+\section*{Hardware Information}
+\begin{center}
+    \begin{tabular}{| c | c |}
+        \hline
+        Comando & Función \\
+        \hline\hline
+        \texttt{lscpu} & Muestra información de la CPU \\
+        \hline
+        \texttt{lsblk} & Muestra información sobre \textbf{block devices} (HDD O SSD) \\
+        \hline
+        \texttt{lspci -tv} & Muestra los dispositivos \textbf{PCI} (Peripheral Component Interconnec)\\ & en forma de arbol (-tv) \\
+        \hline
+        \texttt{lsusb -tv} & Despliega los dispositivos USB en formato de arbol (-tv) \\
+        \hline
+        \texttt{lshw} & Muestra la configuración del Hardware \\
+        \hline
+        \texttt{cat /proc/cpuinfo} & Muestra información detallada de la CPU. \\
+        \hline
+        \texttt{cat /proc/meminfo} & Información detallada de la memoria del sistema. \\
+        \hline
+        \texttt{cat /proc/mounts} & Muestra información de \textbf{mounted files}. \\
+        \hline
+        \texttt{free -h} & Muestra memoria ocupada y disponible en formato humano (-h). \\
+        \hline
+        \texttt{sudo dmidecode} & Muestra información del HW desde la \textbf{BIOS}. \\
+        \hline
+        \texttt{sudo hdparm -i /dev/[device name]} & Despliega información (-i) del disco. \\
+        \hline
+        \texttt{sudo hdparm -tT /dev/[device name]} & Hace una prueba de velocidad de lectura (-tT) al disco. \\
+        \hline
+        \texttt{sudo badblocks -s /dev/[device name]} & Prueba para encontrar bloques no leibles en el disco. \\
+        \hline
+        \texttt{sudo fsck /dev/[device name]} & Hace un chequéo al disco. \\
+        \hline
+    \end{tabular}
+\end{center}
+
+
+\section*{Comandos de busqueda (Searching commands)}
+\begin{center}
+    \begin{tabular}{| c | c |}
+        \hline
+        Comando & Función \\
+        \hline\hline
+        \textbf{find [path] $-$name [search $\_$ pattern]} & Encuentra archivos y directorios que cumplan con\\ & el patrón dentro del directorio. \\
+        \hline
+        \textbf{find [path] $-$size [+100M]} & Muestra archivos y directorios con tamaño mayor o igual al dado. \\
+        \hline
+        \textbf{grep [search$\_$pattern] [file$\_$name]} & Busca un patrón dentro de un archivo. \\
+        \hline
+        \textbf{grep -r [search$\_$pattern] [directory$\_$name]} & Busca un patrón dentro de archivos de un direcotio recursivamente \\
+        \hline
+        \textbf{locate [name]} & Localiza TODOS los archivos y directorios relacionados a un nombre. \\
+        \hline
+        \textbf{which [command]} & Busca la ruta del comando dentro de la variable de entorno $\%$ PATH \\
+        \hline
+        \textbf{whereis [command]} & Encuentra la fuente, el binario y el manual de un comando \\
+        \hline
+        \textbf{(g)awk '[search$\_$pattern] {print \$0}' [file$\_$name]} & Imprime todas las lineas que contengan al patrón. \\
+        \hline
+        \textbf{sed 's/[old$\_$text]/[new$\_$text]/' [file$\_$name]} & Encuentra y reemplaza texto en un archivo. \\
+        \hline
+    \end{tabular}
+\end{center}
+
 
 \section*{Archivos y Directorios}
+\subsection*{ls}
 \begin{itemize}[leftmargin=*]
     \item \texttt{ls} — listar archivos
     \item \texttt{cd dir} — cambiar directorio
@@ -54,5 +120,10 @@
     \item \texttt{zip -r file.zip dir}
 \end{itemize}
 
-\end{multicols}
+
+\section*{Fuentes}
+\begin{itemize}
+    \item https://phoenixnap.com/kb/linux-commands-cheat-sheet
+\end{itemize}
+
 \end{document}
