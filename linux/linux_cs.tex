@@ -8,7 +8,7 @@
 \begin{document}
 
 \begin{center}
-    {\Large \textbf{Formulario de Comandos Linux}}\\
+    {\Large \texttt{Formulario de Comandos Linux}}\\
 \end{center}
 
 
@@ -20,9 +20,9 @@
         \hline\hline
         \texttt{lscpu} & Muestra información de la CPU \\
         \hline
-        \texttt{lsblk} & Muestra información sobre \textbf{block devices} (HDD O SSD) \\
+        \texttt{lsblk} & Muestra información sobre \texttt{block devices} (HDD O SSD) \\
         \hline
-        \texttt{lspci -tv} & Muestra los dispositivos \textbf{PCI} (Peripheral Component Interconnec)\\ & en forma de arbol (-tv) \\
+        \texttt{lspci -tv} & Muestra los dispositivos \texttt{PCI} (Peripheral Component Interconnec)\\ & en forma de arbol (-tv) \\
         \hline
         \texttt{lsusb -tv} & Despliega los dispositivos USB en formato de arbol (-tv) \\
         \hline
@@ -32,11 +32,11 @@
         \hline
         \texttt{cat /proc/meminfo} & Información detallada de la memoria del sistema. \\
         \hline
-        \texttt{cat /proc/mounts} & Muestra información de \textbf{mounted files}. \\
+        \texttt{cat /proc/mounts} & Muestra información de \texttt{mounted files}. \\
         \hline
         \texttt{free -h} & Muestra memoria ocupada y disponible en formato humano (-h). \\
         \hline
-        \texttt{sudo dmidecode} & Muestra información del HW desde la \textbf{BIOS}. \\
+        \texttt{sudo dmidecode} & Muestra información del HW desde la \texttt{BIOS}. \\
         \hline
         \texttt{sudo hdparm -i /dev/[device name]} & Despliega información (-i) del disco. \\
         \hline
@@ -56,39 +56,90 @@
         \hline
         Comando & Función \\
         \hline\hline
-        \textbf{find [path] $-$name [search $\_$ pattern]} & Encuentra archivos y directorios que cumplan con\\ & el patrón dentro del directorio. \\
+        \texttt{find [path] $-$name [search $\_$ pattern]} & Encuentra archivos y directorios que cumplan con\\ & el patrón dentro del directorio. \\
         \hline
-        \textbf{find [path] $-$size [+100M]} & Muestra archivos y directorios con tamaño mayor o igual al dado. \\
+        \texttt{find [path] $-$size [+100M]} & Muestra archivos y directorios con tamaño mayor \\ & oigual al dado. \\
         \hline
-        \textbf{grep [search$\_$pattern] [file$\_$name]} & Busca un patrón dentro de un archivo. \\
+        \texttt{grep [search$\_$pattern] [file$\_$name]} & Busca un patrón dentro de un archivo. \\
         \hline
-        \textbf{grep -r [search$\_$pattern] [directory$\_$name]} & Busca un patrón dentro de archivos de un direcotio recursivamente \\
+        \texttt{grep -r [search$\_$pattern] [directory$\_$name]} & Busca un patrón dentro de archivos de un \\ & direcotio recursivamente \\
         \hline
-        \textbf{locate [name]} & Localiza TODOS los archivos y directorios relacionados a un nombre. \\
+        \texttt{locate [name]} & Localiza TODOS los archivos y directorios \\ &  relacionados a un nombre. \\
         \hline
-        \textbf{which [command]} & Busca la ruta del comando dentro de la variable de entorno $\%$ PATH \\
+        \texttt{which [command]} & Busca la ruta del comando dentro de la \\ & variable de entorno $\%$ PATH \\
         \hline
-        \textbf{whereis [command]} & Encuentra la fuente, el binario y el manual de un comando \\
+        \texttt{whereis [command]} & Encuentra la fuente, el binario y el manual de un comando \\
         \hline
-        \textbf{(g)awk '[search$\_$pattern] {print \$0}' [file$\_$name]} & Imprime todas las lineas que contengan al patrón. \\
+        \texttt{(g)awk '[search$\_$pattern] {print \$0}' [file$\_$name]} & Imprime todas las lineas que contengan al patrón. \\
         \hline
-        \textbf{sed 's/[old$\_$text]/[new$\_$text]/' [file$\_$name]} & Encuentra y reemplaza texto en un archivo. \\
+        \texttt{sed 's/[old$\_$text]/[new$\_$text]/' [file$\_$name]} & Encuentra y reemplaza texto en un archivo. \\
         \hline
     \end{tabular}
 \end{center}
 
 
 \section*{Archivos y Directorios}
-\subsection*{ls}
-\begin{itemize}[leftmargin=*]
-    \item \texttt{ls} — listar archivos
-    \item \texttt{cd dir} — cambiar directorio
-    \item \texttt{pwd} — ruta actual
-    \item \texttt{mkdir dir} — crear directorio
-    \item \texttt{rm -r dir} — borrar directorio
-    \item \texttt{cp src dst} — copiar
-    \item \texttt{mv src dst} — mover/renombrar
-\end{itemize}
+\begin{center}
+    \begin{tabular}{| c | c |}
+        \hline
+        Comando & Función \\
+        \hline\hline
+        \texttt{mkdir [directory$\_$name]} & Crea un nuevo directorio \\
+        \hline
+        \texttt{rm [file$\_$name]} & Borra un archivo \\
+        \hline
+        \texttt{rm -r [directory$\_$name]} & Borra un directorio recursivamente (-r)\\
+        \hline
+        \texttt{rm -rf [directory$\_$name]} & Borra un directorio recursivamente sin confirmación (-rf) \\
+        \hline
+        \texttt{cp [source$\_$file] [destination$\_$file]} & Copia el contenido de un archivo en otro. \\
+        \hline
+        \texttt{cp -r [source$\_$dir] [destination$\_$dir]} & Recursivamente copia un directorio en otro. \\
+        \hline
+        \texttt{mv [source$\_$file] [destination$\_$dir/file]} & Mueve o renombra un archivo. \\ & Lo mueve si el segundo argumento es un dir. \\
+        \hline
+        \texttt{ln -s [path] / [file$\_$name] [link$\_$name]} & Crea un \texttt{enlace simbólico}(un shortcut) \\
+        \hline
+        \texttt{touch [file$\_$name]} & Crea un archivo \\
+        \hline
+        \texttt{cat [file$\_$name]} & Muestra en terminal el contenido de un archivo \\
+        \hline
+        \texttt{cat [file$\_$name] >> cat [destination$\_$]file} & Concatena el contenido de un archivo en otro \\
+        \hline
+        \texttt{head [file$\_$name]} & Muestra las primeras 10 lineas de un archivo \\
+        \hline
+        \texttt{tail [file$\_$name]} & Muestra las ultimas 10 lineas de un archivo \\
+        \hline
+        \texttt{more [file$\_$name]} & Muestra el contenido de un archivo Página por página \\
+        \hline
+        \texttt{nano [file$\_$name]} & Abre o Crea un archivo con el edito \texttt{nano} \\
+        \hline
+        \texttt{vi(m) [file$\_$name]} & Abre o crea un archivo con el editor VI(M) \\
+        \hline
+        \texttt{gpg -c [file$\_$name]} & Encripta un archivo (-c) \\
+        \hline
+        \texttt{gpg [file$\_$name].gpg} & Desencripta un archivo .gpg \\
+        \hline
+        \texttt{wc -w [file$\_$name]} & Muestra el número de palabras (-w), líneas (-l) y bytes (-c) \\
+        \hline
+        \texttt{ls | xargs wc} & Lisra el número de lineas/palabras/caracteres en cada archivo de un dir. \\
+        \hline
+        \texttt{cut -d [delimiter] [file$\_$name]} & Corta una sección de un archivo y lo muestra terminal \\
+        \hline
+        \texttt{[data] | cut -d [delimiter]} & Corta una sección de datos y lo muestra en termimal \\
+        \hline
+        \texttt{shred -u [file$\_$name]} & Sobreescribe un archivo y previene su recuperación para luego borrarlo. \\
+        \hline
+        \texttt{diff cut [first$\_$file] [second$\_$file]} & Compara dos archivos y muestra sus diferencia. \\
+        \hline
+        \texttt{source [file$\_$name]} & Lee y ejecuta el contenido de un archivo en la terminal \\
+        \hline
+        \texttt{[command] | tee [file$\_$name] >/dev/null} & Guarda el resultado de un comando y lo gurada en otro archivo (tee) \\
+        &  y evita que el resultado se imprima en la terminal \\
+        \hline
+
+    \end{tabular}
+\end{center}
 
 \section*{Permisos}
 \begin{itemize}[leftmargin=*]
