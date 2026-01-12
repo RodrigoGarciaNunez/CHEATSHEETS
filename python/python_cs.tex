@@ -16,29 +16,92 @@
     {\Large \textbf{Formulario Python}}\\
 \end{center}
 
-\begin{multicols}{2}
+
 
 \section*{Sintaxis básica}
-\begin{lstlisting}
-x = 5
-print(x)
-\end{lstlisting}
+\begin{multicols}{2}
+    \begin{lstlisting}
+    x = 5
+    print(x)
 
-\section*{Estructuras}
+    if __name__ == "__main__":
+        x = 5
+        print(x)
+   
+\end{lstlisting}
+\columnbreak
+
+La diferencia entre el script directo y el que está dentro del if es la prioridad de ejecución.
+El código dentro del if sólo se ejecuta si se corre directamente el archivo, más no lo hará si el archivo se una importación.  
+\end{multicols}
+
+
+\section*{Tipos de datos}
+\begin{center}
+\begin{tabular}{| c | c | c | c |}
+    \hline
+    Tipo &  Ejemplo & Descripción & Mutabilidad \\
+    \hline\hline
+    int & i = 5 & Números enteros & NO \\
+    \hline
+    float & i = 3.14 & Números de punto flotante & NO \\
+    \hline
+    complex  & x = 2 + 3j & Números complejos & NO \\
+    \hline
+    bool & x = True & Valores booleanos (True/False ) & NO \\
+    \hline
+    str & s = "Holaaa" & Cadenas de texto & NO\\
+    \hline
+    tuple & t = (1,2,3) & Tuplas & NO \\
+    \hline
+    frozenset & frozenset({}) & falta de descripción & NO \\
+    \hline
+    bytes & b = b"abc" & Obtiene la representación en bytes de lo que esté entre comillas & NO \\
+    \hline
+    NoneType & None & None & NO \\
+    \hline
+    list & l = [1,'h',"hola, 3"] & Listas & SÍ \\
+    \hline
+    dict & d = {"a":1} (KEY: VALUE) & Diccionarios & SÍ \\
+    \hline
+    set & s = {1, 2} & Falta de descripción & SÍ \\
+    \hline
+    bytearray & b = bytearray(b"abc") & Falta descripción & SÍ \\
+    \hline
+
+\end{tabular}
+\end{center}
+
+\section*{Estructuras de control}
+\begin{multicols}{2}
 \begin{lstlisting}
 if x > 0:
-    pass
+    code
 
-for i in range(10):
-    pass
+for i in [something]:
+    code
+
 \end{lstlisting}
+\columnbreak
+
+Al usar la sentencia de control FOR, se puede iterar dentro de estructuras como rangos, listas, cadenas, diccionarios, etc.
+\end{multicols}
 
 \section*{Funciones}
+\begin{multicols}{2}
 \begin{lstlisting}
 def suma(a, b):
     return a + b
 \end{lstlisting}
-
+\columnbreak
+    \begin{tabular}{| c | c |}
+        \hline
+        Referencia & Valor \\
+        \hline\hline
+         Algo  & ALgo  \\
+        \hline
+    \end{tabular}
+\end{multicols}
 \section*{Listas y diccionarios}
 \begin{lstlisting}
 lst = [1,2,3]
@@ -64,5 +127,4 @@ class A:
     \item \texttt{source venv/bin/activate}
 \end{itemize}
 
-\end{multicols}
 \end{document}
