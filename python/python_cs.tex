@@ -18,7 +18,7 @@
 
 
 
-\section*{Sintaxis básica}
+\section*{Sintaxis básica y aspectos generales}
 \begin{multicols}{2}
     \begin{lstlisting}
     x = 5
@@ -30,7 +30,8 @@
    
 \end{lstlisting}
 \columnbreak
-
+Python es un lenguaje interpretado, lo que quiere decir que este compila y ejecuta el código linea por línea.\\\\
+Al ser un lenguaje fuertemente orientado a objetos, TODO se considera como uno, incluyendo las funciones.\\\\
 La diferencia entre el script directo y el que está dentro del if es la prioridad de ejecución.
 El código dentro del if sólo se ejecuta si se corre directamente el archivo, más no lo hará si el archivo se una importación.  
 \end{multicols}
@@ -71,6 +72,23 @@ El código dentro del if sólo se ejecuta si se corre directamente el archivo, m
 
 \end{tabular}
 \end{center}
+La \textbf{Mutabilidad} es una herramienta de seguridad y rendimiento y hasta concurrencia.\\
+\begin{multicols}{2}
+    \subsection*{Objeto Mutable}
+
+    Si se crean dos objetos mutables iguales, dos dict(), por ejemplo, cada variable referencia a su propio objeto.
+    \columnbreak
+
+    \subsection*{Inmutabilidadd}
+
+    Si se crean dos objetos inmutables iguales, dos int() = 10, por ejemplo, ambos apuntan al mismo objeto. 
+    Eso permite evitar crear dos variables iguales, aumentando la seguridad.
+    Si una variable cambia (pasa a valer 11), entonces Python crea un nuevo objeto con el valor actualizado y la variable reasigna la referencia
+    al nuevo objeto. \\
+    En el caso de concurrencia, Estos objetos son super seguros por definición, ya que en sí son copias. Con ellos, no existen las \textbf{condiciones
+    de competencia}.
+\end{multicols}
+
 
 \section*{Estructuras de control}
 \begin{multicols}{2}
@@ -84,7 +102,7 @@ for i in [something]:
 \end{lstlisting}
 \columnbreak
 
-Al usar la sentencia de control FOR, se puede iterar dentro de estructuras como rangos, listas, cadenas, diccionarios, etc.
+Al usar la sentencia de control "in", se puede iterar dentro de estructuras como rangos, listas, cadenas, diccionarios, etc.
 \end{multicols}
 
 \section*{Funciones}
@@ -102,6 +120,12 @@ def suma(a, b):
         \hline
     \end{tabular}
 \end{multicols}
+Si se pasa un objeto \textbf{inmutable} a una función, este se pasa por valor, lo que quiere decir que
+se hace una copia de este objeto, por lo que los cambios en este objeto no ven reflejados en el objeto original.
+Por otro lado al pasar un objeto \textbf{mutable} a un función, este se pasa por referencia, por lo que
+este puede cambiar dentro de la función.
+
+
 \section*{Listas y diccionarios}
 \begin{lstlisting}
 lst = [1,2,3]
