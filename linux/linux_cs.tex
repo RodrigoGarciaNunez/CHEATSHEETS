@@ -212,6 +212,8 @@
         \hline\hline
         gs -sDEVICE=pdfwrite  / \\ -dCompatibilityLevel=1.4  / \\ -dPDFSETTINGS=/ebook  / \\ -dNOPAUSE   / \\-dBATCH  / \\ -sOutputFile=output.pdf source.pdf & Reduce el tamaño de un \textbf{PDF}\\
         \hline
+        sudo sync; echo 3 | sudo tee /proc/sys/vm/drop$\_$caches & Libera la memoria al borrar los caches \\  &  (1 = page cache, 2 = dentries e inodes, \\ & 3 = page, denitries e inodes). \\
+        \hline
     \end{tabular}
 \end{center}
 
