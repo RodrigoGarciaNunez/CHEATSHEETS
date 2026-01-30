@@ -1,0 +1,225 @@
+\documentclass[10pt]{article}
+
+\usepackage[margin=1.5cm]{geometry}
+\usepackage{multicol}
+\usepackage{booktabs}
+\usepackage{array}
+\usepackage{xcolor}
+\usepackage{listings}
+\usepackage{hyperref}
+
+\definecolor{codegray}{rgb}{0.95,0.95,0.95}
+
+\lstset{
+    backgroundcolor=\color{codegray},
+    basicstyle=\ttfamily\footnotesize,
+    frame=single,
+    breaklines=true,
+    columns=fullflexible
+}
+
+\title{\textbf{Formulario de Bash Scripting}}
+\author{}
+\date{}
+
+\begin{document}
+\maketitle
+
+\begin{multicols}{2}
+
+%------------------------------------------------
+\section*{Estructura básica}
+
+\begin{lstlisting}
+#!/bin/bash
+echo "Hola mundo"
+\end{lstlisting}
+
+\begin{itemize}
+\item \texttt{\#!/bin/bash}: intérprete
+\item \texttt{chmod +x script.sh}
+\item \texttt{./script.sh}
+\end{itemize}
+
+%------------------------------------------------
+\section*{Variables}
+
+\begin{lstlisting}
+x=10
+nombre="Rodrigo"
+echo $x
+echo "$nombre"
+\end{lstlisting}
+
+\begin{center}
+\begin{tabular}{ll}
+\toprule
+Variable & Significado \\
+\midrule
+\texttt{\$0} & Nombre del script \\
+\texttt{\$1..\$9} & Argumentos \\
+\texttt{\$@} & Todos los argumentos \\
+\texttt{\$?} & Código de salida \\
+\texttt{\$\$} & PID del script \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+%------------------------------------------------
+\section*{Tipos de datos}
+
+\begin{center}
+\begin{tabular}{ll}
+\toprule
+Tipo lógico & Ejemplo \\
+\midrule
+String & \texttt{s="hola"} \\
+Entero & \texttt{i=10} \\
+Array & \texttt{a=(1 2 3)} \\
+Array asociativo & \texttt{declare -A m} \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+%------------------------------------------------
+\section*{Arrays}
+
+\begin{lstlisting}
+arr=(uno dos tres)
+echo ${arr[0]}
+echo ${arr[@]}
+\end{lstlisting}
+
+\begin{lstlisting}
+declare -A edades
+edades[Juan]=20
+\end{lstlisting}
+
+%------------------------------------------------
+\section*{Aritmética}
+
+\begin{lstlisting}
+a=10
+b=3
+echo $((a + b))
+echo $((a * b))
+\end{lstlisting}
+
+%------------------------------------------------
+\section*{Comparadores numéricos}
+
+\begin{center}
+\begin{tabular}{ll}
+\toprule
+Operador & Significado \\
+\midrule
+-eq & Igual \\
+-ne & Distinto \\
+-lt & Menor \\
+-le & Menor o igual \\
+-gt & Mayor \\
+-ge & Mayor o igual \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\begin{lstlisting}
+if [ $a -gt 5 ]; then
+    echo "Mayor que 5"
+fi
+\end{lstlisting}
+
+%------------------------------------------------
+\section*{Comparadores de strings}
+
+\begin{center}
+\begin{tabular}{ll}
+\toprule
+Operador & Significado \\
+\midrule
+= & Igual \\
+!= & Distinto \\
+-z & Vacío \\
+-n & No vacío \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+%------------------------------------------------
+\section*{Control de flujo}
+
+\begin{lstlisting}
+if [ $x -eq 10 ]; then
+    echo "Diez"
+elif [ $x -eq 5 ]; then
+    echo "Cinco"
+else
+    echo "Otro"
+fi
+\end{lstlisting}
+
+\begin{lstlisting}
+for ((i=0;i<5;i++)); do
+    echo $i
+done
+\end{lstlisting}
+
+%------------------------------------------------
+\section*{Funciones}
+
+\begin{lstlisting}
+suma() {
+    echo $(($1 + $2))
+}
+resultado=$(suma 3 4)
+\end{lstlisting}
+
+%------------------------------------------------
+\section*{Archivos}
+
+\begin{center}
+\begin{tabular}{ll}
+\toprule
+Prueba & Significado \\
+\midrule
+-e & Existe \\
+-f & Archivo regular \\
+-d & Directorio \\
+-r & Lectura \\
+-w & Escritura \\
+-x & Ejecutable \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+%------------------------------------------------
+\section*{Redirecciones}
+
+\begin{center}
+\begin{tabular}{ll}
+\toprule
+Símbolo & Uso \\
+\midrule
+\texttt{>} & Sobrescribe \\
+\texttt{>>} & Agrega \\
+\texttt{|} & Pipe \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\begin{lstlisting}
+ls | grep cpp > archivos.txt
+\end{lstlisting}
+
+%------------------------------------------------
+\section*{Debug}
+
+\begin{lstlisting}
+bash -x script.sh
+set -e
+set -u
+\end{lstlisting}
+
+\end{multicols}
+
+\end{document}
