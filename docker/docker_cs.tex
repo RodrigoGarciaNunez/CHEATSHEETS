@@ -1,0 +1,121 @@
+\documentclass[a4paper,10pt]{article}
+\usepackage[margin=1.5cm]{geometry}
+\usepackage{longtable}
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+
+\title{Docker Cheatsheet}
+\date{}
+
+\begin{document}
+\maketitle
+
+\section*{1. Dockerfile Commands}
+
+\begin{longtable}{|p{3cm}|p{11cm}|}
+\hline
+\textbf{Comando} & \textbf{Descripción} \\
+\hline
+FROM & Define la imagen base. Ej: \texttt{FROM ubuntu:22.04} \\
+\hline
+RUN & Ejecuta comandos durante el build. Ej: \texttt{RUN apt update \&\& apt install -y xclip} \\
+\hline
+COPY & Copia archivos del host al contenedor. Ej: \texttt{COPY . /app} \\
+\hline
+ADD & Similar a COPY pero permite URLs y extracción automática. \\
+\hline
+WORKDIR & Define directorio de trabajo. Ej: \texttt{WORKDIR /app} \\
+\hline
+CMD & Comando por defecto al iniciar el contenedor. \\
+\hline
+ENTRYPOINT & Ejecutable principal del contenedor. \\
+\hline
+ENV & Variables de entorno. Ej: \texttt{ENV PORT=8080} \\
+\hline
+EXPOSE & Documenta puerto usado. Ej: \texttt{EXPOSE 8000} \\
+\hline
+USER & Cambia el usuario activo. \\
+\hline
+VOLUME & Define punto de montaje. \\
+\hline
+ARG & Variable solo para build. \\
+\hline
+\end{longtable}
+
+\section*{2. Comandos de Terminal}
+
+\subsection*{Imágenes}
+
+\begin{longtable}{|p{5cm}|p{9cm}|}
+\hline
+\texttt{docker build -t nombre .} & Construye una imagen \\
+\hline
+\texttt{docker images} & Lista imágenes locales \\
+\hline
+\texttt{docker rmi imagen} & Elimina imagen \\
+\hline
+\texttt{docker pull imagen} & Descarga imagen \\
+\hline
+\end{longtable}
+
+\subsection*{Contenedores}
+
+\begin{longtable}{|p{5cm}|p{9cm}|}
+\hline
+\texttt{docker run imagen} & Ejecuta contenedor \\
+\hline
+\texttt{docker run -it imagen bash} & Contenedor interactivo \\
+\hline
+\texttt{docker ps} & Lista contenedores activos \\
+\hline
+\texttt{docker ps -a} & Lista todos los contenedores \\
+\hline
+\texttt{docker stop id} & Detiene contenedor \\
+\hline
+\texttt{docker start id} & Inicia contenedor \\
+\hline
+\texttt{docker restart id} & Reinicia contenedor \\
+\hline
+\texttt{docker rm id} & Elimina contenedor \\
+\hline
+\texttt{docker logs id} & Muestra logs \\
+\hline
+\texttt{docker exec -it id bash} & Entra al contenedor \\
+\hline
+\texttt{docker inspect id} & Información detallada \\
+\hline
+\end{longtable}
+
+\subsection*{Servicio Docker}
+
+\begin{longtable}{|p{6cm}|p{8cm}|}
+\hline
+\texttt{sudo systemctl start docker} & Inicia servicio \\
+\hline
+\texttt{sudo systemctl stop docker} & Detiene servicio \\
+\hline
+\texttt{sudo systemctl restart docker} & Reinicia servicio \\
+\hline
+\texttt{sudo systemctl status docker} & Estado del servicio \\
+\hline
+\texttt{sudo systemctl enable docker} & Activa autoarranque \\
+\hline
+\texttt{sudo systemctl disable docker} & Desactiva autoarranque \\
+\hline
+\end{longtable}
+
+\section*{3. Limpieza}
+
+\begin{longtable}{|p{5cm}|p{9cm}|}
+\hline
+\texttt{docker system prune} & Limpia recursos no usados \\
+\hline
+\texttt{docker container prune} & Borra contenedores detenidos \\
+\hline
+\texttt{docker image prune} & Borra imágenes sin uso \\
+\hline
+\texttt{docker volume prune} & Borra volúmenes sin uso \\
+\hline
+\end{longtable}
+
+\end{document}
