@@ -1,6 +1,7 @@
 \documentclass[a4paper,10pt]{article}
 \usepackage[margin=1.5cm]{geometry}
 \usepackage{longtable}
+\usepackage{listings}
 \usepackage[T1]{fontenc}
 \usepackage[utf8]{inputenc}
 
@@ -9,6 +10,35 @@
 
 \begin{document}
 \maketitle
+
+
+\section*{0. Previous Game}
+\subsection*{Intalación}
+
+\subsection*{Permisos para crear una imágen}
+Al crear una imágen con \textbf{docker build} puede que salte el siguiente error
+\begin{center}
+    \texttt{Got permission denied while trying to connect to the Docker daemon socket at unix:///var/run/docker.sock}
+\end{center}
+Para resolverlo, debes agregar al usaurio al grupo de DOCKER:
+\begin{center}
+    \begin{lstlisting}
+        sudo usermod -a -G docker $USER   
+    \end{lstlisting}
+\end{center}
+
+
+Corrobora con grep docker /etc/group para ver a tu usuario agregado al grupo.
+
+Finaliza con  
+\begin{center}
+    \begin{lstlisting}
+        systemctl reboot
+    \end{lstlisting}
+\end{center}
+
+para aplicar los cambios.
+
 
 \section*{1. Dockerfile Commands}
 
