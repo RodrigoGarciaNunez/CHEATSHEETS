@@ -1,0 +1,51 @@
+\documentclass[a4paper,10pt]{article}
+\usepackage[margin=1.5cm]{geometry}
+\usepackage{longtable}
+\usepackage{listings}
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+
+\title{Docker-Compose}
+\date{}
+
+\begin{document}
+\maketitle
+
+
+\section*{0. Introducción a \textit{DOCKER-COMPOSE}?}
+Es una herramienta de \textbf{Orquestasión de contenedores}, principalmente orinetada en
+desarrollo (dev). Aunque su uso no se limita a sólo entorno de desarrollo, hay alternativas más
+robustas (como \textbf{KUBERNETES}) para entornos productivos. 
+
+\subsection*{0.1. Instalación (Distribuciones BEBIAN-like )}
+Para instalar Docker-Compose en distribuciones DEBIAN, ejecutar los siguientes comandos
+
+\begin{center}
+    \begin{lstlisting}
+        sudo apt-get update
+        sudo apt-get install docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin   
+    \end{lstlisting}
+\end{center}
+
+Verifica con
+
+\begin{center}
+    \begin{lstlisting}
+        docker compose version
+    \end{lstlisting}    
+\end{center}
+
+
+\section*{1. El archivo docker-compose.yml}
+
+Este archivo sirve para construir, iniciar y establecer el entorno de los contenedores.
+Su sintaxis básica es:
+
+
+\section*{1. Comandos}
+
+\subsection{}
+
+
+
+\end{document}
