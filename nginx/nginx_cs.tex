@@ -1,0 +1,392 @@
+\documentclass[a4paper,11pt]{article}
+
+\usepackage[margin=1.5cm]{geometry}
+\usepackage{multicol}
+\usepackage{listings}
+\usepackage{xcolor}
+\usepackage[T1]{fontenc}
+
+\lstset{
+  basicstyle=\ttfamily\small,
+  keywordstyle=\color{blue},
+  commentstyle=\color{gray},
+  breaklines=true
+}
+
+\begin{document}
+
+\begin{center}
+    {\Large \textbf{Formulario NGINX}}\\
+\end{center}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\section*{¿Qué es NGINX?}
+
+NGINX es:
+\begin{itemize}
+    \item Web Server
+    \item Reverse Proxy
+    \item Load Balancer
+    \item API Gateway
+    \item Proxy para contenedores
+\end{itemize}
+
+Muy usado con:
+\begin{itemize}
+    \item Docker
+    \item Kubernetes
+    \item NodeJS
+    \item FastAPI
+    \item Flask
+\end{itemize}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\section*{Arquitectura}
+
+\begin{center}
+\begin{lstlisting}
+Cliente
+   |
+   V
+NGINX
+   |
+   +--> Backend 1
+   |
+   +--> Backend 2
+\end{lstlisting}
+\end{center}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\section*{Instalación}
+
+\begin{lstlisting}
+sudo apt update
+
+sudo apt install nginx
+\end{lstlisting}
+
+Verificar:
+\begin{lstlisting}
+nginx -v
+\end{lstlisting}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\section*{Comandos importantes}
+
+\begin{center}
+\begin{tabular}{| c | c |}
+\hline
+Comando & Descripción \\
+\hline\hline
+nginx -t & Validar configuración \\
+\hline
+systemctl start nginx & Iniciar \\
+\hline
+systemctl stop nginx & Detener \\
+\hline
+systemctl restart nginx & Reiniciar \\
+\hline
+systemctl reload nginx & Recargar config \\
+\hline
+journalctl -u nginx & Logs \\
+\hline
+\end{tabular}
+\end{center}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\section*{Estructura Linux típica}
+
+\begin{lstlisting}
+/etc/nginx/
+|
+|-- nginx.conf
+|-- sites-available/
+|-- sites-enabled/
+|-- conf.d/
+\end{lstlisting}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\section*{nginx.conf básico}
+
+\begin{lstlisting}
+events {}
+
+http {
+
+    server {
+
+        listen 80;
+
+        server_name localhost;
+
+        location / {
+
+            root /var/www/html;
+
+            index index.html;
+
+        }
+    }
+}
+\end{lstlisting}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\section*{Bloques importantes}
+
+\begin{center}
+\begin{tabular}{| c | c |}
+\hline
+Bloque & Función \\
+\hline\hline
+events & Conexiones/eventos \\
+\hline
+http & Config HTTP \\
+\hline
+server & Virtual Host \\
+\hline
+location & Rutas \\
+\hline
+upstream & Load balancing \\
+\hline
+\end{tabular}
+\end{center}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\section*{Servir archivos estáticos}
+
+\begin{lstlisting}
+server {
+
+    listen 80;
+
+    server_name localhost;
+
+    location / {
+
+        root /var/www/html;
+
+        index index.html;
+    }
+}
+\end{lstlisting}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\section*{Reverse Proxy}
+
+\begin{lstlisting}
+location /api/ {
+
+    proxy_pass http://localhost:5000/;
+
+}
+\end{lstlisting}
+
+NGINX recibe requests y las reenvía.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\section*{Headers importantes}
+
+\begin{lstlisting}
+location / {
+
+    proxy_pass http://backend;
+
+    proxy_set_header Host $host;
+
+    proxy_set_header X-Real-IP $remote_addr;
+
+    proxy_set_header X-Forwarded-For
+    $proxy_add_x_forwarded_for;
+
+}
+\end{lstlisting}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\section*{Load Balancer}
+
+\begin{lstlisting}
+upstream backend {
+
+    server localhost:5000;
+
+    server localhost:5001;
+
+}
+
+server {
+
+    location / {
+
+        proxy_pass http://backend;
+
+    }
+}
+\end{lstlisting}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\section*{Docker + NGINX}
+
+\begin{lstlisting}
+location / {
+
+    proxy_pass http://web_container:8000;
+
+}
+\end{lstlisting}
+
+NGINX puede comunicarse usando nombres
+de contenedores.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\section*{HTTPS}
+
+\begin{lstlisting}
+server {
+
+    listen 443 ssl;
+
+    ssl_certificate
+    /etc/ssl/cert.pem;
+
+    ssl_certificate_key
+    /etc/ssl/key.pem;
+
+}
+\end{lstlisting}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\section*{Redirección HTTP -> HTTPS}
+
+\begin{lstlisting}
+server {
+
+    listen 80;
+
+    return 301 https://$host$request_uri;
+
+}
+\end{lstlisting}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\section*{Logs}
+
+\begin{lstlisting}
+/var/log/nginx/access.log
+
+/var/log/nginx/error.log
+\end{lstlisting}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\section*{Validar configuración}
+
+\begin{lstlisting}
+sudo nginx -t
+\end{lstlisting}
+
+MUY importante antes de reiniciar.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\section*{Recargar configuración}
+
+\begin{lstlisting}
+sudo systemctl reload nginx
+\end{lstlisting}
+
+No mata conexiones activas.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\section*{Errores comunes}
+
+\begin{center}
+\begin{tabular}{| c | c |}
+\hline
+Error & Posible causa \\
+\hline\hline
+502 Bad Gateway & Backend muerto \\
+\hline
+bind() failed & Puerto ocupado \\
+\hline
+Permission denied & Permisos Linux \\
+\hline
+404 & Ruta incorrecta \\
+\hline
+\end{tabular}
+\end{center}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\section*{Proxy para WebSockets}
+
+\begin{lstlisting}
+location /socket {
+
+    proxy_pass http://backend;
+
+    proxy_http_version 1.1;
+
+    proxy_set_header Upgrade $http_upgrade;
+
+    proxy_set_header Connection "upgrade";
+
+}
+\end{lstlisting}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\section*{Rate Limiting}
+
+\begin{lstlisting}
+limit_req_zone
+$binary_remote_addr
+zone=api:10m
+rate=5r/s;
+\end{lstlisting}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\section*{Workers}
+
+\begin{lstlisting}
+worker_processes auto;
+\end{lstlisting}
+
+NGINX crea workers según CPUs.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\section*{Flujo típico}
+
+\begin{lstlisting}
+Cliente
+  |
+  V
+NGINX
+  |
+  +--> React Frontend
+  |
+  +--> FastAPI Backend
+  |
+  +--> PostgreSQL
+\end{lstlisting}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\end{document}
