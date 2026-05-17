@@ -1,0 +1,74 @@
+\documentclass[a4paper,10pt]{article}
+\usepackage[margin=1.5cm]{geometry}
+\usepackage{multicol}
+\usepackage{hyperref}
+\usepackage{enumitem}
+\usepackage{listings}
+
+
+
+\setlength{\parindent}{0pt}
+
+\begin{document}
+
+
+
+\begin{center}
+    {\Large \texttt{Linux Trouble Shooting}}\\
+\end{center}
+
+\tableofcontents
+\newpage
+
+
+
+\section{Introducción}
+
+En este documento encontrarás los soluciones a los problemas del kernel/os de distribuciones \textit{Linux} con los que me he encontrado.
+
+
+
+\section{Kernel Panic}
+
+
+\subsection{VFS: Unable to mount root fs on unkowun-block 0,0}
+
+Este error ocurre cuando hubo un problema al momento de compilar el kernel y el \textit{initramfs}. Este último es una imagen temporal del filesystem que se usa para ayudar al kernel a montar el root filesystem y correr el sistema principal \textit{Init}.
+En mi caso, el error se debió a que un modulo de kernel de terceros, \textit{hid-xpadneo},  no era compatible con la versión de kernel con la que traté de iniciar mi equipo, Linux 7.0.0-15-generic.
+Para encontrar qué módulo fue el que falló, corrí el siguiente comando:
+
+\begin{lstlisting}
+    sudo dkms autoinstall -k 7.0.0-15-generic (cambia por la version de kernel del caso)
+\end{lstlisting}
+
+En los logs de ejecución, se podía ver que había ocurrido un error al tratar de integar el paquete hid-xpadneo en la versión de kernel. En mi caso, ese modulo ya no era necesario, por lo que la solución fue \textbf{removerlo}.
+Para saber correctamente el nombre del paquete, se puede consultar el siguiente comando:
+
+
+
+\begin{lstlisting}
+    sudo dkms status
+\end{lstlisting}
+
+El output de ese comando mostará los paquetes de terceros presentes para ser integrados al kernel. Los estatus pueden ser "added" o "installed". Incluso si se muestra solo como agregado, al momento de tratar de compilar al kernel también mostrará el error. El objetivo es que el paquete desaparezca. Para ello, ejecuta:
+
+\begin{lstlisting}
+    sudo dkms remove hid-xpadneo/v0.9-214-g8d20a23(cambia por el paquete problematico) --all 
+\end{lstlisting}
+
+Una vez ejecutado eso, corroboramos con dkms status. Si se tuvo exito, el paquete ya no aparecerá en el output de ese comando.
+
+
+Ahora, para \textbf{reparar} la compilación del kernel, sigue la secuencia de comando:
+
+\begin{lstlisting}
+    sudo apt update
+    sudo apt upgrade
+    sudo dkms autoinstall -k 7.0.0-15-generic  
+    sudo update-initramfs -u -k 7.0.0-15-generic
+\end{lstlisting}
+
+Después de eso, reinicia el equipo e intenta iniciar con el kernel reparado.
+
+
+\end{document}
