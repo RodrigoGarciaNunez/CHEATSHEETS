@@ -1,0 +1,110 @@
+\documentclass[a4paper,10pt]{article}
+\usepackage[margin=1.5cm]{geometry}
+\usepackage{multicol}
+\usepackage{hyperref}
+\usepackage{enumitem}
+\usepackage{listings}
+
+
+
+\setlength{\parindent}{0pt}
+
+\begin{document}
+
+
+\begin{center}
+    {\Large \texttt{HTTP(S)}}\\
+\end{center}
+
+\tableofcontents
+\newpage
+
+
+
+\section{¿Qué es HTTP(S)?}
+
+
+\textbf{HTTP} (Hypertext Transfer Protocol) es el protocolo encargado de la transferencia de infromación a través de archivos (XML, HTML, etc.).
+HTTP define la sintaxis y la semántica que utilizan los elementos de software de la arquitectura web (clientes, servidores, proxies) para comunicarse.
+
+\
+
+Es un protocolo orientado a transacciones y sigue el esquema petición-respuesta entre un cliente y un servidor. El \textbf{cliente}  
+realiza una petición enviando un mensaje, con cierto formato al servidor. El \textbf{servidor} le envía un mensaje de respuesta.
+
+
+\section{Estructura de un mensaje HTTP}
+
+Los mensajes HTTP son en texto plano, lo que lo hace más legible y fácil de depurar. Los mensajes tienen la siguiente estructura:
+
+\begin{itemize}
+    
+    \item Línea inicial (termina con retorno de carro y un salto de línea) con:
+    
+    \begin{itemize}
+        \item[*] Para las \textbf{peticiones}: la acción requerida por el servidor (método de petición) 
+        seguido de la URL del recurso y la versión de HTTP que soporta el cliente.
+        
+        \item[*] Para \textbf{respuestas}: la versión del HTTP usado seguido del código de respuesta 
+        (que indica qué ha pasado con la petición seguido de la URL del recurso) y de la frase asociada a dicho retorno.
+    
+    \end{itemize}
+    
+    \item Las \textbf{cabeceras} del mensaje que terminan con una línea en blanco. Son metadatos. Estas cabeceras le dan gran flexibilidad al protocolo.
+    
+    \item Cuerpo del mensaje (\textit{Opcional}). Su presencia depende de la línea anterior del mensaje y del tipo de recurso al que hace referencia la URL. 
+    Típicamente tiene los datos que se intercambian cliente y servidor. 
+    Por ejemplo, para una petición podría contener ciertos datos que se quieren enviar al servidor para que los procese. Para una respuesta podría incluir los datos que el cliente ha solicitado.
+
+\end{itemize}
+
+
+
+
+\section{Métodos}
+
+HTTP define una \textbf{serie predefinida de métodos} de petición para indicar la acción que se desea realizar sobre el \textbf{recurso} identificado. 
+Que este recurso sea preexistente (datos ya almacenados) o se genere de forma dinámica depende de la implementación del servidor. 
+A menudo, el recurso corresponde a un archivo o a la salida de un ejecutable que reside en el servidor.
+
+\
+
+Un método puede ser catalogado como \textbf{seguro, idempotente o cacheable}:
+
+\begin{itemize}
+
+    \item Método Seguro:  Si una petición con ese método no tiene un efecto intencional en el servidor (\textbf{solo lectura}).
+    
+    \item Método idempotente: Si múltiples peticiones con ese método tienen el mismo efecto que una sola petición.
+    Los métodos seguros son trivialmente idempotentes pues no deberían representar actualizaciones para el servidor.
+    
+    \item Método Cacheable: Si se pueden almacenar sus resultados para su reutilización.
+
+\end{itemize}
+
+\begin{tabular}{| c | c | c | c | c | c |}
+\hline
+Método & Petición con Carga Util & Respuesta con Carga Util & Safe & Idempotente & Cacheable \\
+\hline
+GET \\
+\hline
+HEAD \\
+\hline
+POST \\
+\hline
+PUT \\
+\hline
+DELETE \\
+\hline
+CONNECT \\
+\hline
+OPTIONS \\
+\hline
+TRACE  \\
+\hline
+PATCH \\
+\hline
+
+\end{tabular}
+
+\end{document}
