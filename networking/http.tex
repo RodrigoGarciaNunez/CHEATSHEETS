@@ -83,28 +83,163 @@ Un método puede ser catalogado como \textbf{seguro, idempotente o cacheable}:
 \end{itemize}
 
 \begin{tabular}{| c | c | c | c | c | c |}
-\hline
-Método & Petición con Carga Util & Respuesta con Carga Util & Safe & Idempotente & Cacheable \\
-\hline
-GET \\
-\hline
-HEAD \\
-\hline
-POST \\
-\hline
-PUT \\
-\hline
-DELETE \\
-\hline
-CONNECT \\
-\hline
-OPTIONS \\
-\hline
-TRACE  \\
-\hline
-PATCH \\
-\hline
+    \hline
+    Método & Petición con Carga Util & Respuesta con Carga Util & Safe & Idempotente & Cacheable \\
+    \hline
+    GET & Opcional	& Sí & Sí & Sí & Sí \\ 
+    \hline
+    HEAD & Opcional	& No & Sí&	Sí&	Sí\\
+    \hline
+    POST & Sí &Sí &No	&No	&Sí\\
+    \hline
+    PUT & Sí &Sí &No	&Sí	&No\\
+    \hline
+    DELETE &Opcional	&Sí	&No	&Sí	&No\\
+    \hline
+    CONNECT &Opcional	&Sí &No	&No	&No \\
+    \hline
+    OPTIONS& Opcional&	Sí&	Sí&	Sí	&No \\
+    \hline
+    TRACE &  No	&Sí	&Sí	&Sí	&No \\
+    \hline
+    PATCH & Sí	&Sí	&No	&No	&No\\
+    \hline
+    QUERY & & &Sí & Sí & Sí\\
+    \hline
+\end{tabular}
 
+\
+
+\subsection{GET}
+El método \textbf{GET} solicita que el recurso de destino transfiera una representación de su estado. 
+Las solicitudes que usan GET solo deben recuperar datos y no deben tener ningún otro efecto. \textit{Traeme el recurso}.
+
+\subsection{HEAD}
+El método \textbf{HEAD} solicita que el recurso de destino transfiera una representación de su estado, al igual que el método GET, pero sin los datos de representación contenidos en el cuerpo de la respuesta.
+Esto es útil para poder recuperar los metadatos de las cabeceras de la respuesta, sin tener que transportar el contenido completo.
+\textit{Traeme SOLO la etiqueta del recurso}.
+
+\subsection{POST}
+El método \textbf{POST} solicita que el recurso de destino procese la representación contenida en la petición de acuerdo con la semántica del propio recurso. 
+\textbf{A nivel semántico está orientado a crear un nuevo recurso}.
+\textit{Crea el recurso que con los  datos que te voy a pasar}.
+
+\subsection{PUT}
+El método \textbf{PUT} envía datos al servidor, pero a diferencia del método POST la URI de la línea de petición no hace referencia al recurso que los procesará, sino que identifica a los propios datos. 
+PUT está \textbf{más orientado a la actualización} de los mismos (aunque también podría crearlos).
+\textit{Actualiza (o crea) el recurso con los siguientes datos}.
+
+\subsection{DELETE}
+Borra el recurso.
+
+\subsection{CONNECT}
+Es una solicitud que establece un \textbf{Tunel TCP/IP} medinate un proxy HTTP, con el fín de facilitar comunicación mediante \textbf{HTTPS}.
+\textit{Solicito establecer conexión contigo}. 
+
+\subsection{OPTIONS}
+Se usa para \textbf{mostrar las opciones presentes durante una conexión para un URL especifico}, con el fín de que el cliente sea capaz de determinar qué métodos y/o cabeceras HTTP están permitidas
+durante una conexión.
+\textit{¿Qué solicitudes te puedo hacer respecto a este recurso?}
+
+\subsection{TRACE}
+El método \textbf{TRACE} Solicita al servidor que introduzca en la respuesta todos los datos que reciba en el mensaje de petición. 
+Se utiliza con fines de depuración y diagnóstico ya que el cliente puede ver lo que llega al servidor y de esta forma ver todo lo que añaden al mensaje los servidores intermedios 
+\textit{Dime TODO lo que los servidores intermedios añaden a mi mensaje}.
+
+\subsection{PATCH}
+Su función es la misma que PUT, el cual \textbf{sobrescribe completamente un recurso}. Se utiliza para actualizar, de manera parcial una o varias partes. Está orientado también para el uso con proxy.
+\textit{Actualiza el recurso}.
+
+\subsection{QUERY}
+Similar a GET, \textbf{QUERY} solicita un recurso con la diferencia de poder solicitarlo mediante estructuras de consulta (queries) como los son \textbf{JSON o SQL}.
+Esto elimina la limitación del tamaño de URLs o la no idempotencia de la semantica de POST.
+\textit{Busca el recurso utilizando este JSON o esta consulta SQL}.
+
+
+
+\section{Ejemplo de Dialogo}
+
+\begin{itemize}
+    \item Cliente: 
+        \begin{lstlisting}
+            GET /index.html HTTP/1.1
+            Host: www.example.com
+            Referer: www.google.com
+            User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:45.0) Gecko/20100101 Firefox/45.0
+            Connection: keep-alive
+            [Linea en blanco]
+        \end{lstlisting}
+
+    \item Servidor:
+    \begin{lstlisting}
+            HTTP/1.1 200 OK
+            Date: Fri, 31 Dec 2003 23:59:59 GMT
+            Content-Type: text/html
+            Content-Length: 1221
+
+            <html lang="eo">
+            <head>
+            <meta charset="utf-8">
+            <title>Titulo del sitio</title>
+            </head>
+            <body>
+            <h1>Pigina principal de tuHost</h1>
+            (Contenido)
+            .
+            .
+            .
+            </body>
+            </html>
+        \end{lstlisting}
+\end{itemize}
+
+
+Para ver un \textbf{ejemplo de dialogo de cada uno de los métodos HTTP}, desde un shell linux:
+\begin{lstlisting}
+    curl -X [Metodo] https://example.com/resource (-d '{"key":"value"})'
+\end{lstlisting}
+
+
+
+\section{Status Codes}
+Un \textbf{STATUS CODE} es un número que indica que ha pasado con la petición. 
+El resto del contenido de la respuesta dependerá del valor de este código.
+\
+
+El número de los códigos están elegidos de tal forma que según si pertenece a una centena u otra se pueda identificar 
+el tipo de respuesta que ha dado el servidor:
+
+\begin{itemize}
+    \item Formtado \textbf{1XX: LOGS}. Respuestas informativas. Indica que la petición ha sido recibida y se está procesando.
+    \item Formato \textbf{2XX: Respuestas correctas}. Indica que la petición ha sido procesada correctamente.
+    \item Formato \textbf{3XX: Respuestas de redirección}. Indica que el cliente necesita realizar más acciones para finalizar la petición. 
+    |   \textit{Lo que buscas ya no está aquí}.
+    \item Formato \textbf{4XX: Errores del lado del cliente}. Indica que ha habido un error al procesar le petición del cliente pues algo fue mal de su lado.
+    \item Formato \textbf{5XX: Errores del lado del servidor}. La petición llegó, pero no se pudo procesar debido a un fallo del lado del servidor. 
+\end{itemize}
+
+\subsection{Status Codes Comunes}
+
+\begin{tabular}{| c | c | c |}
+    \hline
+    Código & Significado & Descripción \\
+    \hline
+    200 & SUCCESS &  Petición Exitosa\\
+    \hline
+    301 & REDIRECT & El cliente será redirigido a otro dominio \\
+    \hline
+    400 & BAD REQUEST & \\
+    \hline
+    401 & UNAUTHORIZED & El cliente no ha sido autenticado \\
+    \hline
+    403 & FORBIDDEN & El cliente sí fue autenticado, más no tiene acceso al recurso. \\
+    \hline
+    404 & NOT FOUND & El recurso solicitado no pudo ser encontrado. \\
+    \hline
+    500 & INTERNAL SERVER ERROR & Problemas del lado del servidor. \\
+    \hline
+    503 & SERVICE UNAVAILABLE & Servidor no disponible. \\
+    \hline
 \end{tabular}
 
 \end{document}
