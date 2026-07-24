@@ -1,0 +1,185 @@
+\documentclass[a4paper,10pt]{article}
+\usepackage[margin=1.5cm]{geometry}
+\usepackage{multicol}
+\usepackage{hyperref}
+\usepackage{enumitem}
+\usepackage{listings}
+\usepackage{graphicx}
+
+
+\setlength{\parindent}{0pt}
+
+\begin{document}
+
+
+\begin{center}
+    {\Large \texttt{Modelo OSI}}\\
+\end{center}
+
+\tableofcontents
+\newpage
+
+
+\section{¿Qué es?}
+El modelo \textbf{Open Systems Interconnections} es un modelo conceptual creado por la Organización Internacional para la Estandarización, el cual
+permite que diversos sistemas de comunicación se conecten usando protocolos estándar. \textbf{Proporciona un estándar para que distintos sistemas de
+equipos puedan comuncarse entre sí}.
+
+Se basa en el concepto de dividir un sistema de comunicación en \textbf{siete capas abstractas}, cada una apilada sobre la anterior. Cada capa del modelo OSI tiene una función específica y se comunica con las capas superiores e inferiores. 
+ 
+\
+
+\begin{figure}
+    \centering
+    \includegraphics[width=0.7\textwidth]{images/osi_model_7_layers.png}
+    \caption{Representación del modelo OSI.}
+    \label{fig:osi_model_7_layer}
+\end{figure}
+
+
+Auque el intenet moderno no sigue estructamnete el modelo OSI, este modelo es muy util para resolver problemas de de red, pues dependiendo del problema,
+este modelo \textbf{nos ayuda como un mapa para desglozar e identeficar la causa de este}.
+
+
+
+\section{Capas del modelo OSI}
+
+Es conveniente definir las 7 capas de abstracción de forma descendente para mejor entendimiento.
+
+\subsection{Capa 7 - Aplicación}
+Esta es la única capa que interactúa directamente con los datos del usuario. 
+Las aplicaciones de software, como los navegadores web y los clientes de correo electrónico, dependen de la capa de aplicación para iniciar las comunicaciones, mas no forman parte de esta capa.
+
+\
+
+La capa de aplicación es \textbf{responsable de los protocolos y la manipulación de datos de los que depende el software para presentar datos significativos al usuario}.
+
+\
+
+Los protocolos de la capa de aplicación incluyen \textbf{HTTP}, así como también \textbf{SMTP}.
+
+\begin{figure}
+    \centering
+    \includegraphics[width=0.7\textwidth]{images/osi_model_application_layer_7.png}
+    \caption{Capa 7 (Aplicación) del modelo OSI.}
+    \label{fig:osi_7_layer}
+\end{figure}
+
+
+\subsection{Capa 6 - Presentación}
+Esta capa es principalmente responsable de preparar los datos para que los pueda usar la capa de aplicación; en otras palabras, 
+la capa 6 \textbf{hace que los datos se preparen para su consumo por las aplicaciones}. La capa de presentación es responsable de la \textbf{traducción, el cifrado y la compresión} de los datos.
+
+La capa 6 es la \textbf{responsable de traducir los datos entrantes en una sintaxis que la capa de aplicación del dispositivo receptor pueda comprender} sin importar si los dos dispostivos usan el mismo
+método de codificación o no.
+
+La capa 6 es responsable de \textbf{añadir el cifrado en el extremo del emisor}, así como de \textbf{decodificar el cifrado en el extremo del receptor}, para poder presentar a la capa de aplicación datos descifrados y legibles.
+
+\
+
+Después, la capa de presentación es también la encargada de \textbf{comprimir los datos que recibe de la capa de aplicación antes de ser enviados a la capa 5}. 
+Esto ayuda a mejorar la velocidad y la eficiencia de la comunicación mediante la minimización de la cantidad de datos que serán transferidos.
+
+\
+
+\begin{figure}
+    \centering
+    \includegraphics[width=0.7\textwidth]{images/osi_model_presentation_layer_6.png}
+    \caption{Capa 6 (Presentación) del modelo OSI.}
+    \label{fig:osi_6_layer}
+\end{figure}
+
+
+\subsection{Capa 5 - Sesión}
+
+La capa de sesión es la responsable de la \textbf{apertura y cierre de comunicaciones entre dos dispositivos}. Ese tiempo que transcurre entre la apertura de la comunicación y el cierre de esta se conoce como \textbf{sesión}. 
+
+\
+
+La capa de sesión \textbf{garantiza que la sesión permanezca abierta el tiempo suficiente como para transferir todos los datos que se están intercambiando}.
+
+\begin{figure}
+    \centering
+    \includegraphics[width=0.7\textwidth]{images/osi_model_session_layer_5.png}
+    \caption{Capa 5 (Sesión) del modelo OSI.}
+    \label{fig:osi_5_layer}
+\end{figure}
+
+\
+
+La capa de sesión también \textbf{sincroniza la transferencia de datos utilizando puntos de control}. 
+Por ejemplo, si un archivo de 100 megabytes está transfiriéndose, la capa de sesión podría fijar un punto de control cada 5 megabytes. 
+En caso de desconexión o caída tras haberse transferido, por ejemplo, 52 megabytes, la sesión podría reiniciarse a partir del último punto de control, con lo cual solo quedarían unos 50 megabytes pendientes de transmisión. 
+Sin esos puntos de control, la transferencia en su totalidad tendría que reiniciarse desde cero.
+
+\subsection{Capa 4 - Transporte}
+
+La capa 4 es la \textbf{responsable de las comunicaciones de extremo a extremo entre dos dispositivos}. Esto implica, antes de proceder a ejecutar el envío a la capa 3, tomar \textbf{datos de la capa de sesión y fragmentarlos seguidamente en trozos más pequeños llamados \textit{segmentos}}. 
+La capa de transporte del dispositivo receptor es la responsable luego de rearmar tales segmentos y construir con ellos datos que la capa de sesión pueda consumir.
+
+\
+
+La capa de transporte también es \textbf{responsable del control de flujo y el control de errores}. El control de flujo determina una velocidad óptima de transmisión para garantizar que un emisor con una conexión rápida no abrume a un receptor con una conexión lenta. 
+La capa de transporte realiza un control de errores en el extremo receptor al garantizar que los datos recibidos estén completos y solicitar una retransmisión si no lo están.
+
+\
+
+La capa de transporte solo realiza tareas de control de flujo y de control de errores para las comunicaciones dentro de la red.
+
+\begin{figure}
+    \centering
+    \includegraphics[width=0.7\textwidth]{images/osi_model_transport_layer_4.png}
+    \caption{Capa 4 (Transporte) del modelo OSI.}
+    \label{fig:osi_4_layer}
+\end{figure}
+
+\subsection{Capa 3 - Red}
+La capa de red es \textbf{responsable de facilitar la transferencia de datos \textit{entre dos redes diferentes}}. 
+Si los dispositivos que se comunican se encuentran en la misma red, entonces la capa de red no es necesaria. 
+Esta capa divide los segmentos de la capa de transporte en unidades más pequeñas, llamadas \textbf{paquetes}, en el dispositivo del emisor, y vuelve a juntar estos paquetes en el dispositivo del receptor. 
+La capa de red también \textbf{busca la mejor ruta física para que los datos lleguen a su destino}; esto se conoce como \textbf{enrutamiento}.
+
+\
+
+Los protocolos de la capa de red incluyen la \textbf{IP}, el Protocolo de mensajes de control de Internet \textbf{(ICMP)}, el Protocolo de mensajes de grupo de Internet \textbf{(IGMP)} y el paquete \textbf{IPsec}.
+
+\begin{figure}
+    \centering
+    \includegraphics[width=0.7\textwidth]{images/osi_model_network_layer_3.png}
+    \caption{Capa 3 (RED) del modelo OSI.}
+    \label{fig:osi_3_layer}
+\end{figure}
+
+
+\subsection{Capa 2 - Enlace de Datos}
+La capa de enlace de Datos comparte responsabnlidades con la capa de Red, con la diferencia de que esta se enfoca en la \textbf{trasnferencia de datos entre dos dispositivos de la \textit{misma red}}.
+
+\
+
+La capa de enlace de datos toma los paquetes de la capa de red y los divide en partes más pequeñas que se denominan \textbf{tramas}. 
+
+\begin{figure}
+    \centering
+    \includegraphics[width=0.7\textwidth]{images/data_link_layer_osi_model.png}
+    \caption{Capa 2 (Enlace de Datos) del modelo OSI.}
+    \label{fig:osi_2_layer}
+\end{figure}
+
+\subsection{Capa 1 - Física}
+
+Esta capa \textbf{incluye el equipo físico implicado en la transferencia de datos}, tal como los cables y los conmutadores de red. 
+Esta también es la capa donde los \textbf{datos se convierten en una secuencia de bits}, es decir, una cadena de unos y ceros. 
+La capa física de ambos dispositivos también debe estar de acuerdo en cuanto a una convención de señal para que los 1 puedan distinguirse de los 0 en ambos dispositivos.
+
+\begin{figure}
+    \centering
+    \includegraphics[width=0.7\textwidth]{images/osi_model_physical_layer_1.png}
+    \caption{Capa 1 (Fisica) del modelo OSI.}
+    \label{fig:osi_1_layer}
+\end{figure}
+
+
+\section{Flujo de Datos en el modelo OSI}
+
+
+\end{document}
