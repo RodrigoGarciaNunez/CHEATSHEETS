@@ -21,12 +21,12 @@
 
 
 
-\section{¿Qué es HTTP(S)?}
+\section{¿Qué es HTTP?}
 
 
 \textbf{HTTP} (Hypertext Transfer Protocol) es el protocolo encargado de la transferencia de infromación a través de archivos (XML, HTML, etc.).
 HTTP define la sintaxis y la semántica que utilizan los elementos de software de la arquitectura web (clientes, servidores, proxies) para comunicarse.
-
+\textbf{El puerto estandar de HTTP es el 80}.
 \
 
 Es un protocolo orientado a transacciones y sigue el esquema petición-respuesta entre un cliente y un servidor. El \textbf{cliente}  
@@ -241,5 +241,58 @@ el tipo de respuesta que ha dado el servidor:
     503 & SERVICE UNAVAILABLE & Servidor no disponible. \\
     \hline
 \end{tabular}
+
+
+
+\section{HTTP\textbf{S}}
+
+El \textbf{Hypertext Transfer Protocol Secure} es la versión segura de HTTP. Como se menciona anteriormente, los mensajes HTTP son meramenta texto plano, lo que los vuelve inseguros, pues
+cualquier persona que intercepte el mensaje podrá ver y entender su contenido. \textbf{El puerto estandar de HTTP es el 443}.
+
+\
+
+HTTPS resuelve esto al agregar un protocolo de encriptación llamado \textbf{Transport Layer Security (\textit{TLS})}, anteriomente conocido como \textbf{Secure Sockets Layer (\textit{SSL})}, que utiliza una \textbf{infraestructura de clave pública asimétrica},
+lo que indica que este tipo de sistema utiliza dos claves diferentes para encriptar las comunicaciones.
+
+\begin{itemize}
+    \item Clave Privada: Es la clave con la que cuenta el propietario de un sitio Web. Se ubica en un servidor web y se utiliza para desencriptar la información encriptada por la clave publica.
+    \item Clave Publica: Esta es utilizada por todos los clientes que quieran interactuar con el servidor de forma segura. Sirve para encriptar las peticiones, mas no para desencriptarlas. 
+\end{itemize}
+
+
+\subsection{Certificado TLS/SSL}
+
+Para que un sitio Web pueda usar HTTPS, este necesita tener un \textbf{Certificado TLS/SSL}, los cuales pueden ser otorgados por proveedores de alojamiento de sitios.
+Estos cerificados sirven para validar que un sitio web es quien dice ser. Se trata de un archivo almacenado en el servidor original de un sitio web.
+
+\
+
+El certiicado cuenta con las claves publica y privada necesarias para encrpitación TLS/SSL. De ese modo, cuando un usuario quiere entablas conversación con un servidor, este le puede pasaar la clave publica 
+necesaria para iniciar la comunicación encriptada.
+
+\
+
+Para obtener información detallada del certificado TLS/SSL, puedes usar el siguiente comando:
+
+\begin{lstlisting}
+
+echo | openssl s_client -connect dominio.com:443 -servername dominio.com 2>/dev/null | 
+
+openssl x509 -noout -text   
+
+\end{lstlisting}
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 \end{document}

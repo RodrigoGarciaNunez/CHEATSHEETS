@@ -179,7 +179,32 @@ La capa física de ambos dispositivos también debe estar de acuerdo en cuanto a
 \end{figure}
 
 
-\section{Flujo de Datos en el modelo OSI}
+\section{Ejemplo de Flujo de Datos en el modelo OSI}
+El señor Cooper quiere enviar a la señora Palmer un correo electrónico. 
+El señor Cooper redacta dicho mensaje en una aplicación de correo y después le da a Enviar. 
+Su aplicación de correo pasa entonces su mensaje a la \textbf{capa de aplicación}, y esta elige un protocolo (SMTP en este caso, pero puede ser otro, como HTTPS) y pasa los datos a la \textbf{capa de presentación}. 
+La capa de presentación comprime entonces los datos y los pasa a la \textbf{capa de sesión}, que será la que inicie la sesión de comunicación.
+
+\
+
+Los datos llegarán entonces a la \textbf{capa de transporte del emisor} y serán allí segmentados. 
+Después, esos segmentos se fragmentarán en trozos más pequeños, paquetes, en la \textbf{capa de red} y en trozos aún más pequeños, tramas, en la \textbf{capa de enlace de datos}. 
+Entonces la capa de enlace de datos enviará las tramas a la \textbf{capa física} para que puedan ser convertidas por esta en una secuencia de bits formada por unos y ceros que viaje a través de un medio físico, por ejemplo, un cable.
+
+\
+
+Cuando el ordenador de la señora Palmer reciba la secuencia de bits a través de un medio físico (por ejemplo, su wifi), 
+los datos viajarán a través de la misma serie de capas, solo que ahora en su dispositivo y en \textit{orden inverso}. 
+Primero, la \textbf{capa física} convertirá la secuencia de bits en tramas que pasarán a la \textbf{capa de enlace de datos}. 
+Segundo, esta capa ensamblará las tramas para formar paquetes que pueda utilizar la \textbf{capa de red}. 
+Tercero la capa de red creará segmentos a partir de tales paquetes y los enviará a la \textbf{capa de transporte}. 
+Por último, la capa de transporte convertirá tales segmentos en trozos de información.
+
+\
+
+Los ahora ya datos pasarán a la \textbf{capa de sesión del receptor}, y esta, a su vez, los hará llegar a la \textbf{capa de presentación}; 
+después pondrá fin a la sesión de comunicación. La capa de presentación eliminará entonces la compresión y pasará los datos brutos a la \textbf{capa de aplicación}. 
+Por último, la capa de aplicación suministrará datos legibles por humanos al software de correo de la señora Palmer a fin de que esta persona pueda leer en la pantalla de su portátil el correo del señor Cooper.
 
 
 \end{document}
