@@ -33,7 +33,7 @@ El modelo TCP/IP se conforma de 4 capas de protocolos:
     \item Capa 4 - \textbf{Aplicación},
     \item Capa 3 - \textbf{Transporte},
     \item Capa 2 - \textbf{Red} e
-    \item Capa 1 - \textbf{Interfáz de Red}.
+    \item Capa 1 - \textbf{Acceso a Red}.
 \end{itemize}
 
 
@@ -63,22 +63,127 @@ Respecto al \textbf{modelo OSI}, la capa de aplicación en el modelo TCP/IP corr
 
 
 \subsection{Capa 3 - Transporte}
-En la \textbf{Capa de Transporte} se 
+En la \textbf{Capa de Transporte} se establecen canales de datos utilizados para hacer posible el intercambio de datos. 
+Además \textbf{establece la conectividad de host a host en forma de servicios de transferencia de mensajes de extremo a extremo} independientes de las redes subyacentes e independientes de la 
+estructura de los datos del usuario y la logística del intercambio de información.
+
+\
+
+Los protocolos de esta capa pueden proporcionar \textbf{control de errores, segmentación, control de flujo, control de congestión y direccionamiento de aplicaciones}.
+
+\
+
+Es en esta capa en la que aparece en concepto de \textbf{puertos de red}. Estos son puertos \textit{lógicos} numerados que se asignan de forma especifica para cada uno de los
+canales de comunicación que necesita una aplicación. Esta técnica resuelve el problema de: \textit{Puedes llegar al edificio correcto, pero llamar a la puerta equivocada}.
+
+\
+
+Un \textbf{comando para ver información detallada sobre los puertos TCP y UDP} ocupados
+
+\begin{center}
+    \begin{lstlisting}
+    netstat -tulnp
+    o
+    ss -tulpn
+    \end{lstlisting}
+\end{center}
+
+en donde -tulpn significa:
+
+\begin{itemize}
+    \item -t - Muestra conexiones TCP.
+    \item -u - MUestra conexiones UDP.
+    \item -l - Muestra puertos en listening (que ya hay un proceso que los ocupa y espera conexión).
+    \item -n - Muestra direcciones en formato numérico.
+    \item -p - Muestra el PID del proceso asociado a cada puerto.
+\end{itemize}
+
+\
+
+Algunos protocolos presentes en esta capa son:
+
+\begin{itemize}
+    \item Transmission Control Protocol - TCP.
+    \item User Datagram Protocol - UDP.
+    \item Stream Control Transmission Protocol - SCTP.
+    \item Datagram Congestion Control Protocol - DCCP.
+    \item Real-Time Transport Protocol - RTP.
+\end{itemize}
+
+\begin{center}
+    \textit{Aquí van los protocolos que se encargan de controlar el envío de recursos en la red.}
+\end{center}
+
+\subsubsection{Transmission Control Protocol - TCP}
 
 
-\subsection{Capa 2 - Red}
+\subsubsection{User Datagram Protocol - UDP}
 
-\subsection{Capa 1 - Interfáz de Red}
+\subsection{Capa 2 - Red/Internét}
 
+En la capa de \textbf{Red} se introduce el concepto de \textbf{enrutamniento}, el cual se refiere a la acción de enivar datos desde una red de origen a
+una red destino mediante la interconexión de redes. Esta capa es la \textbf{responsable de enviar paquetes de datos a través de múltiples redes}. 
+La capa de Internet hace posible la interconexión, el funcionamiento interno de diferentes redes IP y es como Internet se establece.
+
+\
+
+La capa de Internet no distingue entre los distintos protocolos de la capa de transporte. IP transporta datos para que los protocolos de capas superiores se encarguen de tratarlos de la manera correcta, pues no entiende de otras capas.
+\
+
+Protocolos presentes en la capa de red son:
+
+\begin{itemize}
+    \item Internet Protocol - IP.
+    \item Inteneet Control Message Protocol - ICMP.
+    \item Address Resolution Protocol - ARP.
+    \item Reverse Address Resolution Protocol - RARP.
+    \item Internet Group Management Protocol - IGMP.
+    \item Bootstrap Protocol - BOOTP.
+\end{itemize}
+
+
+\begin{center}
+    \textit{Aquí van los protocolos que se encargan de direccionar y asegurar que los datos lleguen al destino correcto}
+\end{center}
+
+\subsubsection{Internet Protocol - IP}
+
+\subsection{Capa 1 - Acceso a red}
+
+La capa de \textbf{Acceso a Red} define \textbf{cómo se deben enviar los datos, maneja el acto físico de enviar y recibir datos y es responsable de transmitir datos entre aplicaciones o dispositivos en una red}. 
+Esto incluye definir cómo el hardware y otros dispositivos de transmisión deben señalar los datos en una red, como el controlador de dispositivo de una computadora, un cable \textbf{Ethernet}, una tarjeta de interfaz de red (\textbf{NIC}) o una \textbf{red inalámbrica}.
+
+\
+
+Respecto al \textbf{modelo OSI}, esta capa corresponde a la capa 1, \textbf{Física}, y a la capa 2, \textbf{Enlace de Datos}.
+
+\
+
+Protocolos presentes en esta capa
+
+\begin{itemize}
+    \item Ethernet.
+    \item Wi-Fi.
+    \item Peer to Peer Protocol - PPP.
+    \item Frame Relat y X.25.
+    \item Bluethooth.
+\end{itemize}
+
+\begin{center}
+    \textit{Aquí van los protocolos que se encargan de decidir cómo procesan físicamente los datos que se envían y se reciben en una red}
+\end{center}
 
 
 \subsection{Modelo OSI vs TCP/IP}
 
-\section{TCP}
 
-
-\section{IP}
-
+\begin{figure}
+    \begin{center}
+        \includegraphics[width=0.7\textwidth]{images/osi-tcpip.png}
+        \caption{Modelo TCP/IP vs modelo OSI.}
+        \label{fig:TCP-IP_V_osi}
+    \end{center}
+\end{figure}
 
 
 \end{document}
