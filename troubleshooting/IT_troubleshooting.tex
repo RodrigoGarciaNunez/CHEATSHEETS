@@ -1,0 +1,288 @@
+\documentclass[a4paper,10pt]{article}
+\usepackage[margin=1.5cm]{geometry}
+\usepackage{multicol}
+\usepackage{hyperref}
+\usepackage{enumitem}
+\usepackage{listings}
+\usepackage{graphicx}
+
+
+\setlength{\parindent}{0pt}
+
+\begin{document}
+
+
+\begin{center}
+    {\Large \texttt{IT Troubleshooting}}\\
+\end{center}
+
+\tableofcontents
+\newpage
+
+
+
+\section{Troubleshooting}
+
+El \textbf{Troubleshooting} es una habilidad crítica para los ingenieros en sistemas. \textbf{Permite diagnosticar y resolver problemas relacionados a los
+dispositivos, aplicaciones y redes}. 
+
+\
+
+Gran parte del tiempo de un ingeniero va de investigar por qué algo que debería funcionar no lo hace. Gran parte del conocimiento para resolver problemas referentes a sistemas de computo viene
+de la experiencia. Sin embargo, aunque no todos los problemas se resulven de la misma manera, sí que hay una metodología que se recomienda seguir para agilizar el diagnóstico y solución de estos.
+
+\begin{enumerate}
+    \item Identificar el Problema.
+    \item Establecer una teoría sobre la causa problable.
+    \item Probar la teoría para determinar la causa.
+    \item Sugerir un plan de acción para resolver el problema e identificar efectos potenciales.
+    \item Implementar la solución o escalar si es necesario.
+    \item Verificar la funcionalidad completa del sitema y, si es posbible, implementar contramedidas para situaciones futuras.
+    \item Documentar lo aprendido: allazgos, acciones, resultados, contactos, etc.
+\end{enumerate}
+
+Una aclaración importante es que si alguno de los pasos posteriores al paso 4 falla, será necesario analizar el plan de acción y, según sea el caso, corregirlo o proponer una nueva solución.
+
+\subsection{Identificar el problema}
+Para completar este paso, primero es necesario \textbf{obtener tanta información como sea posible}. Fuentes de información pueden ser desde un archivo de logs, tickets que documenten el problema,
+o incluso el mismo usuario. Nunca hay que formular una causa probable hasta haber agotado las fuentes de información y se haya analizado toda la documentación del problema, pues, de otro modo, la busqueda 
+puede quedar sesgada y entorpecer la busqueda y resolución del problema. 
+
+\
+
+Por ejemplo, un login fallido puede parecer un simple problema de contraseña o username, cuando el problema real puede estar relacionado a una posible falta
+de conectividad a internet, servicios caídos, trafico bloqueado, puertos de red ocupados, deployments recientes, etc.
+
+\
+
+Una vez que el probelma se ha analizado correctamente, es momento de aislar el alcance (\textbf{scope}) del mismo, para poder concer su ubicación respecto a la arquitectura del sistema.
+
+\
+
+Pasos internos de este punto puede incluír:
+
+\begin{itemize}
+    \item Identificar fuentes de información.
+    \item Recolectar informacíon que detalle el problema (\textit{log files, users, tickets, etc.}).
+    \item Cuestionar al usuario (\textit{¿Desde cuando? ¿Lo haz experimentado antes? ¿Qué sí puedes hacer? ¿Cambió algo en el equipo después de la última vez que uso el sistema?})
+    \item Identificar los sintomas (\textit{¿En qué parte falla? ¿Cuando falla? ¿Afecta a uno o a varios usuarios?}).
+    \item Determinar los cambios recientes en el sistema o en el dispositivo.
+    \item Reproducir el problema.
+    \item Reducir el alcance del problema (\textit{Server o client side, problema de red, registros corruptos, servicio caído, etc.})
+\end{itemize}
+
+
+\subsection{Establecer una teoría sobre la causa probable}
+Una vez que se ha identificado correctamente el problema y se ha reducido su alcance, el siguiente paso consiste en \textbf{formular una teoría sobre la causa probable}. 
+Esta teoría debe estar basada en la información recolectada durante la etapa anterior y debe considerar las diferentes capas o componentes que forman parte del sistema afectado.
+
+\
+
+Es importante establecer una hipótesis que pueda ser comprobada posteriormente. 
+En este punto, no se debe asumir que la primera explicación posible es necesariamente la correcta. Un mismo síntoma puede ser provocado por diferentes causas, por lo que es recomendable formular varias hipótesis y priorizarlas de acuerdo con su probabilidad, impacto y facilidad de comprobación.
+
+\
+
+Por ejemplo, si un usuario no puede acceder a una aplicación interna, una posible teoría podría ser que existe un problema de conectividad entre el equipo del usuario y el servidor. 
+Sin embargo, también podrían existir otras causas, como una resolución DNS incorrecta, un puerto bloqueado por un firewall, un servicio detenido, un certificado TLS inválido, una configuración incorrecta del proxy o incluso un problema específico del equipo del usuario.
+
+\
+
+La teoría debe plantear una relación lógica entre los síntomas observados y una posible causa raíz. 
+De esta manera, las siguientes acciones estarán orientadas a comprobar o descartar dicha hipótesis en lugar de realizar cambios de manera arbitraria.
+
+\
+
+Pasos internos de este punto puede incluír:
+
+\begin{itemize}
+    \item Analizar la información obtenida durante la identificación del problema.
+    \item Formular una o varias hipótesis sobre la causa probable.
+    \item Priorizar las hipótesis de acuerdo con su probabilidad e impacto.
+    \item Considerar las diferentes capas involucradas (\textit{hardware, sistema operativo, aplicación, red, servicios, seguridad, etc.}).
+    \item Identificar qué evidencia permitiría confirmar o descartar cada hipótesis.
+    \item Evitar realizar cambios innecesarios antes de validar la teoría.
+\end{itemize}
+
+\subsection{Probar la teoría para determinar la causa}
+Después de establecer una teoría sobre la causa probable, es necesario \textbf{realizar pruebas que permitan confirmarla o descartarla}. Las pruebas deben ser controladas y estar directamente relacionadas con la hipótesis planteada, evitando realizar múltiples cambios simultáneamente, 
+ya que esto puede dificultar la identificación de la causa real.
+
+\
+
+Una buena práctica consiste en comenzar con las pruebas menos invasivas y avanzar progresivamente hacia procedimientos más complejos. 
+Por ejemplo, ante un problema de conectividad, primero puede comprobarse la configuración de red del equipo, posteriormente la resolución DNS, la conectividad con el servidor y finalmente la disponibilidad del puerto o servicio específico.
+
+\
+
+Es importante que cada prueba produzca información útil para el proceso de diagnóstico. 
+Si una prueba confirma la teoría, se puede continuar con la resolución del problema. Por el contrario, si la prueba demuestra que la hipótesis era incorrecta, es necesario regresar a la información recopilada y formular una nueva teoría.
+
+\
+
+Por ejemplo, si se sospecha que una aplicación no es accesible debido a un bloqueo en el puerto TCP correspondiente, 
+se puede realizar una prueba de conectividad hacia dicho puerto. Si la conexión es exitosa, la hipótesis del bloqueo puede descartarse y el análisis debe continuar hacia otras posibles causas, como un problema de autenticación, 
+configuración de la aplicación o disponibilidad del servicio.
+
+\
+
+Pasos internos de este punto puede incluír:
+
+\begin{itemize}
+    \item Diseñar una prueba para cada hipótesis planteada.
+    \item Comenzar con pruebas de bajo riesgo y bajo impacto.
+    \item Recopilar evidencia antes y después de cada prueba.
+    \item Realizar pruebas de conectividad, configuración, servicios y componentes involucrados.
+    \item Evitar modificar múltiples variables simultáneamente.
+    \item Confirmar o descartar cada teoría basándose en evidencia.
+    \item Identificar la causa raíz o continuar con una nueva hipótesis si es necesario.
+\end{itemize}
+
+
+\subsection{Sugerir un plan de acción para resolver el problema e identificar efectos potenciales}
+Una vez que la causa del problema ha sido identificada, el siguiente paso consiste en \textbf{definir un plan de acción para solucionarlo}. 
+El plan debe establecer claramente qué acciones serán realizadas, en qué orden se ejecutarán y cuáles podrían ser sus posibles efectos sobre el sistema.
+
+\
+
+Antes de implementar una solución, es importante evaluar los riesgos asociados. 
+Una modificación aparentemente sencilla puede afectar otros componentes del sistema o generar una interrupción adicional. 
+Por esta razón, el plan debe considerar el impacto potencial de cada acción y, cuando sea posible, incluir un procedimiento de reversión (\textbf{rollback}) en caso de que la solución produzca resultados inesperados.
+
+\
+
+Por ejemplo, si se determina que un problema de conectividad es provocado por una regla incorrecta en un firewall, el plan podría consistir en modificar dicha regla, 
+validar la conectividad y monitorear el comportamiento del sistema. Sin embargo, también se debe considerar la posibilidad de que el cambio permita tráfico no autorizado o afecte otros servicios que utilizan la misma regla.
+
+\
+
+En ambientes productivos, también es necesario considerar factores como ventanas de mantenimiento, 
+aprobación de cambios, comunicación con los usuarios y disponibilidad de personal especializado.
+
+\
+
+Pasos internos de este punto puede incluír:
+
+\begin{itemize}
+    \item Definir las acciones necesarias para solucionar la causa identificada.
+    \item Determinar el orden de ejecución de las acciones.
+    \item Evaluar los riesgos e impactos potenciales.
+    \item Identificar dependencias con otros sistemas o servicios.
+    \item Definir un plan de reversión (\textit{rollback}).
+    \item Determinar si es necesario realizar respaldos antes de implementar cambios.
+    \item Obtener las autorizaciones necesarias para realizar modificaciones.
+    \item Comunicar el impacto esperado a los usuarios o equipos involucrados.
+\end{itemize}
+
+
+\subsection{Implementar la solución o escalar si es necesario}
+Una vez aprobado el plan de acción, se procede a \textbf{implementar la solución}. 
+La implementación debe realizarse siguiendo el procedimiento definido previamente y procurando minimizar el impacto sobre los usuarios y los sistemas involucrados.
+
+\
+
+Durante esta etapa es importante registrar las acciones realizadas y los cambios efectuados. 
+Esta información puede ser necesaria para realizar un rollback, continuar con el diagnóstico en caso de que la solución no funcione o documentar posteriormente la resolución del incidente.
+
+\
+
+No todos los problemas pueden ser resueltos por el equipo o nivel de soporte que inicialmente los recibe. 
+Si el problema requiere conocimientos especializados, permisos adicionales o acceso a sistemas que no están disponibles, el incidente debe ser escalado al equipo correspondiente. 
+El escalamiento debe incluir toda la información relevante recopilada hasta el momento, evitando que el siguiente equipo tenga que repetir las mismas investigaciones.
+
+\
+
+Por ejemplo, un equipo de soporte puede identificar que una aplicación es inaccesible debido a un problema en la infraestructura de red, 
+pero no contar con permisos para modificar los firewalls. En este caso, el incidente puede ser escalado al equipo de redes proporcionando evidencia de las pruebas realizadas, los síntomas observados y 
+la teoría que fue confirmada.
+
+\
+
+Pasos internos de este punto puede incluír:
+
+\begin{itemize}
+    \item Implementar la solución siguiendo el plan establecido.
+    \item Registrar los cambios realizados.
+    \item Monitorear el sistema durante la implementación.
+    \item Ejecutar el procedimiento de reversión si la solución genera efectos inesperados.
+    \item Escalar el problema cuando se requieran conocimientos, permisos o recursos adicionales.
+    \item Proporcionar al equipo receptor toda la información y evidencia recopilada.
+    \item Mantener informados a los usuarios y equipos involucrados sobre el progreso.
+\end{itemize}
+
+\subsection{Verificar la funcionalidad completa del sistema y, si es posible, implementar contramedidas para situaciones futuras}
+Después de implementar la solución, es necesario \textbf{verificar que el problema haya sido resuelto completamente}. No es suficiente con comprobar únicamente el síntoma original, ya que un cambio realizado 
+para solucionar un problema puede afectar otros componentes del sistema.
+
+\
+
+La validación debe incluir pruebas que permitan confirmar que el servicio funciona correctamente desde la perspectiva del usuario y que los componentes relacionados continúan operando de manera adecuada. 
+Cuando sea posible, también se debe comprobar que la causa identificada realmente ha sido eliminada y no simplemente ocultada temporalmente.
+
+\
+
+Por ejemplo, si se solucionó un problema de acceso a una aplicación modificando una regla de firewall, 
+no basta con verificar que el usuario pueda iniciar sesión. También se debe comprobar que otros servicios continúan funcionando correctamente y que la nueva configuración no introdujo vulnerabilidades o accesos no autorizados.
+
+\
+
+Una vez confirmada la resolución, es recomendable analizar si pueden implementarse \textbf{contramedidas} para reducir la probabilidad de que el problema vuelva a ocurrir. 
+Estas pueden incluir monitoreo adicional, alertas, automatización, cambios de configuración, actualización de documentación o modificaciones en los procedimientos operativos.
+
+\
+
+Pasos internos de este punto puede incluír:
+
+\begin{itemize}
+    \item Confirmar que el síntoma original ha desaparecido.
+    \item Validar la funcionalidad completa del sistema.
+    \item Verificar que otros servicios o componentes no hayan sido afectados.
+    \item Confirmar que la solución implementada eliminó la causa del problema.
+    \item Monitorear el sistema después de implementar la solución.
+    \item Identificar posibles contramedidas preventivas.
+    \item Implementar monitoreo, alertas o automatizaciones cuando sea posible.
+    \item Actualizar configuraciones y procedimientos para prevenir incidentes similares.
+\end{itemize}
+
+\subsection{Documentar lo aprendido}
+Finalmente, es necesario \textbf{documentar toda la información relevante obtenida durante el proceso de troubleshooting}. 
+La documentación permite conservar el conocimiento adquirido y facilita la resolución de incidentes similares en el futuro.
+
+\
+
+La documentación debe incluir una descripción clara del problema, los síntomas observados, 
+la causa raíz identificada, las pruebas realizadas, las acciones ejecutadas y el resultado obtenido. 
+También es recomendable registrar cualquier información adicional que pueda ser útil para futuros procesos de diagnóstico, como contactos de equipos especializados, dependencias entre sistemas o procedimientos particulares.
+
+\
+
+Una documentación adecuada evita que otros miembros del equipo tengan que comenzar nuevamente el proceso de investigación ante la aparición de un problema similar. 
+Además, permite construir una base de conocimiento que puede ser utilizada para desarrollar procedimientos de resolución de problemas conocidos (\textit{known issues}), guías de troubleshooting y documentación técnica.
+
+\
+
+Por ejemplo, si un incidente fue provocado por una configuración incorrecta en un firewall, la documentación debería indicar cuál era la configuración problemática, 
+cómo fue identificada, qué cambio se realizó, cómo se verificó la solución y qué medidas se implementaron para evitar que el problema vuelva a ocurrir.
+
+\
+
+Pasos internos de este punto puede incluír:
+
+\begin{itemize}
+    \item Documentar el problema y sus síntomas.
+    \item Registrar la causa raíz identificada.
+    \item Documentar las teorías planteadas y las pruebas realizadas.
+    \item Registrar las acciones implementadas y sus resultados.
+    \item Documentar los cambios realizados en el sistema.
+    \item Registrar contactos o equipos involucrados en la resolución.
+    \item Documentar las contramedidas implementadas.
+    \item Registrar cualquier conocimiento adquirido durante el proceso.
+    \item Actualizar la base de conocimientos y la documentación técnica.
+\end{itemize}
+
+
+\end{document}
+
+
+
+
