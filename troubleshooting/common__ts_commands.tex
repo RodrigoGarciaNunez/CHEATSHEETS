@@ -1,0 +1,6925 @@
+\documentclass[a4paper,10pt]{article}
+\usepackage[margin=1.5cm]{geometry}
+\usepackage{multicol}
+\usepackage{hyperref}
+\usepackage{enumitem}
+\usepackage{listings}
+\usepackage{graphicx}
+\usepackage{longtable}
+
+\setlength{\parindent}{0pt}
+
+\begin{document}
+
+
+\begin{center}
+    {\Large \texttt{Comandos y herramientas Frecuentes en Troubleshooting y sus usos}}\\
+\end{center}
+
+\tableofcontents
+\newpage
+
+\section{Introducción}
+
+En este documento se encuentran documentados algunos de los comandos y herramientas
+más utilizados durante el proceso de \textbf{IT Troubleshooting} en sistemas
+Linux, Windows y macOS.
+
+El objetivo principal no es describir exhaustivamente cada comando, sino servir
+como una guía de referencia rápida durante la resolución de incidencias.
+Cada herramienta se presenta indicando su función principal, sintaxis básica,
+argumentos de mayor utilidad, particularidades y el sistema operativo donde
+está disponible.
+
+Los comandos se agrupan siguiendo el flujo habitual de un proceso de
+troubleshooting, comenzando por la recolección de información, continuando con
+la verificación de conectividad, análisis de red, revisión de servicios,
+diagnóstico de protocolos como HTTP, HTTPS y TLS, revisión de registros del
+sistema y finalizando con herramientas de monitoreo y recuperación.
+
+Es perfectamente válido utilizar comandos compuestos o combinados mediante
+pipes, redirecciones o herramientas auxiliares cuando éstos faciliten el
+diagnóstico del problema.
+
+\vspace{0.5cm}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\section{Listado de comandos y herramientas y sus usos}
+
+El siguiente listado está organizado conforme al flujo habitual de un proceso
+de troubleshooting.
+
+Cada subsección agrupa herramientas que permiten obtener cierto tipo de
+información o realizar una acción específica para aislar la causa del problema.
+
+En cada tabla se incluyen:
+
+\begin{itemize}
+\item El comando o herramienta.
+\item Su sintaxis más común.
+\item Los argumentos más utilizados durante troubleshooting.
+\item Alguna característica importante.
+\item Los sistemas operativos donde puede utilizarse.
+\end{itemize}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\subsection{Paso 1. Recolección de información}
+
+Antes de realizar cualquier modificación sobre el sistema, resulta recomendable
+obtener la mayor cantidad de información posible acerca del equipo afectado.
+
+En esta etapa se busca conocer:
+
+\begin{itemize}
+\item Sistema operativo.
+\item Versión.
+\item Kernel.
+\item Usuario actual.
+\item Arquitectura.
+\item Hardware.
+\item Memoria disponible.
+\item Espacio en disco.
+\item Variables de entorno.
+\item Hora del sistema.
+\end{itemize}
+
+Esta información permite identificar rápidamente incompatibilidades,
+restricciones de permisos, problemas de capacidad o configuraciones
+incorrectas.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\subsubsection{Información general del sistema}
+
+Los siguientes comandos permiten conocer las características generales del
+equipo.
+
+\begin{longtable}{|p{2.8cm}|p{3.1cm}|p{4.3cm}|p{5.5cm}|p{1.5cm}|}
+
+\hline
+\textbf{Comando} &
+\textbf{Sintaxis} &
+\textbf{Argumentos útiles} &
+\textbf{Particularidad} &
+\textbf{OS}
+\\
+\hline
+\endhead
+
+hostname &
+hostname &
+-f, -I &
+Obtiene el nombre del equipo y, dependiendo del sistema, las direcciones IP configuradas. &
+Linux/macOS
+\\
+\hline
+
+hostname &
+hostname &
+N/A &
+Obtiene el nombre del equipo. &
+Windows
+\\
+\hline
+
+uname &
+uname -a &
+-r, -m, -n &
+Muestra versión del kernel, arquitectura y otra información del sistema. &
+Linux/macOS
+\\
+\hline
+
+systeminfo &
+systeminfo &
+N/A &
+Proporciona información completa del sistema operativo, memoria, BIOS, dominio, hotfixes instalados y hardware. &
+Windows
+\\
+\hline
+
+sw\_vers &
+sw\_vers &
+-productVersion &
+Obtiene la versión de macOS instalada. &
+macOS
+\\
+\hline
+
+hostnamectl &
+hostnamectl &
+status &
+Muestra información del hostname, sistema operativo, kernel y arquitectura. &
+Linux
+\\
+\hline
+
+lsb\_release &
+lsb\_release -a &
+-d &
+Obtiene información de la distribución Linux instalada. &
+Linux
+\\
+\hline
+
+ver &
+ver &
+N/A &
+Muestra la versión de Windows desde consola. &
+Windows
+\\
+\hline
+
+winver &
+winver &
+N/A &
+Abre la ventana con la versión gráfica de Windows. &
+Windows
+\\
+\hline
+
+\end{longtable}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\subsubsection{Usuario actual y permisos}
+
+Es importante conocer con qué usuario se está trabajando y si éste posee los
+privilegios necesarios para realizar cambios en el sistema.
+
+\begin{longtable}{|p{2.8cm}|p{3.1cm}|p{4.3cm}|p{5.5cm}|p{1.5cm}|}
+
+\hline
+Comando &
+Sintaxis &
+Argumentos útiles &
+Particularidad &
+OS
+\\
+\hline
+\endhead
+
+whoami &
+whoami &
+N/A &
+Muestra el usuario actual. &
+Todos
+\\
+\hline
+
+id &
+id &
+id usuario &
+Obtiene UID, GID y grupos a los que pertenece un usuario. Muy útil para problemas de permisos. &
+Linux
+\\
+\hline
+
+groups &
+groups &
+usuario &
+Lista los grupos de un usuario. &
+Linux/macOS
+\\
+\hline
+
+who &
+who &
+-a &
+Lista los usuarios conectados al sistema. &
+Linux/macOS
+\\
+\hline
+
+w &
+w &
+-h &
+Muestra usuarios conectados y procesos que ejecutan. &
+Linux
+\\
+\hline
+
+query user &
+query user &
+N/A &
+Lista las sesiones activas en Windows. &
+Windows
+\\
+\hline
+
+logname &
+logname &
+N/A &
+Obtiene el usuario que inició la sesión. &
+Linux
+\\
+\hline
+
+sudo -l &
+sudo -l &
+-U usuario &
+Permite conocer los privilegios sudo disponibles. &
+Linux
+\\
+\hline
+
+net user &
+net user &
+nombreUsuario &
+Obtiene información sobre usuarios locales de Windows. &
+Windows
+\\
+\hline
+
+whoami /groups &
+whoami /groups &
+N/A &
+Muestra los grupos de seguridad del usuario actual. &
+Windows
+\\
+\hline
+
+whoami /priv &
+whoami /priv &
+N/A &
+Lista los privilegios asignados al usuario actual. &
+Windows
+\\
+\hline
+
+\end{longtable}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\subsubsection{Fecha y hora}
+
+Una configuración incorrecta de fecha u hora puede ocasionar problemas de
+autenticación, certificados TLS, Kerberos, sincronización de archivos y
+servicios distribuidos.
+
+\begin{longtable}{|p{2.8cm}|p{3.1cm}|p{4.3cm}|p{5.5cm}|p{1.5cm}|}
+
+\hline
+Comando &
+Sintaxis &
+Argumentos útiles &
+Particularidad &
+OS
+\\
+\hline
+\endhead
+
+date &
+date &
+-u &
+Obtiene la fecha y hora del sistema. &
+Linux/macOS
+\\
+\hline
+
+timedatectl &
+timedatectl &
+status &
+Muestra la configuración de fecha, zona horaria y estado de sincronización NTP. &
+Linux
+\\
+\hline
+
+Get-Date &
+Get-Date &
+-Format &
+Obtiene la fecha desde PowerShell. &
+Windows
+\\
+\hline
+
+tzutil &
+tzutil /g &
+/s &
+Consulta o modifica la zona horaria. &
+Windows
+\\
+\hline
+
+w32tm &
+w32tm /query /status &
+/resync &
+Consulta el estado del servicio de sincronización NTP de Windows. &
+Windows
+\\
+\hline
+
+systemsetup &
+systemsetup -gettimezone &
+-settimezone &
+Consulta o modifica la zona horaria en macOS. &
+macOS
+\\
+\hline
+
+\end{longtable}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\subsubsection{Información del hardware}
+
+Estas herramientas permiten conocer las características físicas del equipo.
+
+\begin{longtable}{|p{2.8cm}|p{3.1cm}|p{4.3cm}|p{5.5cm}|p{1.5cm}|}
+
+\hline
+Comando &
+Sintaxis &
+Argumentos útiles &
+Particularidad &
+OS
+\\
+\hline
+\endhead
+
+lscpu &
+lscpu &
+-e &
+Obtiene información detallada del procesador. &
+Linux
+\\
+\hline
+
+cat /proc/cpuinfo &
+cat /proc/cpuinfo &
+grep model &
+Información detallada del CPU. &
+Linux
+\\
+\hline
+
+lsblk &
+lsblk &
+-f, -o &
+Lista los dispositivos de almacenamiento conectados. &
+Linux
+\\
+\hline
+
+lshw &
+sudo lshw &
+-short &
+Inventario completo del hardware instalado. &
+Linux
+\\
+\hline
+
+dmidecode &
+sudo dmidecode &
+-t memory, -t bios &
+Obtiene información directamente del BIOS/UEFI. &
+Linux
+\\
+\hline
+
+wmic cpu &
+wmic cpu get name &
+N/A &
+Información del procesador. &
+Windows
+\\
+\hline
+
+wmic memorychip &
+wmic memorychip &
+N/A &
+Obtiene información de la memoria RAM instalada. &
+Windows
+\\
+\hline
+
+system\_profiler &
+system\_profiler SPHardwareDataType &
+SPMemoryDataType &
+Inventario completo del hardware en macOS. &
+macOS
+\\
+\hline
+
+
+
+sysctl &
+sysctl hw &
+-a &
+Consulta parámetros del kernel y cierta información del hardware. Muy útil para verificar configuraciones del sistema y límites del kernel. &
+macOS/Linux
+\\
+\hline
+
+lspci &
+lspci &
+-v, -vv, -k &
+Lista los dispositivos conectados al bus PCI (adaptadores de red, GPU, controladores SATA, etc.). Muy útil para verificar que el hardware sea detectado correctamente. &
+Linux
+\\
+\hline
+
+lsusb &
+lsusb &
+-v &
+Lista los dispositivos USB conectados al equipo. Útil cuando un periférico no es reconocido. &
+Linux
+\\
+\hline
+
+diskutil &
+diskutil list &
+info &
+Permite listar discos y particiones disponibles en macOS. &
+macOS
+\\
+\hline
+
+Get-ComputerInfo &
+Get-ComputerInfo &
+-property * &
+Obtiene un inventario muy completo del sistema mediante PowerShell. &
+Windows
+\\
+\hline
+
+\end{longtable}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\subsubsection{Uso de memoria}
+
+Problemas relacionados con falta de memoria RAM o memoria virtual pueden provocar
+lentitud, terminación inesperada de procesos o fallas al iniciar servicios.
+
+Los siguientes comandos permiten conocer el estado actual de la memoria.
+
+\begin{longtable}{|p{2.8cm}|p{3cm}|p{4cm}|p{5.6cm}|p{1.5cm}|}
+
+\hline
+Comando &
+Sintaxis &
+Argumentos útiles &
+Particularidad &
+OS
+\\
+\hline
+\endhead
+
+free &
+free -h &
+-m, -g &
+Muestra la memoria RAM y Swap utilizada. El argumento \texttt{-h} facilita su lectura mostrando unidades apropiadas. &
+Linux
+\\
+\hline
+
+vmstat &
+vmstat &
+1, -s &
+Muestra estadísticas de memoria, CPU y procesos. Muy útil para observar el comportamiento del sistema durante algunos segundos. &
+Linux/macOS
+\\
+\hline
+
+top &
+top &
+-d, -o &
+Permite observar el consumo de memoria de los procesos en tiempo real. &
+Linux/macOS
+\\
+\hline
+
+htop &
+htop &
+N/A &
+Versión interactiva de \texttt{top}. Facilita ordenar procesos por uso de memoria o CPU. &
+Linux
+\\
+\hline
+
+cat /proc/meminfo &
+cat /proc/meminfo &
+grep Mem &
+Información detallada de la memoria administrada por el kernel. &
+Linux
+\\
+\hline
+
+vm\_stat &
+vm\_stat &
+N/A &
+Muestra estadísticas detalladas de memoria virtual en macOS. &
+macOS
+\\
+\hline
+
+Activity Monitor &
+N/A &
+Memory &
+Herramienta gráfica para revisar el consumo de memoria en macOS. &
+macOS
+\\
+\hline
+
+taskmgr &
+taskmgr &
+N/A &
+Administrador de tareas de Windows. Permite revisar el consumo de memoria por proceso. &
+Windows
+\\
+\hline
+
+Get-Process &
+Get-Process &
+Sort WorkingSet &
+Permite ordenar procesos por consumo de memoria desde PowerShell. &
+Windows
+\\
+\hline
+
+\end{longtable}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\subsubsection{Uso de almacenamiento}
+
+La falta de espacio en disco suele ocasionar errores de aplicaciones,
+servicios que dejan de funcionar, imposibilidad de generar logs,
+errores de bases de datos y fallas durante actualizaciones.
+
+\begin{longtable}{|p{2.8cm}|p{3cm}|p{4cm}|p{5.6cm}|p{1.5cm}|}
+
+\hline
+Comando &
+Sintaxis &
+Argumentos útiles &
+Particularidad &
+OS
+\\
+\hline
+\endhead
+
+df &
+df -h &
+-i &
+Muestra el espacio libre por sistema de archivos. El argumento \texttt{-i} permite revisar el consumo de inodos. &
+Linux/macOS
+\\
+\hline
+
+du &
+du -sh directorio &
+-h, --max-depth &
+Calcula el tamaño ocupado por archivos o directorios. Muy útil para localizar qué consume espacio. &
+Linux/macOS
+\\
+\hline
+
+ncdu &
+ncdu &
+N/A &
+Herramienta interactiva para localizar directorios con mayor consumo de almacenamiento. &
+Linux
+\\
+\hline
+
+lsblk &
+lsblk -f &
+-o &
+Lista discos, particiones y sistemas de archivos disponibles. &
+Linux
+\\
+\hline
+
+mount &
+mount &
+N/A &
+Lista los sistemas de archivos montados. &
+Linux/macOS
+\\
+\hline
+
+findmnt &
+findmnt &
+N/A &
+Presenta de forma estructurada la información de los puntos de montaje. &
+Linux
+\\
+\hline
+
+diskutil &
+diskutil list &
+info &
+Información sobre discos y particiones en macOS. &
+macOS
+\\
+\hline
+
+wmic logicaldisk &
+wmic logicaldisk get size,freespace,caption &
+N/A &
+Consulta el espacio disponible de las unidades en Windows. &
+Windows
+\\
+\hline
+
+Get-PSDrive &
+Get-PSDrive &
+N/A &
+Lista las unidades disponibles y el espacio libre mediante PowerShell. &
+Windows
+\\
+\hline
+
+\end{longtable}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\subsubsection{Variables de entorno}
+
+Muchas aplicaciones dependen de variables de entorno para localizar
+bibliotecas, archivos de configuración, certificados o ejecutables.
+
+Una configuración incorrecta suele provocar errores aparentemente
+inexplicables.
+
+\begin{longtable}{|p{2.8cm}|p{3cm}|p{4cm}|p{5.6cm}|p{1.5cm}|}
+
+\hline
+Comando &
+Sintaxis &
+Argumentos útiles &
+Particularidad &
+OS
+\\
+\hline
+\endhead
+
+env &
+env &
+grep VARIABLE &
+Lista todas las variables de entorno del proceso actual. &
+Linux/macOS
+\\
+\hline
+
+printenv &
+printenv &
+PATH &
+Permite consultar una variable específica. &
+Linux/macOS
+\\
+\hline
+
+echo &
+echo \$PATH &
+\$HOME &
+Consulta el contenido de una variable de entorno. &
+Linux/macOS
+\\
+\hline
+
+set &
+set &
+N/A &
+Lista variables de entorno en CMD. &
+Windows
+\\
+\hline
+
+Get-ChildItem Env: &
+Get-ChildItem Env: &
+N/A &
+Lista todas las variables de entorno desde PowerShell. &
+Windows
+\\
+\hline
+
+echo &
+echo \%PATH\% &
+\%TEMP\% &
+Consulta variables específicas desde CMD. &
+Windows
+\\
+\hline
+
+which &
+which programa &
+-a &
+Indica qué ejecutable será utilizado al invocar un comando. Muy útil para detectar conflictos entre múltiples instalaciones. &
+Linux/macOS
+\\
+\hline
+
+whereis &
+whereis programa &
+N/A &
+Localiza binarios, código fuente y páginas de manual. &
+Linux
+\\
+\hline
+
+where &
+where programa &
+N/A &
+Busca la ubicación de un ejecutable en Windows. &
+Windows
+\\
+\hline
+
+type &
+type comando &
+-a &
+Indica si un comando corresponde a un alias, función o ejecutable. Muy útil durante troubleshooting de shells. &
+Linux
+\\
+\hline
+
+\end{longtable}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\subsubsection{Información de procesos}
+
+Antes de comenzar a revisar conectividad o servicios, resulta recomendable
+verificar si el proceso o aplicación realmente se encuentra en ejecución.
+
+En muchas ocasiones el problema no corresponde a la red, sino a que el
+servicio nunca inició correctamente.
+
+\begin{longtable}{|p{2.8cm}|p{3cm}|p{4cm}|p{5.6cm}|p{1.5cm}|}
+
+\hline
+Comando &
+Sintaxis &
+Argumentos útiles &
+Particularidad &
+OS
+\\
+\hline
+\endhead
+
+ps &
+ps aux &
+-ef &
+Lista los procesos activos del sistema. Constituye una de las herramientas fundamentales de troubleshooting en Linux. &
+Linux/macOS
+\\
+\hline
+
+pgrep &
+pgrep proceso &
+-a, -f &
+Busca procesos por nombre o por línea completa de ejecución. &
+Linux
+\\
+\hline
+
+pidof &
+pidof nginx &
+N/A &
+Obtiene rápidamente el PID de un proceso. &
+Linux
+\\
+\hline
+
+pstree &
+pstree &
+-p &
+Representa gráficamente la jerarquía de procesos. Muy útil para identificar procesos padre e hijos. &
+Linux
+\\
+\hline
+
+top &
+top &
+-o &
+Monitor interactivo de procesos en tiempo real. &
+Linux/macOS
+\\
+\hline
+
+htop &
+htop &
+N/A &
+Versión mejorada e interactiva de top. &
+Linux
+\\
+\hline
+
+tasklist &
+tasklist &
+/svc, /FI &
+Lista los procesos activos en Windows. Puede filtrar procesos por nombre o servicio asociado. &
+Windows
+\\
+\hline
+
+Get-Process &
+Get-Process &
+-Name &
+Obtiene procesos mediante PowerShell. &
+Windows
+\\
+\hline
+
+Get-Service &
+Get-Service &
+-Name, -DisplayName &
+Permite identificar rápidamente si un proceso está asociado a un servicio del sistema. Muy útil para determinar si un servicio se encuentra detenido o en ejecución. &
+Windows
+\\
+\hline
+
+procmon &
+procmon &
+Filtros &
+Herramienta de Sysinternals que permite monitorear en tiempo real procesos, acceso a archivos, registro y red. Es una de las herramientas más utilizadas durante troubleshooting avanzado en Windows. &
+Windows
+\\
+\hline
+
+Process Explorer &
+procexp &
+N/A &
+Herramienta de Sysinternals que proporciona información detallada sobre procesos, DLL cargadas, handles abiertos y uso de recursos. &
+Windows
+\\
+\hline
+
+Activity Monitor &
+Activity Monitor &
+CPU, Memory &
+Administrador gráfico de procesos en macOS. Permite revisar consumo de CPU, memoria, disco y red. &
+macOS
+\\
+\hline
+
+kill &
+kill PID &
+-9, -15, -HUP &
+Envía señales a un proceso. Durante troubleshooting suele utilizarse para finalizar procesos bloqueados o solicitar que recarguen su configuración. &
+Linux/macOS
+\\
+\hline
+
+pkill &
+pkill nombreProceso &
+-f &
+Finaliza procesos buscando por nombre. Evita tener que buscar previamente el PID. &
+Linux
+\\
+\hline
+
+killall &
+killall nombreProceso &
+-v &
+Finaliza todos los procesos con el mismo nombre. Disponible en Linux y macOS. &
+Linux/macOS
+\\
+\hline
+
+taskkill &
+taskkill /PID PID &
+/F, /IM &
+Finaliza procesos en Windows mediante CMD. Puede utilizarse indicando el PID o el nombre del ejecutable. &
+Windows
+\\
+\hline
+
+Stop-Process &
+Stop-Process -Id PID &
+-Force &
+Equivalente en PowerShell para finalizar procesos. &
+Windows
+\\
+\hline
+
+\end{longtable}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\subsubsection{Información de servicios}
+
+En muchos escenarios el problema no se encuentra en la aplicación en sí, sino en
+que el servicio correspondiente nunca inició, se encuentra detenido o falló
+durante el arranque del sistema.
+
+Las siguientes herramientas permiten consultar el estado de los servicios,
+iniciarlos, detenerlos o reiniciarlos.
+
+\begin{longtable}{|p{2.8cm}|p{3cm}|p{4cm}|p{5.6cm}|p{1.5cm}|}
+
+\hline
+Comando &
+Sintaxis &
+Argumentos útiles &
+Particularidad &
+OS
+\\
+\hline
+\endhead
+
+systemctl &
+systemctl status servicio &
+start, stop, restart, enable, disable, is-active &
+Principal herramienta para administrar servicios en sistemas Linux basados en systemd. &
+Linux
+\\
+\hline
+
+service &
+service nombreServicio status &
+start, stop, restart &
+Interfaz compatible con sistemas Linux más antiguos o distribuciones que mantienen scripts SysV. &
+Linux
+\\
+\hline
+
+journalctl &
+journalctl -u servicio &
+-f, -b, --since &
+Permite consultar exclusivamente los registros asociados a un servicio administrado por systemd. Muy útil cuando un servicio falla al iniciar. &
+Linux
+\\
+\hline
+
+systemctl list-units &
+systemctl list-units --type=service &
+--failed &
+Lista los servicios cargados y permite identificar rápidamente aquellos que fallaron durante el arranque. &
+Linux
+\\
+\hline
+
+launchctl &
+launchctl list &
+load, unload, kickstart &
+Administrador de servicios y daemons en macOS. &
+macOS
+\\
+\hline
+
+sc &
+sc query servicio &
+start, stop, qc, config &
+Administrador de servicios desde la línea de comandos de Windows. Permite consultar configuración y estado. &
+Windows
+\\
+\hline
+
+net start &
+net start &
+nombreServicio &
+Lista los servicios actualmente iniciados o inicia uno específico. &
+Windows
+\\
+\hline
+
+net stop &
+net stop servicio &
+N/A &
+Detiene un servicio en Windows. &
+Windows
+\\
+\hline
+
+Get-Service &
+Get-Service &
+Status, Name &
+Obtiene el estado de los servicios mediante PowerShell. Permite filtrar fácilmente por nombre o estado. &
+Windows
+\\
+\hline
+
+Restart-Service &
+Restart-Service servicio &
+-Force &
+Reinicia un servicio desde PowerShell. Muy útil durante troubleshooting remoto. &
+Windows
+\\
+\hline
+
+services.msc &
+services.msc &
+N/A &
+Consola gráfica para administrar servicios en Windows. Facilita revisar dependencias y tipo de inicio. &
+Windows
+\\
+\hline
+
+\end{longtable}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\subsubsection{Información del sistema de archivos}
+
+Una gran cantidad de incidencias provienen de problemas relacionados con
+permisos, archivos faltantes, puntos de montaje incorrectos o configuraciones
+ubicadas en rutas inesperadas.
+
+Los siguientes comandos permiten explorar el sistema de archivos.
+
+\begin{longtable}{|p{2.8cm}|p{3cm}|p{4cm}|p{5.6cm}|p{1.5cm}|}
+
+\hline
+Comando &
+Sintaxis &
+Argumentos útiles &
+Particularidad &
+OS
+\\
+\hline
+\endhead
+
+pwd &
+pwd &
+N/A &
+Muestra el directorio actual de trabajo. Fundamental para evitar operar sobre rutas incorrectas. &
+Linux/macOS
+\\
+\hline
+
+cd &
+cd ruta &
+.., ~ &
+Permite cambiar el directorio de trabajo. &
+Todos
+\\
+\hline
+
+ls &
+ls -lah &
+-R, -ltr &
+Lista el contenido de un directorio. Los argumentos permiten visualizar permisos, tamaños y ordenar por fecha de modificación. &
+Linux/macOS
+\\
+\hline
+
+dir &
+dir &
+/A, /O &
+Equivalente de \texttt{ls} en Windows CMD. &
+Windows
+\\
+\hline
+
+tree &
+tree &
+-L, /F &
+Representa gráficamente la estructura de directorios. Muy útil para localizar configuraciones o entender la organización de un proyecto. &
+Todos
+\\
+\hline
+
+stat &
+stat archivo &
+-c &
+Obtiene información detallada de un archivo: permisos, propietario, fechas de acceso y modificación, tamaño e inodos. &
+Linux/macOS
+\\
+\hline
+
+attrib &
+attrib archivo &
++R, -R &
+Consulta o modifica atributos de archivos en Windows. &
+Windows
+\\
+\hline
+
+file &
+file archivo &
+N/A &
+Determina el tipo real de un archivo independientemente de su extensión. Muy útil para identificar archivos corruptos o con extensiones incorrectas. &
+Linux/macOS
+\\
+\hline
+
+realpath &
+realpath archivo &
+N/A &
+Obtiene la ruta absoluta de un archivo o directorio. &
+Linux/macOS
+\\
+\hline
+
+readlink &
+readlink -f enlace &
+-f &
+Resuelve enlaces simbólicos y muestra el archivo real al que apuntan. &
+Linux
+\\
+\hline
+
+
+find &
+find ruta criterios &
+-name, -iname, -type, -size, -mtime, -mmin, -user, -perm, -exec &
+Herramienta principal para localizar archivos y directorios utilizando múltiples criterios de búsqueda. Fundamental durante tareas de troubleshooting. &
+Linux/macOS
+\\
+\hline
+
+locate &
+locate archivo &
+-i &
+Busca archivos utilizando una base de datos previamente indexada. Mucho más rápido que \texttt{find}, aunque puede no reflejar cambios recientes. &
+Linux
+\\
+\hline
+
+updatedb &
+updatedb &
+N/A &
+Actualiza la base de datos utilizada por \texttt{locate}. &
+Linux
+\\
+\hline
+
+whereis &
+whereis comando &
+-b, -m &
+Localiza el binario, código fuente y páginas del manual asociadas a un programa. &
+Linux
+\\
+\hline
+
+which &
+which programa &
+-a &
+Indica qué ejecutable será utilizado al invocar un comando. Muy útil para detectar múltiples instalaciones de un mismo programa. &
+Linux/macOS
+\\
+\hline
+
+where &
+where programa &
+/R &
+Busca ejecutables dentro del PATH o dentro de un directorio específico. &
+Windows
+\\
+\hline
+
+findstr &
+findstr patrón archivo &
+/S, /I, /N &
+Busca cadenas de texto dentro de archivos. Equivalente básico de \texttt{grep} en Windows. &
+Windows
+\\
+\hline
+
+grep &
+grep patrón archivo &
+-r, -i, -n, -v, -E, -A, -B, -C &
+Permite buscar texto dentro de archivos. Es una de las herramientas más utilizadas durante troubleshooting para localizar mensajes de error o configuraciones. &
+Linux/macOS
+\\
+\hline
+
+egrep &
+egrep expresión archivo &
+N/A &
+Versión basada en expresiones regulares extendidas. Actualmente suele reemplazarse por \texttt{grep -E}. &
+Linux/macOS
+\\
+\hline
+
+zgrep &
+zgrep patrón archivo.gz &
+-i &
+Permite buscar texto directamente dentro de archivos comprimidos con gzip sin necesidad de descomprimirlos. &
+Linux
+\\
+\hline
+
+strings &
+strings archivo &
+-a &
+Extrae cadenas ASCII imprimibles de archivos binarios. Muy útil para identificar rutas, URLs, mensajes o configuraciones embebidas. &
+Linux/macOS
+\\
+\hline
+
+head &
+head archivo &
+-n &
+Muestra las primeras líneas de un archivo. &
+Linux/macOS
+\\
+\hline
+
+tail &
+tail archivo &
+-f, -n &
+Muestra las últimas líneas de un archivo. El argumento \texttt{-f} permite seguir un archivo en tiempo real. Muy utilizado para monitorear logs. &
+Linux/macOS
+\\
+\hline
+
+more &
+more archivo &
+N/A &
+Visualiza archivos página por página. &
+Todos
+\\
+\hline
+
+less &
+less archivo &
+-N &
+Permite navegar archivos grandes de manera interactiva. Constituye una de las herramientas más utilizadas para revisar logs. &
+Linux/macOS
+\\
+\hline
+
+cat &
+cat archivo &
+-n &
+Muestra el contenido completo de uno o varios archivos. &
+Linux/macOS
+\\
+\hline
+
+type &
+type archivo &
+N/A &
+Muestra el contenido de un archivo desde CMD. &
+Windows
+\\
+\hline
+
+sort &
+sort archivo &
+-r, -u &
+Ordena el contenido de un archivo. Puede eliminar líneas duplicadas utilizando \texttt{-u}. &
+Linux/macOS
+\\
+\hline
+
+uniq &
+uniq archivo &
+-c, -d &
+Elimina líneas consecutivas duplicadas o cuenta ocurrencias. Suele utilizarse junto con \texttt{sort}. &
+Linux/macOS
+\\
+\hline
+
+wc &
+wc archivo &
+-l, -w, -c &
+Cuenta líneas, palabras y caracteres. Muy útil para validar el tamaño de un archivo o el número de resultados obtenidos. &
+Linux/macOS
+\\
+\hline
+
+cut &
+cut &
+-d, -f &
+Extrae columnas específicas de un archivo delimitado por caracteres. &
+Linux/macOS
+\\
+\hline
+
+paste &
+paste &
+-d &
+Une líneas de varios archivos en columnas. &
+Linux/macOS
+\\
+\hline
+
+tr &
+tr &
+-d, -s &
+Reemplaza o elimina caracteres de la entrada estándar. &
+Linux/macOS
+\\
+\hline
+
+sed &
+sed &
+-n, -i, -e &
+Editor de flujo ampliamente utilizado para modificar archivos de configuración o transformar texto durante el troubleshooting. &
+Linux/macOS
+\\
+\hline
+
+awk &
+awk &
+-F &
+Lenguaje de procesamiento de texto orientado a columnas. Muy útil para analizar logs, archivos CSV y salidas de comandos. &
+Linux/macOS
+\\
+\hline
+
+xargs &
+xargs &
+-I, -0 &
+Permite construir comandos utilizando la salida de otro comando. Muy utilizado junto con \texttt{find}. &
+Linux/macOS
+\\
+\hline
+
+\end{longtable}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\subsubsection{Permisos y propietarios}
+
+Problemas relacionados con permisos insuficientes constituyen una de las causas
+más frecuentes de incidencias en sistemas operativos. Los siguientes comandos
+permiten consultar o modificar permisos, propietarios y listas de control de acceso.
+
+\begin{longtable}{|p{2.8cm}|p{3cm}|p{4cm}|p{5.6cm}|p{1.5cm}|}
+
+\hline
+Comando &
+Sintaxis &
+Argumentos útiles &
+Particularidad &
+OS
+\\
+\hline
+\endhead
+
+ls &
+ls -l &
+-a, -h &
+Permite visualizar permisos, propietario y grupo de archivos y directorios. &
+Linux/macOS
+\\
+\hline
+
+stat &
+stat archivo &
+-c &
+Obtiene información detallada sobre permisos, propietario, fechas e inodos. &
+Linux/macOS
+\\
+\hline
+
+chmod &
+chmod modo archivo &
+-R &
+Modifica los permisos de archivos y directorios utilizando notación simbólica u octal. &
+Linux/macOS
+\\
+\hline
+
+chown &
+chown usuario archivo &
+-R &
+Modifica el propietario y grupo de un archivo o directorio. &
+Linux/macOS
+\\
+\hline
+
+chgrp &
+chgrp grupo archivo &
+-R &
+Modifica únicamente el grupo propietario. &
+Linux/macOS
+\\
+\hline
+
+umask &
+umask &
+-S &
+Consulta o modifica la máscara de permisos predeterminada para nuevos archivos. &
+Linux/macOS
+\\
+\hline
+
+getfacl &
+getfacl archivo &
+-R &
+Consulta listas de control de acceso (ACL). Muy útil cuando los permisos tradicionales no explican el comportamiento observado. &
+Linux
+\\
+\hline
+
+setfacl &
+setfacl &
+-m, -x, -R &
+Permite agregar, modificar o eliminar entradas ACL. &
+Linux
+\\
+\hline
+
+icacls &
+icacls archivo &
+/grant, /remove, /inheritance &
+Consulta y modifica ACL en Windows. &
+Windows
+\\
+\hline
+
+takeown &
+takeown /F archivo &
+/R &
+Permite tomar posesión de archivos o directorios cuando el usuario carece de permisos suficientes. &
+Windows
+\\
+\hline
+
+cacls &
+cacls archivo &
+/E &
+Herramienta heredada para administrar permisos NTFS. Actualmente se recomienda utilizar \texttt{icacls}. &
+Windows
+\\
+\hline
+
+Get-Acl &
+Get-Acl ruta &
+N/A &
+Obtiene las listas de control de acceso desde PowerShell. &
+Windows
+\\
+\hline
+
+Set-Acl &
+Set-Acl &
+N/A &
+Modifica permisos mediante PowerShell. &
+Windows
+\\
+\hline
+
+\end{longtable}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\subsection{Paso 2. Verificación del estado de la red}
+
+Una vez recopilada la información básica del sistema, el siguiente paso consiste
+en verificar el estado de la configuración de red.
+
+Antes de comprobar la conectividad hacia un servicio remoto es recomendable
+confirmar que la interfaz de red se encuentre habilitada, que posea una dirección
+IP válida, una máscara de red correcta, un gateway configurado y los servidores
+DNS esperados.
+
+Los comandos de esta sección permiten inspeccionar la configuración local del
+equipo antes de comenzar a diagnosticar problemas de comunicación.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\subsubsection{Interfaces de red}
+
+Las siguientes herramientas permiten consultar las interfaces disponibles,
+su estado, direcciones IP asignadas y otra información relevante de la configuración
+de red.
+%%%%%%%%%%%%%%%%%%
+
+\begin{longtable}{|p{2.8cm}|p{3cm}|p{4cm}|p{5.6cm}|p{1.5cm}|}
+
+\hline
+Comando &
+Sintaxis &
+Argumentos útiles &
+Particularidad &
+OS
+\\
+\hline
+\endhead
+
+ip &
+ip addr &
+link, addr, -br &
+Herramienta moderna para consultar y administrar interfaces de red, direcciones IP y enlaces. Sustituye a \texttt{ifconfig} en la mayoría de las distribuciones Linux. &
+Linux
+\\
+\hline
+
+ip link &
+ip link show &
+set up, set down &
+Consulta el estado de las interfaces y permite habilitarlas o deshabilitarlas. &
+Linux
+\\
+\hline
+
+ip addr &
+ip addr show &
+add, del &
+Permite consultar, agregar o eliminar direcciones IP asignadas a una interfaz. &
+Linux
+\\
+\hline
+
+ifconfig &
+ifconfig &
+-a &
+Herramienta clásica para visualizar y configurar interfaces de red. Aunque está obsoleta en muchas distribuciones, sigue presente en numerosos sistemas. &
+Linux/macOS
+\\
+\hline
+
+ipconfig &
+ipconfig &
+/all, /release, /renew, /flushdns, /displaydns &
+Muestra la configuración de red del equipo y permite renovar direcciones obtenidas mediante DHCP. &
+Windows
+\\
+\hline
+
+networksetup &
+networksetup -listallhardwareports &
+-getinfo, -setdnsservers &
+Permite consultar y modificar la configuración de red en macOS. &
+macOS
+\\
+\hline
+
+ifstatus &
+ifstatus interfaz &
+N/A &
+Consulta el estado de una interfaz en algunas distribuciones Linux. &
+Linux
+\\
+\hline
+
+nmcli &
+nmcli device status &
+connection show, device show &
+Interfaz de línea de comandos de NetworkManager. Muy utilizada en distribuciones modernas. &
+Linux
+\\
+\hline
+
+hostname -I &
+hostname -I &
+N/A &
+Muestra rápidamente las direcciones IPv4 e IPv6 asignadas al equipo. &
+Linux
+\\
+\hline
+
+Get-NetAdapter &
+Get-NetAdapter &
+Name, Status &
+Lista los adaptadores de red instalados mediante PowerShell. &
+Windows
+\\
+\hline
+
+Get-NetIPAddress &
+Get-NetIPAddress &
+InterfaceAlias &
+Obtiene todas las direcciones IP configuradas en Windows mediante PowerShell. &
+Windows
+\\
+\hline
+
+netsh interface show interface &
+netsh interface show interface &
+N/A &
+Lista las interfaces de red y su estado administrativo y operativo. &
+Windows
+\\
+\hline
+
+\end{longtable}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\subsubsection{Configuración IP}
+
+Una configuración IP incorrecta es una de las causas más comunes de problemas de
+conectividad. Los siguientes comandos permiten consultar direcciones IPv4,
+IPv6, máscaras de red, gateways y servidores DNS configurados.
+
+\begin{longtable}{|p{2.8cm}|p{3cm}|p{4cm}|p{5.6cm}|p{1.5cm}|}
+
+\hline
+Comando &
+Sintaxis &
+Argumentos útiles &
+Particularidad &
+OS
+\\
+\hline
+\endhead
+
+ip addr show &
+ip addr show &
+dev interfaz &
+Muestra las direcciones IP configuradas en una interfaz específica. &
+Linux
+\\
+\hline
+
+ip -br addr &
+ip -br addr &
+N/A &
+Presenta un resumen compacto de las interfaces y sus direcciones IP. Muy útil durante sesiones remotas. &
+Linux
+\\
+\hline
+
+ifconfig &
+ifconfig interfaz &
+N/A &
+Consulta la dirección IP y parámetros de una interfaz específica. &
+Linux/macOS
+\\
+\hline
+
+ipconfig /all &
+ipconfig /all &
+N/A &
+Presenta la configuración completa de todos los adaptadores de red en Windows. &
+Windows
+\\
+\hline
+
+Get-NetIPAddress &
+Get-NetIPAddress &
+AddressFamily &
+Obtiene información detallada de las direcciones IPv4 e IPv6 configuradas. &
+Windows
+\\
+\hline
+
+hostname -I &
+hostname -I &
+N/A &
+Muestra únicamente las direcciones IP configuradas. &
+Linux
+\\
+\hline
+
+networksetup -getinfo &
+networksetup -getinfo Ethernet &
+Wi-Fi &
+Consulta la configuración IP de una interfaz en macOS. &
+macOS
+\\
+\hline
+
+
+\end{longtable}
+%%%%%%%%
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\subsubsection{Gateway y tabla de rutas}
+
+Si la configuración IP parece correcta pero no existe conectividad hacia otras
+redes, resulta necesario revisar la puerta de enlace predeterminada y la tabla
+de enrutamiento del sistema.
+
+\begin{longtable}{|p{2.8cm}|p{3cm}|p{4cm}|p{5.6cm}|p{1.5cm}|}
+
+\hline
+Comando &
+Sintaxis &
+Argumentos útiles &
+Particularidad &
+OS
+\\
+\hline
+\endhead
+
+ip route &
+ip route &
+show, add, del &
+Consulta y administra la tabla de enrutamiento del sistema. Constituye la herramienta principal para diagnosticar problemas de routing en Linux. &
+Linux
+\\
+\hline
+
+route &
+route -n &
+add, del &
+Herramienta clásica para consultar y modificar rutas. Aún disponible en numerosos sistemas UNIX. &
+Linux/macOS
+\\
+\hline
+
+netstat &
+netstat -rn &
+-r &
+Permite visualizar la tabla de rutas utilizando la utilidad netstat. &
+Linux/macOS
+\\
+\hline
+
+route print &
+route print &
+N/A &
+Muestra la tabla de enrutamiento de Windows. Incluye rutas IPv4 e IPv6. &
+Windows
+\\
+\hline
+
+Get-NetRoute &
+Get-NetRoute &
+DestinationPrefix &
+Consulta las rutas configuradas mediante PowerShell. &
+Windows
+\\
+\hline
+
+ip route get &
+ip route get direcciónIP &
+N/A &
+Indica qué ruta utilizará el sistema para llegar a un destino específico. Muy útil para validar decisiones de enrutamiento. &
+Linux
+\\
+\hline
+
+route get &
+route get direcciónIP &
+N/A &
+Obtiene la ruta utilizada hacia un destino específico en macOS. &
+macOS
+\\
+\hline
+
+\end{longtable}
+%%%%%%%%%5
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\subsubsection{ARP y vecinos}
+
+Antes de transmitir tráfico dentro de una red local, un equipo necesita conocer
+la dirección MAC correspondiente a la dirección IP de destino. Para ello utiliza
+el protocolo ARP (IPv4) o Neighbor Discovery (IPv6).
+
+Las siguientes herramientas permiten inspeccionar dichas tablas.
+
+\begin{longtable}{|p{2.8cm}|p{3cm}|p{4cm}|p{5.6cm}|p{1.5cm}|}
+
+\hline
+Comando &
+Sintaxis &
+Argumentos útiles &
+Particularidad &
+OS
+\\
+\hline
+\endhead
+
+arp &
+arp -a &
+-d &
+Muestra la caché ARP del sistema y permite eliminar entradas específicas. &
+Linux/macOS/Windows
+\\
+\hline
+
+ip neigh &
+ip neigh show &
+flush &
+Consulta la tabla de vecinos utilizada por el kernel para IPv4 e IPv6. Sustituye progresivamente al comando \texttt{arp}. &
+Linux
+\\
+\hline
+
+ip -s neigh &
+ip -s neigh &
+N/A &
+Incluye estadísticas adicionales de cada vecino conocido. &
+Linux
+\\
+\hline
+
+netsh interface ip show neighbors &
+netsh interface ip show neighbors &
+N/A &
+Consulta la tabla ARP desde Windows. &
+Windows
+\\
+\hline
+
+Get-NetNeighbor &
+Get-NetNeighbor &
+InterfaceAlias &
+Obtiene la tabla de vecinos mediante PowerShell. &
+Windows
+\\
+\hline
+
+arp -d &
+arp -d direcciónIP &
+N/A &
+Elimina una entrada específica de la caché ARP para forzar una nueva resolución. &
+Linux/macOS/Windows
+\\
+\hline
+
+ip neigh flush &
+ip neigh flush all &
+dev &
+Vacía completamente la tabla de vecinos. Muy útil para diagnosticar problemas de resolución MAC. &
+Linux
+\\
+\hline
+
+\end{longtable}
+
+%%%%%%%%55
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\subsection{Paso 3. Verificación de conectividad}
+
+Una vez validada la configuración local de la red, el siguiente paso consiste en
+comprobar la conectividad hacia otros dispositivos.
+
+Durante esta etapa se busca responder preguntas como:
+
+\begin{itemize}
+\item ¿El equipo tiene comunicación con su gateway?
+\item ¿Existe conectividad hacia otros equipos de la misma red?
+\item ¿Existe salida hacia Internet?
+\item ¿En qué salto se pierde la comunicación?
+\item ¿El puerto del servicio realmente está respondiendo?
+\item ¿El problema corresponde a la red o únicamente a la aplicación?
+\end{itemize}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\subsubsection{Verificación básica de conectividad}
+
+Las siguientes herramientas permiten verificar rápidamente si existe
+comunicación entre dos equipos utilizando distintos protocolos.
+
+\begin{longtable}{|p{2.8cm}|p{3cm}|p{4cm}|p{5.6cm}|p{1.5cm}|}
+
+\hline
+Comando &
+Sintaxis &
+Argumentos útiles &
+Particularidad &
+OS
+\\
+\hline
+\endhead
+
+ping &
+ping destino &
+-c, -i, -s, -W &
+Envía solicitudes ICMP Echo Request para verificar conectividad básica, latencia y pérdida de paquetes. Constituye la primera prueba de conectividad en la mayoría de los escenarios. &
+Linux/macOS
+\\
+\hline
+
+ping &
+ping destino &
+-n, -l, -t, -4, -6 &
+Versión disponible en Windows. Permite forzar IPv4 o IPv6 y realizar pruebas continuas. &
+Windows
+\\
+\hline
+
+ping6 &
+ping6 destino &
+-c &
+Permite comprobar conectividad utilizando IPv6. En muchas distribuciones modernas también puede utilizarse mediante \texttt{ping -6}. &
+Linux/macOS
+\\
+\hline
+
+fping &
+fping rango &
+-a, -g &
+Permite realizar pruebas ICMP sobre múltiples equipos simultáneamente. Muy útil durante tareas de inventario o diagnóstico masivo. &
+Linux
+\\
+\hline
+
+arping &
+arping direcciónIP &
+-c, -I &
+Envía solicitudes ARP en lugar de ICMP. Muy útil para comprobar conectividad dentro de la misma red incluso cuando ICMP está bloqueado. &
+Linux
+\\
+\hline
+
+
+\end{longtable}
+%%%%
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\subsubsection{Análisis de rutas}
+
+Cuando existe pérdida de conectividad, resulta importante determinar en qué
+dispositivo o salto se interrumpe la comunicación.
+
+Las siguientes herramientas permiten analizar el camino seguido por los paquetes.
+
+\begin{longtable}{|p{2.8cm}|p{3cm}|p{4cm}|p{5.6cm}|p{1.5cm}|}
+
+\hline
+Comando &
+Sintaxis &
+Argumentos útiles &
+Particularidad &
+OS
+\\
+\hline
+\endhead
+
+traceroute &
+traceroute destino &
+-I, -T, -m, -w &
+Obtiene cada uno de los saltos recorridos hasta el destino utilizando paquetes ICMP, UDP o TCP. Fundamental para detectar dónde se pierde una conexión. &
+Linux/macOS
+\\
+\hline
+
+tracert &
+tracert destino &
+-d, -h, -w &
+Equivalente disponible en Windows. El argumento \texttt{-d} evita resolver nombres DNS y acelera considerablemente la ejecución. &
+Windows
+\\
+\hline
+
+tracepath &
+tracepath destino &
+N/A &
+Similar a traceroute pero sin requerir privilegios administrativos. Además detecta automáticamente el MTU del camino. &
+Linux
+\\
+\hline
+
+mtr &
+mtr destino &
+-r, -c, -w &
+Combina las funcionalidades de ping y traceroute mostrando estadísticas en tiempo real sobre cada salto. Una de las herramientas más utilizadas para diagnosticar enlaces inestables. &
+Linux/macOS
+\\
+\hline
+
+pathping &
+pathping destino &
+-n &
+Herramienta de Windows que combina traceroute y estadísticas de pérdida de paquetes por salto. Muy útil para identificar enlaces congestionados. &
+Windows
+\\
+\hline
+
+\end{longtable}
+
+
+%%%%%%%%%%%%%%%55
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\subsubsection{Verificación de puertos remotos}
+
+En numerosas ocasiones un equipo responde correctamente a ICMP, pero el puerto
+utilizado por la aplicación permanece cerrado o inaccesible.
+
+Los siguientes comandos permiten comprobar si un puerto TCP o UDP acepta
+conexiones.
+
+\begin{longtable}{|p{2.8cm}|p{3cm}|p{4cm}|p{5.6cm}|p{1.5cm}|}
+
+\hline
+Comando &
+Sintaxis &
+Argumentos útiles &
+Particularidad &
+OS
+\\
+\hline
+\endhead
+
+nc &
+nc host puerto &
+-z, -v, -u, -w &
+Netcat permite comprobar rápidamente si un puerto remoto acepta conexiones TCP o UDP. Constituye una de las herramientas más utilizadas durante troubleshooting de aplicaciones. &
+Linux/macOS
+\\
+\hline
+
+netcat &
+netcat host puerto &
+-zv &
+Nombre completo de la utilidad en algunas distribuciones. &
+Linux
+\\
+\hline
+
+telnet &
+telnet host puerto &
+N/A &
+Permite abrir manualmente una conexión TCP hacia un puerto determinado. Aunque es una herramienta antigua, continúa siendo útil para comprobar disponibilidad de servicios. &
+Todos
+\\
+\hline
+
+Test-NetConnection &
+Test-NetConnection host -Port puerto &
+-InformationLevel &
+Herramienta de PowerShell que verifica conectividad TCP, resolución DNS y rutas de manera integrada. Equivale funcionalmente a combinar ping y telnet. &
+Windows
+\\
+\hline
+
+curl &
+curl host:puerto &
+-v &
+Aunque está orientado a protocolos de aplicación, también permite comprobar rápidamente si un servicio HTTP o HTTPS responde. Se estudiará con mayor detalle en la sección correspondiente. &
+Todos
+\\
+\hline
+
+wget &
+wget URL &
+-S, --spider &
+Permite verificar si un recurso HTTP se encuentra disponible sin descargar completamente el contenido. &
+Linux
+\\
+\hline
+
+\end{longtable}
+
+
+%%%%%%%%%%%%%%5
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\subsubsection{Disponibilidad de hosts}
+
+En algunas situaciones resulta necesario determinar rápidamente qué equipos de
+una red se encuentran activos.
+
+\begin{longtable}{|p{2.8cm}|p{3cm}|p{4cm}|p{5.6cm}|p{1.5cm}|}
+
+\hline
+Comando &
+Sintaxis &
+Argumentos útiles &
+Particularidad &
+OS
+\\
+\hline
+\endhead
+
+ping &
+for ip in ...; do ping ... &
+-c 1 &
+Puede utilizarse dentro de scripts para comprobar múltiples equipos. &
+Linux/macOS
+\\
+\hline
+
+fping &
+fping -a -g red/24 &
+-g &
+Descubre rápidamente qué direcciones IP responden dentro de un segmento de red. &
+Linux
+\\
+\hline
+
+arp-scan &
+arp-scan red &
+--localnet &
+Realiza un descubrimiento de hosts mediante ARP dentro de la red local. Funciona incluso cuando ICMP está filtrado. &
+Linux
+\\
+\hline
+
+nmap &
+nmap -sn red &
+-PR, -PE &
+Realiza descubrimiento de hosts sin escanear puertos. Más adelante se profundizará en esta herramienta. &
+Linux/macOS/Windows
+\\
+\hline
+
+\end{longtable}
+
+
+%%%%%%
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\subsection{Paso 4. Verificación de resolución DNS}
+
+Una vez comprobada la conectividad IP, el siguiente paso consiste en verificar
+la correcta resolución de nombres.
+
+En muchas ocasiones un servicio se encuentra disponible y accesible mediante su
+dirección IP, pero falla al utilizar su nombre de dominio debido a problemas de
+configuración DNS.
+
+Durante esta etapa se busca responder preguntas como:
+
+\begin{itemize}
+\item ¿El nombre realmente resuelve?
+\item ¿Qué servidor DNS respondió?
+\item ¿Cuál fue la dirección IP obtenida?
+\item ¿La respuesta proviene de caché?
+\item ¿Los registros DNS son los esperados?
+\item ¿Existe algún problema de propagación?
+\end{itemize}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\subsubsection{Consultas DNS}
+
+Las siguientes herramientas permiten consultar registros DNS directamente desde
+uno o varios servidores.
+
+\begin{longtable}{|p{2.8cm}|p{3cm}|p{4cm}|p{5.6cm}|p{1.5cm}|}
+
+\hline
+Comando &
+Sintaxis &
+Argumentos útiles &
+Particularidad &
+OS
+\\
+\hline
+\endhead
+
+nslookup &
+nslookup dominio.com &
+server, set type, exit &
+Permite realizar consultas DNS especificando el servidor de nombres y el tipo de registro a consultar. Disponible prácticamente en todos los sistemas operativos. &
+Todos
+\\
+\hline
+
+dig &
+dig dominio.com &
++A, +short, +trace, +tcp &
+Herramienta estándar para consultas DNS avanzadas. Permite inspeccionar respuestas completas, seguir la delegación desde los servidores raíz y realizar consultas TCP cuando sea necesario. &
+Linux/macOS
+\\
+\hline
+
+host &
+host dominio.com &
+-t, -a &
+Realiza consultas DNS rápidas para distintos tipos de registros. Muy útil para verificaciones sencillas. &
+Linux/macOS
+\\
+\hline
+
+Resolve-DnsName &
+Resolve-DnsName dominio.com &
+-Type, -Server &
+Herramienta de PowerShell que permite consultar registros DNS especificando el tipo de registro y el servidor DNS a utilizar. &
+Windows
+\\
+\hline
+
+getent hosts &
+getent hosts dominio.com &
+ahosts &
+Consulta la resolución de nombres utilizando los mecanismos configurados por el sistema operativo (DNS, archivos hosts, LDAP, etc.). Muy útil para verificar el comportamiento real del resolver del sistema. &
+Linux
+\\
+\hline
+
+dscacheutil &
+dscacheutil -q host -a name dominio.com &
+N/A &
+Consulta la resolución de nombres utilizando la caché del sistema en macOS. &
+macOS
+\\
+\hline
+
+\end{longtable}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\subsubsection{Tipos de registros DNS}
+
+Durante el troubleshooting suele ser necesario consultar registros específicos.
+
+\begin{longtable}{|p{2.8cm}|p{3cm}|p{4cm}|p{5.6cm}|p{1.5cm}|}
+
+\hline
+Registro &
+Consulta &
+Uso principal &
+Descripción &
+OS
+\\
+\hline
+\endhead
+
+A &
+dig dominio A &
+IPv4 &
+Obtiene la dirección IPv4 asociada a un nombre de dominio. &
+Todos
+\\
+\hline
+
+AAAA &
+dig dominio AAAA &
+IPv6 &
+Obtiene la dirección IPv6 correspondiente. &
+Todos
+\\
+\hline
+
+MX &
+dig dominio MX &
+Correo electrónico &
+Consulta los servidores responsables de recibir correo electrónico para un dominio. &
+Todos
+\\
+\hline
+
+NS &
+dig dominio NS &
+Delegación &
+Obtiene los servidores autoritativos del dominio. &
+Todos
+\\
+\hline
+
+SOA &
+dig dominio SOA &
+Administración &
+Consulta el registro Start Of Authority del dominio. Muy útil para revisar números de serie y temporizadores de zona. &
+Todos
+\\
+\hline
+
+TXT &
+dig dominio TXT &
+Validaciones &
+Permite consultar registros TXT utilizados para SPF, DKIM, DMARC y diversas verificaciones. &
+Todos
+\\
+\hline
+
+CNAME &
+dig dominio CNAME &
+Alias &
+Obtiene alias canónicos de un nombre de dominio. &
+Todos
+\\
+\hline
+
+PTR &
+dig -x direcciónIP &
+DNS inverso &
+Permite realizar consultas de resolución inversa. Muy utilizado durante troubleshooting de correo electrónico. &
+Todos
+\\
+\hline
+
+SRV &
+dig dominio SRV &
+Servicios &
+Consulta registros utilizados por servicios como Active Directory, SIP o Kerberos. &
+Todos
+\\
+\hline
+
+\end{longtable}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\subsubsection{Diagnóstico del resolver local}
+
+En algunas ocasiones el problema no reside en el servidor DNS sino en la
+configuración local del resolver.
+
+Las siguientes herramientas permiten inspeccionar dicha configuración.
+
+\begin{longtable}{|p{2.8cm}|p{3cm}|p{4cm}|p{5.6cm}|p{1.5cm}|}
+
+\hline
+Comando &
+Sintaxis &
+Argumentos útiles &
+Particularidad &
+OS
+\\
+\hline
+\endhead
+
+cat &
+cat /etc/resolv.conf &
+N/A &
+Permite consultar los servidores DNS configurados por el sistema. &
+Linux
+\\
+\hline
+
+resolvectl &
+resolvectl status &
+query &
+Consulta el estado del resolver administrado por systemd-resolved y los servidores DNS asociados a cada interfaz. &
+Linux
+\\
+\hline
+
+systemd-resolve &
+systemd-resolve --status &
+--statistics &
+Versión utilizada en algunas distribuciones para consultar el estado del resolver. &
+Linux
+\\
+\hline
+
+nmcli &
+nmcli device show &
+connection show &
+Permite consultar los servidores DNS configurados por NetworkManager. &
+Linux
+\\
+\hline
+
+scutil &
+scutil --dns &
+N/A &
+Muestra la configuración completa del resolver DNS en macOS. &
+macOS
+\\
+\hline
+
+ipconfig &
+ipconfig /all &
+N/A &
+Permite consultar los servidores DNS configurados en Windows. &
+Windows
+\\
+\hline
+
+Get-DnsClientServerAddress &
+Get-DnsClientServerAddress &
+InterfaceAlias &
+Obtiene la configuración DNS mediante PowerShell. &
+Windows
+\\
+\hline
+
+\end{longtable}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\subsubsection{Caché DNS}
+
+En determinadas ocasiones el sistema operativo mantiene información DNS
+almacenada localmente. Si un registro cambió recientemente o la información
+almacenada es incorrecta, el equipo puede continuar utilizando una dirección
+IP obsoleta.
+
+Las siguientes herramientas permiten inspeccionar o limpiar la caché DNS.
+
+\begin{longtable}{|p{2.8cm}|p{3cm}|p{4cm}|p{5.6cm}|p{1.5cm}|}
+
+\hline
+Comando &
+Sintaxis &
+Argumentos útiles &
+Particularidad &
+OS
+\\
+\hline
+\endhead
+
+ipconfig &
+ipconfig /displaydns &
+N/A &
+Muestra el contenido de la caché DNS local de Windows. Muy útil para verificar si un registro se encuentra almacenado localmente. &
+Windows
+\\
+\hline
+
+ipconfig &
+ipconfig /flushdns &
+N/A &
+Vacía completamente la caché DNS local. Es uno de los comandos más utilizados durante troubleshooting. &
+Windows
+\\
+\hline
+
+Resolve-DnsName &
+Resolve-DnsName dominio &
+-CacheOnly &
+Consulta únicamente la información almacenada en la caché DNS local. &
+Windows
+\\
+\hline
+
+resolvectl &
+resolvectl statistics &
+reset-statistics &
+Permite consultar estadísticas del resolver administrado por systemd. &
+Linux
+\\
+\hline
+
+resolvectl &
+resolvectl flush-caches &
+N/A &
+Vacía la caché administrada por systemd-resolved. &
+Linux
+\\
+\hline
+
+systemd-resolve &
+systemd-resolve --statistics &
+--flush-caches &
+Versión disponible en algunas distribuciones anteriores a resolvectl. &
+Linux
+\\
+\hline
+
+dscacheutil &
+dscacheutil -flushcache &
+N/A &
+Vacía la caché DNS del sistema en macOS. &
+macOS
+\\
+\hline
+
+killall &
+killall -HUP mDNSResponder &
+N/A &
+Solicita al servicio mDNSResponder reconstruir la caché DNS. Método habitual para limpiar la caché DNS en macOS. &
+macOS
+\\
+\hline
+
+\end{longtable}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\subsubsection{Renovación de configuración DHCP}
+
+Cuando un equipo obtiene su dirección IP mediante DHCP, una concesión vencida
+o una configuración incorrecta pueden impedir la comunicación con otros equipos.
+
+Los siguientes comandos permiten renovar dicha configuración.
+
+\begin{longtable}{|p{2.8cm}|p{3cm}|p{4cm}|p{5.6cm}|p{1.5cm}|}
+
+\hline
+Comando &
+Sintaxis &
+Argumentos útiles &
+Particularidad &
+OS
+\\
+\hline
+\endhead
+
+ipconfig &
+ipconfig /release &
+N/A &
+Libera la dirección IP obtenida mediante DHCP. &
+Windows
+\\
+\hline
+
+ipconfig &
+ipconfig /renew &
+N/A &
+Solicita una nueva concesión DHCP al servidor correspondiente. &
+Windows
+\\
+\hline
+
+dhclient &
+dhclient interfaz &
+-r &
+Cliente DHCP utilizado por numerosas distribuciones Linux para renovar direcciones IP. &
+Linux
+\\
+\hline
+
+nmcli &
+nmcli connection up conexión &
+down &
+Permite reiniciar una conexión administrada por NetworkManager, solicitando nuevamente la configuración DHCP cuando corresponda. &
+Linux
+\\
+\hline
+
+networksetup &
+networksetup -renewdhcp interfaz &
+N/A &
+Renueva la concesión DHCP en macOS. &
+macOS
+\\
+\hline
+
+\end{longtable}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\subsubsection{Archivo hosts}
+
+Antes de consultar un servidor DNS, la mayoría de los sistemas operativos
+verifican si el nombre solicitado se encuentra definido localmente en el
+archivo hosts.
+
+Una entrada incorrecta puede provocar que un dominio resuelva hacia una
+dirección IP equivocada.
+
+\begin{longtable}{|p{2.8cm}|p{3cm}|p{4cm}|p{5.6cm}|p{1.5cm}|}
+
+\hline
+Comando &
+Sintaxis &
+Argumentos útiles &
+Particularidad &
+OS
+\\
+\hline
+\endhead
+
+cat &
+cat /etc/hosts &
+N/A &
+Permite consultar las entradas definidas en el archivo hosts. &
+Linux/macOS
+\\
+\hline
+
+less &
+less /etc/hosts &
+N/A &
+Facilita revisar archivos hosts extensos. &
+Linux/macOS
+\\
+\hline
+
+grep &
+grep nombre /etc/hosts &
+-i &
+Busca rápidamente una entrada específica dentro del archivo hosts. &
+Linux/macOS
+\\
+\hline
+
+type &
+type C:\\Windows\\System32\\drivers\\etc\\hosts &
+N/A &
+Muestra el contenido del archivo hosts en Windows. &
+Windows
+\\
+\hline
+
+findstr &
+findstr dominio hosts &
+/I &
+Busca una entrada específica dentro del archivo hosts. &
+Windows
+\\
+\hline
+
+\end{longtable}
+
+
+%%%%%%%%%%%
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\subsection{Paso 5. Verificación de puertos y conexiones}
+
+Una vez comprobada la resolución DNS, el siguiente paso consiste en verificar
+si el servicio realmente se encuentra escuchando conexiones y si el sistema
+permite establecer comunicación con él.
+
+En esta etapa se busca responder preguntas como:
+
+\begin{itemize}
+\item ¿El proceso realmente abrió el puerto esperado?
+\item ¿Qué proceso está utilizando dicho puerto?
+\item ¿Existe alguna conexión establecida?
+\item ¿El puerto está en estado LISTEN?
+\item ¿Existe algún conflicto de puertos?
+\end{itemize}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\subsubsection{Puertos en escucha y conexiones activas}
+
+Las siguientes herramientas permiten inspeccionar conexiones TCP, UDP y
+puertos abiertos tanto locales como remotos.
+
+\begin{longtable}{|p{2.8cm}|p{3cm}|p{4cm}|p{5.6cm}|p{1.5cm}|}
+
+\hline
+Comando &
+Sintaxis &
+Argumentos útiles &
+Particularidad &
+OS
+\\
+\hline
+\endhead
+
+ss &
+ss -tulpn &
+-a, -l, -n, -p &
+Herramienta moderna para inspeccionar conexiones TCP/UDP y puertos en escucha. Sustituye progresivamente a netstat en Linux. &
+Linux
+\\
+\hline
+
+ss &
+ss -tan &
+state established &
+Permite visualizar conexiones TCP activas y filtrar por estado. &
+Linux
+\\
+\hline
+
+netstat &
+netstat -tulpn &
+-r, -a, -n, -p &
+Herramienta clásica para visualizar conexiones, interfaces y puertos abiertos. Continúa disponible en numerosos sistemas. &
+Linux/macOS
+\\
+\hline
+
+netstat &
+netstat -ano &
+-b &
+Permite visualizar conexiones, PID y puertos abiertos en Windows. &
+Windows
+\\
+\hline
+
+Get-NetTCPConnection &
+Get-NetTCPConnection &
+-State &
+Obtiene todas las conexiones TCP activas mediante PowerShell. &
+Windows
+\\
+\hline
+
+Get-NetUDPEndpoint &
+Get-NetUDPEndpoint &
+N/A &
+Lista los endpoints UDP abiertos. &
+Windows
+\\
+\hline
+
+lsof &
+lsof -i &
+-P, -n &
+Relaciona conexiones de red con los procesos que las mantienen abiertas. Constituye una de las herramientas más útiles durante troubleshooting. &
+Linux/macOS
+\\
+\hline
+
+lsof &
+lsof -i :443 &
+:80 &
+Permite conocer qué proceso está utilizando un puerto específico. &
+Linux/macOS
+\\
+\hline
+
+fuser &
+fuser 443/tcp &
+-v, -k &
+Identifica el proceso asociado a un puerto y puede finalizarlo si es necesario. &
+Linux
+\\
+\hline
+
+
+%%%%
+\hline
+
+sockstat &
+sockstat &
+-4, -6, -l &
+Permite visualizar sockets abiertos y los procesos asociados. Es el equivalente de \texttt{lsof} en sistemas BSD y macOS. &
+macOS
+\\
+\hline
+
+netstat &
+netstat -s &
+-t, -u &
+Presenta estadísticas detalladas de los protocolos TCP, UDP, ICMP e IP. Muy útil para detectar retransmisiones, errores de checksum o paquetes descartados. &
+Linux/macOS
+\\
+\hline
+
+Get-NetTCPConnection &
+Get-NetTCPConnection -State Listen &
+LocalPort &
+Permite listar únicamente los puertos que se encuentran escuchando conexiones. &
+Windows
+\\
+\hline
+
+Get-NetUDPEndpoint &
+Get-NetUDPEndpoint &
+LocalPort &
+Consulta todos los sockets UDP abiertos mediante PowerShell. &
+Windows
+\\
+\hline
+
+\end{longtable}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\subsubsection{Procesos asociados a conexiones}
+
+Una vez identificado un puerto o una conexión, suele ser necesario determinar
+qué proceso la abrió.
+
+Las siguientes herramientas permiten relacionar conexiones de red con procesos.
+
+\begin{longtable}{|p{2.8cm}|p{3cm}|p{4cm}|p{5.6cm}|p{1.5cm}|}
+
+\hline
+Comando &
+Sintaxis &
+Argumentos útiles &
+Particularidad &
+OS
+\\
+\hline
+\endhead
+
+lsof &
+lsof -iTCP &
+-sTCP:LISTEN &
+Permite listar únicamente procesos que mantienen sockets TCP en estado LISTEN. Muy útil para confirmar que una aplicación realmente abrió el puerto esperado. &
+Linux/macOS
+\\
+\hline
+
+lsof &
+lsof -iTCP -sTCP:ESTABLISHED &
+-nP &
+Lista conexiones TCP actualmente establecidas junto con el proceso correspondiente. &
+Linux/macOS
+\\
+\hline
+
+lsof &
+lsof -p PID &
+N/A &
+Permite conocer todos los archivos, sockets y recursos abiertos por un proceso determinado. &
+Linux/macOS
+\\
+\hline
+
+fuser &
+fuser puerto/tcp &
+-v &
+Obtiene el proceso que utiliza un puerto específico. &
+Linux
+\\
+\hline
+
+fuser &
+fuser archivo &
+-v &
+Permite determinar qué proceso mantiene abierto un archivo. Muy útil cuando un archivo no puede eliminarse. &
+Linux
+\\
+\hline
+
+netstat &
+netstat -ano &
+N/A &
+Relaciona conexiones TCP con el PID correspondiente. &
+Windows
+\\
+\hline
+
+tasklist &
+tasklist /FI "PID eq xxxx" &
+/SVC &
+Permite identificar el proceso correspondiente a un PID obtenido mediante netstat. &
+Windows
+\\
+\hline
+
+Get-Process &
+Get-Process -Id PID &
+N/A &
+Obtiene información adicional del proceso asociado a una conexión. &
+Windows
+\\
+\hline
+
+\end{longtable}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\subsection{Paso 6. Verificación del servicio HTTP}
+
+Una vez comprobado que existe conectividad TCP hacia el puerto correspondiente,
+el siguiente paso consiste en verificar que la aplicación realmente responda
+utilizando el protocolo esperado.
+
+Durante esta etapa se busca responder preguntas como:
+
+\begin{itemize}
+\item ¿El servidor responde?
+\item ¿Qué código HTTP devuelve?
+\item ¿Existen redirecciones?
+\item ¿Qué encabezados devuelve?
+\item ¿Qué versión HTTP utiliza?
+\item ¿Cuál fue el tiempo de respuesta?
+\end{itemize}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\subsubsection{Consultas HTTP}
+
+Las siguientes herramientas permiten enviar solicitudes HTTP y analizar la
+respuesta del servidor.
+
+\begin{longtable}{|p{2.8cm}|p{3cm}|p{4cm}|p{5.6cm}|p{1.5cm}|}
+
+\hline
+Comando &
+Sintaxis &
+Argumentos útiles &
+Particularidad &
+OS
+\\
+\hline
+\endhead
+
+curl &
+curl URL &
+-v, -I, -L, -O, -o &
+Herramienta estándar para realizar solicitudes HTTP y HTTPS. Permite inspeccionar encabezados, seguir redirecciones y descargar recursos. Constituye una de las utilidades más importantes durante troubleshooting. &
+Todos
+\\
+\hline
+
+curl &
+curl -I URL &
+N/A &
+Solicita únicamente los encabezados HTTP utilizando el método HEAD. Muy útil para comprobar rápidamente la disponibilidad de un servicio. &
+Todos
+\\
+\hline
+
+curl &
+curl -v URL &
+--http1.1, --http2 &
+Muestra información detallada de la conexión, incluyendo encabezados enviados y recibidos. &
+Todos
+\\
+\hline
+
+curl &
+curl -L URL &
+--max-redirs &
+Sigue automáticamente redirecciones HTTP. &
+Todos
+\\
+\hline
+
+curl &
+curl -X POST URL &
+-H, -d &
+Permite probar distintos métodos HTTP enviando encabezados y cuerpos personalizados. &
+Todos
+\\
+\hline
+
+curl &
+curl --resolve dominio:443:IP &
+--connect-to &
+Permite forzar la resolución DNS hacia una dirección IP específica sin modificar el archivo hosts. Muy útil durante migraciones y pruebas. &
+Todos
+\\
+\hline
+
+wget &
+wget URL &
+-S, --spider, -O &
+Permite descargar recursos o verificar su existencia sin almacenarlos localmente. &
+Linux
+\\
+\hline
+
+wget &
+wget --spider URL &
+-S &
+Comprueba la disponibilidad de un recurso HTTP simulando una descarga. &
+Linux
+\\
+\hline
+
+Invoke-WebRequest &
+Invoke-WebRequest URL &
+-Method, -Headers &
+Herramienta de PowerShell para realizar solicitudes HTTP y HTTPS. &
+Windows
+\\
+\hline
+
+Invoke-RestMethod &
+Invoke-RestMethod URL &
+-Method &
+Orientada principalmente a servicios REST y APIs. Convierte automáticamente respuestas JSON y XML en objetos de PowerShell. &
+Windows
+\\
+\hline
+
+\end{longtable}
+
+%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\subsection{Paso 7. Verificación de HTTPS y TLS}
+
+Una vez validado que el servidor responde mediante HTTP o HTTPS, resulta
+necesario verificar el establecimiento de la conexión TLS.
+
+Muchos problemas de conectividad corresponden realmente a errores durante el
+handshake TLS, certificados expirados, cadenas de confianza incompletas,
+versiones incompatibles del protocolo o configuraciones incorrectas del
+servidor.
+
+Durante esta etapa se busca responder preguntas como:
+
+\begin{itemize}
+\item ¿El handshake TLS se completa correctamente?
+\item ¿El certificado es válido?
+\item ¿La cadena de certificados está completa?
+\item ¿Qué versión de TLS fue negociada?
+\item ¿Qué Cipher Suite se seleccionó?
+\item ¿El servidor requiere SNI?
+\item ¿El certificado corresponde al dominio solicitado?
+\end{itemize}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\subsubsection{Inspección del Handshake TLS}
+
+Las siguientes herramientas permiten inspeccionar el establecimiento de una
+conexión TLS y obtener información detallada sobre el certificado presentado
+por el servidor.
+
+\begin{longtable}{|p{2.8cm}|p{3cm}|p{4cm}|p{5.6cm}|p{1.5cm}|}
+
+\hline
+Comando &
+Sintaxis &
+Argumentos útiles &
+Particularidad &
+OS
+\\
+\hline
+\endhead
+
+openssl s\_client &
+openssl s\_client -connect dominio:443 &
+-showcerts, -servername, -brief &
+Herramienta principal para diagnosticar conexiones TLS. Permite visualizar el handshake completo, la cadena de certificados y los parámetros negociados. &
+Linux/macOS
+\\
+\hline
+
+openssl s\_client &
+openssl s\_client -connect dominio:443 -servername dominio &
+-showcerts &
+Permite enviar el nombre del servidor mediante SNI. Fundamental cuando un mismo servidor hospeda múltiples sitios HTTPS. &
+Linux/macOS
+\\
+\hline
+
+openssl s\_client &
+openssl s\_client -connect dominio:443 -tls1\_2 &
+-tls1\_3 &
+Permite forzar una versión específica del protocolo TLS durante la negociación. &
+Linux/macOS
+\\
+\hline
+
+openssl s\_client &
+openssl s\_client -connect dominio:443 -cipher 'ECDHE:*' &
+-cipher &
+Permite comprobar qué Cipher Suites acepta el servidor. &
+Linux/macOS
+\\
+\hline
+
+curl &
+curl -v https://dominio &
+--http1.1, --http2 &
+Muestra información detallada de la conexión HTTPS, incluyendo negociación TLS y certificados utilizados. &
+Todos
+\\
+\hline
+
+curl &
+curl --tlsv1.2 URL &
+--tlsv1.3 &
+Fuerza el uso de una versión determinada de TLS para comprobar compatibilidad. &
+Todos
+\\
+\hline
+
+\end{longtable}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\subsubsection{Inspección de certificados}
+
+Una vez obtenido el certificado del servidor, resulta necesario verificar
+su validez, fechas, emisor y sujeto.
+
+\begin{longtable}{|p{2.8cm}|p{3cm}|p{4cm}|p{5.6cm}|p{1.5cm}|}
+
+\hline
+Comando &
+Sintaxis &
+Argumentos útiles &
+Particularidad &
+OS
+\\
+\hline
+\endhead
+
+openssl x509 &
+openssl x509 -in certificado.pem -text &
+-noout &
+Muestra toda la información contenida en un certificado X.509. &
+Linux/macOS
+\\
+\hline
+
+openssl x509 &
+openssl x509 -dates &
+-noout &
+Obtiene las fechas de inicio y expiración del certificado. Muy útil para detectar certificados vencidos. &
+Linux/macOS
+\\
+\hline
+
+openssl x509 &
+openssl x509 -subject &
+-issuer &
+Permite consultar el sujeto y la autoridad certificadora que emitió el certificado. &
+Linux/macOS
+\\
+\hline
+
+openssl x509 &
+openssl x509 -fingerprint &
+-sha256 &
+Obtiene la huella digital del certificado para comparaciones de integridad. &
+Linux/macOS
+\\
+\hline
+
+openssl verify &
+openssl verify certificado.pem &
+-CAfile &
+Comprueba si un certificado puede validarse correctamente contra una autoridad certificadora determinada. &
+Linux/macOS
+\\
+\hline
+
+certutil &
+certutil -verify certificado.cer &
+-dump &
+Permite validar certificados y visualizar su contenido desde Windows. &
+Windows
+\\
+\hline
+
+\end{longtable}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\subsubsection{Pruebas de autenticación TLS}
+
+En algunos servicios HTTPS el cliente también debe presentar un certificado
+durante el establecimiento de la conexión.
+
+Los siguientes comandos permiten realizar este tipo de pruebas.
+
+\begin{longtable}{|p{2.8cm}|p{3cm}|p{4cm}|p{5.6cm}|p{1.5cm}|}
+
+\hline
+Comando &
+Sintaxis &
+Argumentos útiles &
+Particularidad &
+OS
+\\
+\hline
+\endhead
+
+curl &
+curl --cert cliente.pem URL &
+--key &
+Permite autenticarse utilizando certificados de cliente. Muy utilizado en APIs empresariales y autenticación mutua (mTLS). &
+Todos
+\\
+\hline
+
+curl &
+curl --cacert ca.pem URL &
+--capath &
+Especifica explícitamente la autoridad certificadora utilizada para validar el servidor. &
+Todos
+\\
+\hline
+
+curl &
+curl --insecure URL &
+-k &
+Omite la validación del certificado del servidor. Debe utilizarse únicamente para fines de diagnóstico. &
+Todos
+\\
+\hline
+
+openssl s\_client &
+openssl s\_client -cert cliente.pem -key cliente.key &
+-CAfile &
+Permite realizar pruebas completas de autenticación mutua utilizando OpenSSL. &
+Linux/macOS
+\\
+\hline
+
+\end{longtable}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\subsubsection{Información sobre Cipher Suites y protocolos}
+
+Durante el troubleshooting también resulta útil conocer qué versiones de TLS
+y qué algoritmos criptográficos soporta una instalación determinada.
+
+\begin{longtable}{|p{2.8cm}|p{3cm}|p{4cm}|p{5.6cm}|p{1.5cm}|}
+
+\hline
+Comando &
+Sintaxis &
+Argumentos útiles &
+Particularidad &
+OS
+\\
+\hline
+\endhead
+
+openssl version &
+openssl version &
+-a &
+Muestra la versión instalada de OpenSSL y las características compiladas. &
+Linux/macOS
+\\
+\hline
+
+openssl ciphers &
+openssl ciphers &
+-v, -tls1\_2, -tls1\_3 &
+Lista las Cipher Suites soportadas por la instalación local de OpenSSL. &
+Linux/macOS
+\\
+\hline
+
+openssl list &
+openssl list -cipher-algorithms &
+-digest-algorithms &
+Permite consultar los algoritmos criptográficos disponibles. &
+Linux/macOS
+\\
+\hline
+
+curl &
+curl --http2 URL &
+--http1.1 &
+Permite comprobar la versión HTTP negociada con el servidor. &
+Todos
+\\
+\hline
+
+curl &
+curl --tls-max 1.2 URL &
+--tlsv1.3 &
+Restringe la versión máxima del protocolo TLS utilizada durante la conexión. Muy útil para detectar incompatibilidades de versión. &
+Todos
+\\
+\hline
+
+\end{longtable}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\subsection{Paso 8. Verificación de Firewalls}
+
+Una vez comprobada la conectividad, la resolución DNS y la disponibilidad del
+servicio, resulta necesario verificar que ningún firewall esté bloqueando la
+comunicación.
+
+Durante esta etapa se busca responder preguntas como:
+
+\begin{itemize}
+\item ¿Existe un firewall habilitado?
+\item ¿Qué política predeterminada utiliza?
+\item ¿Existe una regla que bloquee el puerto?
+\item ¿El tráfico está siendo descartado (DROP) o rechazado (REJECT)?
+\item ¿La regla realmente está siendo utilizada?
+\end{itemize}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\subsubsection{iptables}
+
+Aunque numerosas distribuciones modernas utilizan \texttt{nftables}, todavía
+es muy frecuente encontrar sistemas administrados mediante \texttt{iptables}.
+
+\begin{longtable}{|p{2.8cm}|p{3cm}|p{4cm}|p{5.6cm}|p{1.5cm}|}
+
+\hline
+Comando &
+Sintaxis &
+Argumentos útiles &
+Particularidad &
+OS
+\\
+\hline
+\endhead
+
+iptables &
+iptables -L &
+-v, -n, --line-numbers &
+Lista las reglas configuradas mostrando contadores de paquetes y bytes. Constituye normalmente el primer comando durante troubleshooting. &
+Linux
+\\
+\hline
+
+iptables &
+iptables -S &
+N/A &
+Muestra las reglas utilizando la sintaxis completa de iptables. Muy útil para reconstruir configuraciones. &
+Linux
+\\
+\hline
+
+iptables &
+iptables -t nat -L &
+-v &
+Consulta específicamente las reglas de NAT. &
+Linux
+\\
+\hline
+
+iptables &
+iptables -t mangle -L &
+-v &
+Consulta reglas de modificación de paquetes. &
+Linux
+\\
+\hline
+
+iptables-save &
+iptables-save &
+N/A &
+Exporta completamente la configuración actual del firewall. Muy útil antes de realizar modificaciones. &
+Linux
+\\
+\hline
+
+iptables &
+iptables -F &
+N/A &
+Elimina todas las reglas de una cadena. Debe utilizarse con extrema precaución. &
+Linux
+\\
+\hline
+
+iptables &
+iptables -A INPUT ... &
+-A, -I, -D &
+Permite agregar, insertar o eliminar reglas específicas. &
+Linux
+\\
+\hline
+
+iptables &
+iptables -P INPUT ACCEPT &
+DROP, FORWARD, OUTPUT &
+Consulta o modifica la política predeterminada de una cadena. &
+Linux
+\\
+\hline
+
+\end{longtable}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\subsubsection{nftables}
+
+Las distribuciones Linux actuales utilizan cada vez con mayor frecuencia
+\texttt{nftables} como reemplazo de \texttt{iptables}.
+
+\begin{longtable}{|p{2.8cm}|p{3cm}|p{4cm}|p{5.6cm}|p{1.5cm}|}
+
+\hline
+Comando &
+Sintaxis &
+Argumentos útiles &
+Particularidad &
+OS
+\\
+\hline
+\endhead
+
+nft &
+nft list ruleset &
+N/A &
+Muestra todas las tablas, cadenas y reglas configuradas en nftables. &
+Linux
+\\
+\hline
+
+nft &
+nft list table inet filter &
+N/A &
+Consulta únicamente una tabla específica. &
+Linux
+\\
+\hline
+
+nft &
+nft list chain inet filter INPUT &
+N/A &
+Visualiza las reglas pertenecientes a una cadena determinada. &
+Linux
+\\
+\hline
+
+nft &
+nft add rule ... &
+delete rule &
+Permite agregar o eliminar reglas del firewall. &
+Linux
+\\
+\hline
+
+nft &
+nft monitor &
+trace &
+Monitorea modificaciones realizadas sobre las reglas del firewall en tiempo real. &
+Linux
+\\
+\hline
+
+\end{longtable}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\subsubsection{UFW}
+
+Ubuntu y otras distribuciones utilizan con frecuencia UFW como interfaz
+simplificada sobre iptables.
+
+\begin{longtable}{|p{2.8cm}|p{3cm}|p{4cm}|p{5.6cm}|p{1.5cm}|}
+
+\hline
+Comando &
+Sintaxis &
+Argumentos útiles &
+Particularidad &
+OS
+\\
+\hline
+\endhead
+
+ufw &
+ufw status &
+verbose, numbered &
+Consulta el estado actual del firewall y las reglas configuradas. &
+Linux
+\\
+\hline
+
+ufw &
+ufw allow puerto &
+deny, reject &
+Permite habilitar o bloquear puertos específicos. &
+Linux
+\\
+\hline
+
+ufw &
+ufw delete número &
+allow, deny &
+Elimina reglas previamente configuradas. &
+Linux
+\\
+\hline
+
+ufw &
+ufw reload &
+N/A &
+Recarga la configuración del firewall. &
+Linux
+\\
+\hline
+
+ufw &
+ufw enable &
+disable &
+Habilita o deshabilita completamente UFW. &
+Linux
+\\
+\hline
+
+\end{longtable}
+
+
+%%%%%%
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\subsubsection{firewalld}
+
+Algunas distribuciones empresariales como Red Hat Enterprise Linux,
+CentOS, Rocky Linux o AlmaLinux utilizan \texttt{firewalld}.
+
+\begin{longtable}{|p{2.8cm}|p{3cm}|p{4cm}|p{5.6cm}|p{1.5cm}|}
+
+\hline
+Comando &
+Sintaxis &
+Argumentos útiles &
+Particularidad &
+OS
+\\
+\hline
+\endhead
+
+firewall-cmd &
+firewall-cmd --state &
+N/A &
+Consulta si firewalld se encuentra activo. &
+Linux
+\\
+\hline
+
+firewall-cmd &
+firewall-cmd --list-all &
+--zone &
+Muestra la configuración completa de una zona. &
+Linux
+\\
+\hline
+
+firewall-cmd &
+firewall-cmd --list-ports &
+N/A &
+Lista todos los puertos abiertos. &
+Linux
+\\
+\hline
+
+firewall-cmd &
+firewall-cmd --list-services &
+N/A &
+Lista los servicios permitidos. &
+Linux
+\\
+\hline
+
+firewall-cmd &
+firewall-cmd --add-port &
+--remove-port &
+Permite abrir o cerrar puertos temporalmente o de manera permanente. &
+Linux
+\\
+\hline
+
+firewall-cmd &
+firewall-cmd --reload &
+N/A &
+Recarga toda la configuración del firewall. &
+Linux
+\\
+\hline
+
+\end{longtable}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\subsubsection{Firewall de Windows}
+
+Windows incorpora su propio firewall con una amplia interfaz de línea de
+comandos disponible tanto desde CMD como desde PowerShell.
+
+\begin{longtable}{|p{2.8cm}|p{3cm}|p{4cm}|p{5.6cm}|p{1.5cm}|}
+
+\hline
+Comando &
+Sintaxis &
+Argumentos útiles &
+Particularidad &
+OS
+\\
+\hline
+\endhead
+
+netsh &
+netsh advfirewall show allprofiles &
+N/A &
+Consulta el estado del firewall para cada perfil de red. &
+Windows
+\\
+\hline
+
+netsh &
+netsh advfirewall firewall show rule name=all &
+N/A &
+Lista todas las reglas configuradas. &
+Windows
+\\
+\hline
+
+netsh &
+netsh advfirewall firewall add rule &
+delete rule &
+Permite crear o eliminar reglas desde CMD. &
+Windows
+\\
+\hline
+
+Get-NetFirewallRule &
+Get-NetFirewallRule &
+DisplayName &
+Obtiene todas las reglas del firewall mediante PowerShell. &
+Windows
+\\
+\hline
+
+Get-NetFirewallPortFilter &
+Get-NetFirewallPortFilter &
+N/A &
+Consulta los puertos asociados a una regla determinada. &
+Windows
+\\
+\hline
+
+Enable-NetFirewallRule &
+Enable-NetFirewallRule &
+Disable-NetFirewallRule &
+Habilita o deshabilita reglas existentes. &
+Windows
+\\
+\hline
+
+Set-NetFirewallProfile &
+Set-NetFirewallProfile &
+Enabled &
+Permite habilitar o deshabilitar perfiles completos del firewall. &
+Windows
+\\
+\hline
+
+\end{longtable}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\subsection{Paso 9. Captura y análisis de tráfico}
+
+Cuando la configuración parece correcta y los servicios continúan sin responder
+adecuadamente, resulta necesario inspeccionar directamente el tráfico de red.
+
+Durante esta etapa se busca responder preguntas como:
+
+\begin{itemize}
+\item ¿Los paquetes realmente salen del equipo?
+\item ¿Llegan respuestas?
+\item ¿Existe retransmisión TCP?
+\item ¿Hay pérdida de paquetes?
+\item ¿El handshake TCP se completa?
+\item ¿Existe tráfico DNS?
+\item ¿La aplicación realmente está transmitiendo información?
+\end{itemize}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\subsubsection{Captura básica de tráfico}
+
+Las siguientes herramientas permiten capturar paquetes directamente desde una
+interfaz de red.
+
+\begin{longtable}{|p{2.8cm}|p{3cm}|p{4cm}|p{5.6cm}|p{1.5cm}|}
+
+\hline
+Comando &
+Sintaxis &
+Argumentos útiles &
+Particularidad &
+OS
+\\
+\hline
+\endhead
+
+tcpdump &
+tcpdump -i eth0 &
+-n, -vv, -c &
+Herramienta estándar para capturar tráfico de red. Constituye una de las utilidades más importantes durante troubleshooting avanzado. &
+Linux/macOS
+\\
+\hline
+
+tcpdump &
+tcpdump -D &
+N/A &
+Lista todas las interfaces disponibles para captura. &
+Linux/macOS
+\\
+\hline
+
+tcpdump &
+tcpdump -i any &
+N/A &
+Captura tráfico proveniente de todas las interfaces disponibles. &
+Linux
+\\
+\hline
+
+tcpdump &
+tcpdump -nn &
+-v, -vv, -vvv &
+Evita la resolución de nombres DNS y puertos, mostrando únicamente direcciones IP y números de puerto. Reduce el ruido durante la captura. &
+Linux/macOS
+\\
+\hline
+
+tcpdump &
+tcpdump -c 100 &
+-c &
+Finaliza automáticamente la captura después de obtener el número indicado de paquetes. &
+Linux/macOS
+\\
+\hline
+
+tcpdump &
+tcpdump -w captura.pcap &
+-U &
+Guarda la captura en formato PCAP para su posterior análisis. &
+Linux/macOS
+\\
+\hline
+
+tcpdump &
+tcpdump -r captura.pcap &
+-n &
+Permite analizar una captura previamente almacenada. &
+Linux/macOS
+\\
+\hline
+
+\end{longtable}
+
+%%%%5
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\subsubsection{Filtros por host, puerto y protocolo}
+
+Uno de los aspectos más importantes de tcpdump consiste en limitar la captura
+únicamente al tráfico relevante.
+
+\begin{longtable}{|p{2.8cm}|p{4.2cm}|p{3.5cm}|p{5cm}|p{1.5cm}|}
+
+\hline
+Comando &
+Sintaxis &
+Argumentos útiles &
+Particularidad &
+OS
+\\
+\hline
+\endhead
+
+tcpdump &
+tcpdump host 192.168.1.15 &
+src, dst &
+Captura únicamente paquetes cuyo origen o destino corresponde al host indicado. &
+Linux/macOS
+\\
+\hline
+
+tcpdump &
+tcpdump port 443 &
+src, dst &
+Captura tráfico asociado a un puerto específico. Muy utilizado para HTTPS, DNS, SSH, etc. &
+Linux/macOS
+\\
+\hline
+
+tcpdump &
+tcpdump tcp &
+udp, icmp &
+Filtra únicamente un protocolo determinado. &
+Linux/macOS
+\\
+\hline
+
+tcpdump &
+tcpdump src host 10.0.0.5 &
+dst host &
+Filtra únicamente paquetes provenientes de un origen específico. &
+Linux/macOS
+\\
+\hline
+
+tcpdump &
+tcpdump dst port 443 &
+src port &
+Permite filtrar tráfico dirigido hacia un puerto específico. &
+Linux/macOS
+\\
+\hline
+
+tcpdump &
+tcpdump 'tcp port 80 or tcp port 443' &
+and, or, not &
+Permite construir filtros booleanos complejos utilizando la sintaxis BPF. &
+Linux/macOS
+\\
+\hline
+
+tcpdump &
+tcpdump net 192.168.10.0/24 &
+mask &
+Captura todo el tráfico correspondiente a una red determinada. &
+Linux/macOS
+\\
+\hline
+
+tcpdump &
+tcpdump broadcast &
+multicast &
+Captura únicamente tráfico broadcast o multicast. &
+Linux/macOS
+\\
+\hline
+
+\end{longtable}
+
+
+%%%%%%%%%%%5
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\subsubsection{Capturas específicas para troubleshooting}
+
+Las siguientes combinaciones constituyen algunas de las capturas más utilizadas
+durante el diagnóstico de incidencias.
+
+\begin{longtable}{|p{3cm}|p{4cm}|p{3cm}|p{5cm}|p{1.5cm}|}
+
+\hline
+Objetivo &
+Comando &
+Filtro &
+Particularidad &
+OS
+\\
+\hline
+\endhead
+
+DNS &
+tcpdump port 53 &
+udp &
+Permite verificar consultas y respuestas DNS. &
+Linux/macOS
+\\
+\hline
+
+HTTPS &
+tcpdump port 443 &
+tcp &
+Permite comprobar el establecimiento del handshake TCP previo a TLS. &
+Linux/macOS
+\\
+\hline
+
+HTTP &
+tcpdump port 80 &
+tcp &
+Captura tráfico HTTP sin cifrar. &
+Linux/macOS
+\\
+\hline
+
+SSH &
+tcpdump port 22 &
+tcp &
+Verifica conexiones SSH entrantes y salientes. &
+Linux/macOS
+\\
+\hline
+
+ICMP &
+tcpdump icmp &
+N/A &
+Permite analizar solicitudes y respuestas Ping. &
+Linux/macOS
+\\
+\hline
+
+ARP &
+tcpdump arp &
+N/A &
+Permite diagnosticar problemas de resolución MAC. &
+Linux/macOS
+\\
+\hline
+
+DHCP &
+tcpdump port 67 or port 68 &
+udp &
+Captura solicitudes y respuestas DHCP. &
+Linux/macOS
+\\
+\hline
+
+NTP &
+tcpdump port 123 &
+udp &
+Permite verificar sincronización horaria mediante NTP. &
+Linux/macOS
+\\
+\hline
+
+\end{longtable}
+%%%%%%%%%%%%%%%%%%%%%%5
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\subsubsection{Herramientas complementarias}
+
+Existen otras herramientas orientadas al análisis de tráfico desde la línea de
+comandos que resultan especialmente útiles durante tareas de troubleshooting.
+
+\begin{longtable}{|p{2.8cm}|p{3cm}|p{4cm}|p{5.6cm}|p{1.5cm}|}
+
+\hline
+Comando &
+Sintaxis &
+Argumentos útiles &
+Particularidad &
+OS
+\\
+\hline
+\endhead
+
+tshark &
+tshark -i eth0 &
+-f, -Y, -w, -r &
+Versión de línea de comandos de Wireshark. Permite capturar y analizar tráfico utilizando prácticamente las mismas capacidades del entorno gráfico. &
+Linux/macOS/Windows
+\\
+\hline
+
+tshark &
+tshark -r captura.pcap &
+-Y &
+Analiza archivos PCAP utilizando filtros de visualización de Wireshark. &
+Todos
+\\
+\hline
+
+ngrep &
+ngrep patrón &
+port &
+Permite buscar cadenas de texto dentro del tráfico de red. Muy útil para protocolos sin cifrar como HTTP, SMTP o FTP. &
+Linux/macOS
+\\
+\hline
+
+tcpflow &
+tcpflow &
+-c &
+Reconstruye flujos TCP completos, facilitando el análisis de conversaciones entre cliente y servidor. &
+Linux/macOS
+\\
+\hline
+
+capinfos &
+capinfos captura.pcap &
+N/A &
+Obtiene estadísticas generales de un archivo PCAP: duración, número de paquetes, tamaño y protocolos observados. &
+Linux/macOS
+\\
+\hline
+
+editcap &
+editcap entrada.pcap salida.pcap &
+-c, -A, -B &
+Permite dividir, recortar o filtrar archivos PCAP antes de analizarlos. &
+Linux/macOS
+\\
+\hline
+
+mergecap &
+mergecap &
+-w &
+Fusiona múltiples capturas PCAP en un único archivo. Muy útil cuando se captura tráfico desde varias interfaces o equipos. &
+Linux/macOS
+\\
+\hline
+
+\end{longtable}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\subsection{Paso 10. Revisión de logs y monitoreo del sistema}
+
+Una vez verificada la conectividad y el estado de los servicios, el siguiente
+paso consiste en revisar los registros generados por el sistema operativo y las
+aplicaciones.
+
+Durante esta etapa se busca responder preguntas como:
+
+\begin{itemize}
+\item ¿Qué error ocurrió?
+\item ¿Cuándo ocurrió?
+\item ¿Qué proceso lo generó?
+\item ¿Existe algún patrón repetitivo?
+\item ¿Qué archivo contiene la información relevante?
+\item ¿El problema continúa ocurriendo en este momento?
+\end{itemize}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\subsubsection{Visualización de logs}
+
+Los siguientes comandos permiten inspeccionar archivos de registro.
+
+\begin{longtable}{|p{2.8cm}|p{3.3cm}|p{4cm}|p{5.3cm}|p{1.5cm}|}
+
+\hline
+Comando &
+Sintaxis &
+Argumentos útiles &
+Particularidad &
+OS
+\\
+\hline
+\endhead
+
+cat &
+cat archivo.log &
+N/A &
+Muestra completamente el contenido de un archivo de registro. Adecuado únicamente para archivos pequeños. &
+Linux/macOS
+\\
+\hline
+
+less &
+less archivo.log &
+-N, +G &
+Permite navegar archivos grandes de forma interactiva sin cargarlos completamente en memoria. &
+Linux/macOS
+\\
+\hline
+
+more &
+more archivo.log &
+N/A &
+Visualiza archivos página por página. &
+Todos
+\\
+\hline
+
+head &
+head archivo.log &
+-n &
+Muestra las primeras líneas del archivo. Muy útil para revisar encabezados o información inicial. &
+Linux/macOS
+\\
+\hline
+
+tail &
+tail archivo.log &
+-n &
+Muestra las últimas líneas del archivo. Normalmente es el primer comando utilizado durante troubleshooting. &
+Linux/macOS
+\\
+\hline
+
+tail &
+tail -f archivo.log &
+-f &
+Permite seguir un log en tiempo real conforme se escriben nuevas entradas. &
+Linux/macOS
+\\
+\hline
+
+tail &
+tail -F archivo.log &
+-F &
+Continúa siguiendo el archivo incluso si éste es rotado o recreado por logrotate. &
+Linux/macOS
+\\
+\hline
+
+type &
+type archivo.log &
+N/A &
+Visualiza archivos desde CMD. &
+Windows
+\\
+\hline
+
+Get-Content &
+Get-Content archivo.log &
+-Tail, -Wait &
+Equivalente a tail en PowerShell. El argumento -Wait permite seguir el archivo en tiempo real. &
+Windows
+\\
+\hline
+
+\end{longtable}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\subsubsection{Búsqueda dentro de logs}
+
+Una vez localizado el archivo correcto, normalmente resulta necesario buscar
+mensajes específicos.
+
+\begin{longtable}{|p{2.8cm}|p{3.3cm}|p{4cm}|p{5.3cm}|p{1.5cm}|}
+
+\hline
+Comando &
+Sintaxis &
+Argumentos útiles &
+Particularidad &
+OS
+\\
+\hline
+\endhead
+
+grep &
+grep ERROR archivo.log &
+-i, -n, -r, -A, -B, -C, -v &
+Busca cadenas o expresiones regulares dentro de archivos. Constituye una de las herramientas más utilizadas durante troubleshooting. &
+Linux/macOS
+\\
+\hline
+
+grep &
+grep -i exception &
+-E &
+Permite realizar búsquedas ignorando mayúsculas/minúsculas o utilizando expresiones regulares extendidas. &
+Linux/macOS
+\\
+\hline
+
+findstr &
+findstr ERROR archivo.log &
+/I, /N, /S &
+Equivalente básico de grep en Windows. &
+Windows
+\\
+\hline
+
+awk &
+awk &
+-F &
+Permite analizar columnas y generar reportes a partir de archivos de log. &
+Linux/macOS
+\\
+\hline
+
+sed &
+sed &
+-n &
+Filtra o transforma líneas específicas del archivo. &
+Linux/macOS
+\\
+\hline
+
+sort &
+sort archivo.log &
+-r, -u &
+Ordena registros antes de analizarlos. &
+Linux/macOS
+\\
+\hline
+
+uniq &
+uniq -c &
+-d &
+Cuenta ocurrencias repetidas de un mismo mensaje. Muy útil para detectar errores recurrentes. &
+Linux/macOS
+\\
+\hline
+
+wc &
+wc -l archivo.log &
+-l &
+Cuenta rápidamente el número de líneas contenidas en un log. &
+Linux/macOS
+\\
+\hline
+
+
+\end{longtable}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\subsubsection{Logs del sistema}
+
+Muchos errores no aparecen en los registros de la aplicación sino en los logs
+del propio sistema operativo.
+
+\begin{longtable}{|p{2.8cm}|p{3.3cm}|p{4cm}|p{5.3cm}|p{1.5cm}|}
+
+\hline
+Comando &
+Sintaxis &
+Argumentos útiles &
+Particularidad &
+OS
+\\
+\hline
+\endhead
+
+journalctl &
+journalctl &
+-x, -b, -f, -u &
+Permite consultar todos los registros administrados por systemd. Constituye la principal herramienta de diagnóstico en distribuciones Linux modernas. &
+Linux
+\\
+\hline
+
+journalctl &
+journalctl -u nginx &
+-f &
+Consulta únicamente los registros correspondientes a un servicio específico. &
+Linux
+\\
+\hline
+
+journalctl &
+journalctl --since "10 min ago" &
+--until &
+Permite consultar únicamente eventos ocurridos dentro de un intervalo de tiempo. &
+Linux
+\\
+\hline
+
+journalctl &
+journalctl -p err &
+warning, info &
+Filtra registros según su nivel de severidad. &
+Linux
+\\
+\hline
+
+journalctl &
+journalctl -b &
+-1 &
+Consulta únicamente los registros del arranque actual o de arranques anteriores. &
+Linux
+\\
+\hline
+
+dmesg &
+dmesg &
+-T, -w &
+Consulta mensajes generados por el kernel. Muy útil para diagnosticar problemas de hardware, controladores o dispositivos. &
+Linux
+\\
+\hline
+
+log show &
+log show &
+--last, --predicate &
+Consulta el sistema unificado de logs de macOS. &
+macOS
+\\
+\hline
+
+wevtutil &
+wevtutil qe System &
+Application &
+Consulta registros del Event Viewer desde la línea de comandos. &
+Windows
+\\
+\hline
+
+Get-WinEvent &
+Get-WinEvent &
+-LogName, -MaxEvents &
+Permite consultar registros del Event Viewer utilizando PowerShell. &
+Windows
+\\
+\hline
+
+\end{longtable}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\subsubsection{Monitoreo en tiempo real}
+
+Cuando un problema ocurre de manera intermitente, resulta útil observar el
+sistema conforme los eventos suceden.
+
+\begin{longtable}{|p{2.8cm}|p{3.3cm}|p{4cm}|p{5.3cm}|p{1.5cm}|}
+
+\hline
+Comando &
+Sintaxis &
+Argumentos útiles &
+Particularidad &
+OS
+\\
+\hline
+\endhead
+
+tail &
+tail -f archivo.log &
+-F &
+Monitorea continuamente un archivo de registro. &
+Linux/macOS
+\\
+\hline
+
+journalctl &
+journalctl -f &
+-u &
+Permite seguir en tiempo real los registros del sistema o de un servicio específico. &
+Linux
+\\
+\hline
+
+watch &
+watch comando &
+-n &
+Ejecuta periódicamente un comando mostrando los cambios ocurridos entre ejecuciones. &
+Linux
+\\
+\hline
+
+Get-Content &
+Get-Content archivo.log -Wait &
+-Tail &
+Permite seguir un archivo de log desde PowerShell. &
+Windows
+\\
+\hline
+
+\end{longtable}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\subsubsection{Comandos compuestos de troubleshooting}
+
+Durante una incidencia es común combinar varias herramientas para localizar
+rápidamente la causa del problema. Los siguientes comandos representan algunos
+de los escenarios más frecuentes encontrados durante tareas de soporte.
+
+\begin{longtable}{|p{4.8cm}|p{7.5cm}|p{4cm}|}
+
+\hline
+Objetivo &
+Comando &
+Particularidad
+\\
+\hline
+\endhead
+
+Buscar todos los archivos modificados durante la última hora &
+\texttt{find / -type f -mmin -60 2>/dev/null} &
+Muy útil para localizar archivos generados o modificados recientemente.
+\\
+\hline
+
+Buscar archivos modificados hoy &
+\texttt{find /var/log -type f -daystart -mtime 0} &
+Permite reducir rápidamente la búsqueda de logs recientes.
+\\
+\hline
+
+Buscar archivos mayores a 1 GB &
+\texttt{find / -type f -size +1G 2>/dev/null} &
+Ideal para investigar problemas de almacenamiento.
+\\
+\hline
+
+Buscar archivos cuyo nombre contenga "log" &
+\texttt{find / -iname "*log*" 2>/dev/null} &
+Permite localizar rápidamente archivos de registro cuyo nombre se desconoce.
+\\
+\hline
+
+Encontrar archivos que están creciendo constantemente &
+\texttt{watch 'ls -lh /var/log'} &
+Permite observar cambios de tamaño en tiempo real.
+\\
+\hline
+
+Encontrar los archivos modificados más recientemente &
+\texttt{find /var/log -type f -printf "\%T@ \%p$ \ $n" | sort -nr} &
+Ordena los archivos según su última fecha de modificación.
+\\
+\hline
+
+Visualizar simultáneamente varios logs &
+\texttt{tail -f log1.log log2.log log3.log} &
+Permite seguir múltiples registros desde una única terminal.
+\\
+\hline
+
+Buscar únicamente errores &
+\texttt{grep -i "error\textbackslash|exception\textbackslash|fatal" archivo.log} &
+Filtra rápidamente los mensajes más relevantes.
+\\
+\hline
+
+Contar cuántas veces aparece un error &
+\texttt{grep ERROR archivo.log | wc -l} &
+Permite medir la frecuencia de un problema.
+\\
+\hline
+
+Encontrar los errores más repetidos &
+\texttt{grep ERROR archivo.log | sort | uniq -c | sort -nr} &
+Muy útil para detectar patrones repetitivos.
+\\
+\hline
+
+Buscar registros generados durante los últimos diez minutos &
+\texttt{journalctl --since "10 minutes ago"} &
+Evita revisar grandes cantidades de información innecesaria.
+\\
+\hline
+
+Seguir únicamente los logs de un servicio &
+\texttt{journalctl -fu nginx} &
+Monitorea un servicio mientras se reproduce el problema.
+\\
+\hline
+
+Buscar un PID y verificar si continúa ejecutándose &
+\texttt{ps -ef | grep PID} &
+Permite comprobar rápidamente si un proceso terminó inesperadamente.
+\\
+\hline
+
+Buscar procesos por nombre &
+\texttt{ps -ef | grep nombreProceso} &
+Método clásico para localizar aplicaciones en ejecución.
+\\
+\hline
+
+Encontrar qué proceso utiliza un puerto &
+\texttt{lsof -i :443} &
+Muy útil cuando un servicio no puede iniciar por conflicto de puertos.
+\\
+\hline
+
+Encontrar quién mantiene abierto un archivo &
+\texttt{lsof archivo.log} &
+Permite identificar procesos que bloquean archivos.
+\\
+\hline
+
+Buscar procesos que escriben dentro de un directorio &
+\texttt{lsof +D /var/log} &
+Muestra todos los procesos utilizando archivos dentro del directorio.
+\\
+\hline
+
+Liberar un archivo ocupado &
+\texttt{fuser -k archivo.log} &
+Finaliza el proceso que mantiene abierto el archivo.
+\\
+\hline
+
+Encontrar archivos eliminados que continúan abiertos &
+\texttt{lsof | grep deleted} &
+Caso muy frecuente cuando el disco permanece lleno aun después de borrar archivos.
+\\
+\hline
+
+Buscar todos los archivos abiertos por un proceso &
+\texttt{lsof -p PID} &
+Permite inspeccionar completamente la actividad de un proceso.
+\\
+\hline
+
+Comprobar qué proceso consume más CPU &
+\texttt{ps -eo pid,comm,\%cpu --sort=-\%cpu | head} &
+Obtiene rápidamente los procesos con mayor utilización de CPU.
+\\
+\hline
+
+Comprobar qué proceso consume más memoria &
+\texttt{ps -eo pid,comm,\%mem --sort=-\%mem | head} &
+Muy útil para detectar fugas de memoria.
+\\
+\hline
+
+Buscar archivos cuyo tamaño cambia constantemente &
+\texttt{watch 'du -sh /var/log/*'} &
+Permite identificar qué archivo está creciendo.
+\\
+\hline
+
+Buscar qué proceso escribe continuamente en disco &
+\texttt{iotop} &
+Muestra el uso de E/S por proceso en tiempo real.
+\\
+\hline
+
+Encontrar archivos bloqueados &
+\texttt{lsof | grep "(deleted)"} &
+Frecuente cuando una aplicación continúa escribiendo en un archivo eliminado.
+\\
+\hline
+
+Comprobar espacio disponible y uso por directorio &
+\texttt{df -h ; du -sh /*} &
+Permite determinar rápidamente dónde se encuentra el consumo de almacenamiento.
+\\
+\hline
+
+Buscar conexiones hacia un puerto específico &
+\texttt{ss -tan | grep :443} &
+Permite verificar si realmente llegan conexiones al servidor.
+\\
+\hline
+
+Verificar conexiones en estado LISTEN &
+\texttt{ss -ltnp} &
+Permite confirmar que el servicio realmente abrió el puerto esperado.
+\\
+\hline
+
+Buscar retransmisiones TCP &
+\texttt{netstat -s | grep retrans} &
+Puede indicar pérdida de paquetes o problemas de red.
+\\
+\hline
+
+Verificar rápidamente resolución DNS y conexión HTTPS &
+\texttt{curl -Iv https://servidor.com} &
+Permite comprobar DNS, TCP, TLS y HTTP mediante un único comando.
+\\
+\hline
+
+\end{longtable}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\subsection{Paso 11. Administración de procesos y servicios}
+
+Durante el proceso de troubleshooting resulta indispensable verificar que los
+servicios se encuentren en ejecución, que no hayan terminado inesperadamente y
+que consuman los recursos esperados.
+
+Las siguientes herramientas permiten consultar, administrar y monitorear
+procesos y servicios del sistema.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\subsubsection{Procesos}
+
+\begin{longtable}{|p{2.8cm}|p{3.2cm}|p{4cm}|p{5.4cm}|p{1.5cm}|}
+
+\hline
+Comando &
+Sintaxis &
+Argumentos útiles &
+Particularidad &
+OS
+\\
+\hline
+\endhead
+
+ps &
+ps -ef &
+aux, -eo &
+Lista todos los procesos en ejecución. Constituye el punto de partida para localizar procesos específicos. &
+Linux/macOS
+\\
+\hline
+
+ps &
+ps -eo pid,user,comm,\%cpu,\%mem &
+--sort &
+Permite personalizar las columnas mostradas y ordenar los resultados según distintos criterios. &
+Linux/macOS
+\\
+\hline
+
+top &
+top &
+-p, -H &
+Monitorea procesos en tiempo real mostrando utilización de CPU, memoria y carga del sistema. &
+Linux/macOS
+\\
+\hline
+
+htop &
+htop &
+-d &
+Versión interactiva de top. Facilita ordenar procesos, buscar aplicaciones y finalizar procesos directamente desde la interfaz. &
+Linux
+\\
+\hline
+
+pidof &
+pidof proceso &
+N/A &
+Obtiene rápidamente el PID asociado a un proceso. &
+Linux
+\\
+\hline
+
+pgrep &
+pgrep nombre &
+-a, -f &
+Busca procesos utilizando expresiones regulares o parte del nombre del comando. &
+Linux/macOS
+\\
+\hline
+
+pkill &
+pkill nombre &
+-f &
+Finaliza procesos utilizando su nombre en lugar del PID. &
+Linux/macOS
+\\
+\hline
+
+kill &
+kill PID &
+-9, -15 &
+Envía señales a un proceso. SIGTERM permite finalizar ordenadamente; SIGKILL fuerza la terminación inmediata. &
+Linux/macOS
+\\
+\hline
+
+killall &
+killall proceso &
+-s &
+Finaliza todos los procesos cuyo nombre coincida con el indicado. &
+Linux/macOS
+\\
+\hline
+
+nice &
+nice -n 10 comando &
+N/A &
+Ejecuta un proceso con una prioridad determinada. &
+Linux/macOS
+\\
+\hline
+
+renice &
+renice -10 PID &
+N/A &
+Modifica la prioridad de un proceso ya existente. &
+Linux/macOS
+\\
+\hline
+
+tasklist &
+tasklist &
+/FI, /SVC &
+Lista todos los procesos en Windows junto con información adicional. &
+Windows
+\\
+\hline
+
+Get-Process &
+Get-Process &
+-Id, -Name &
+Obtiene información detallada de procesos mediante PowerShell. &
+Windows
+\\
+\hline
+
+Stop-Process &
+Stop-Process &
+-Id, -Name, -Force &
+Finaliza procesos desde PowerShell. &
+Windows
+\\
+\hline
+
+taskkill &
+taskkill /PID PID &
+/F, /IM &
+Finaliza procesos utilizando el PID o el nombre del ejecutable. &
+Windows
+\\
+\hline
+
+\end{longtable}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\subsubsection{Servicios}
+
+La mayoría de las aplicaciones empresariales se ejecutan como servicios del
+sistema operativo. Las siguientes herramientas permiten consultar su estado y
+administrarlos.
+
+\begin{longtable}{|p{2.8cm}|p{3.2cm}|p{4cm}|p{5.4cm}|p{1.5cm}|}
+
+\hline
+Comando &
+Sintaxis &
+Argumentos útiles &
+Particularidad &
+OS
+\\
+\hline
+\endhead
+
+systemctl &
+systemctl status servicio &
+--no-pager &
+Consulta el estado actual de un servicio administrado por systemd. Constituye normalmente el primer comando utilizado cuando una aplicación deja de funcionar. &
+Linux
+\\
+\hline
+
+systemctl &
+systemctl start servicio &
+stop, restart, reload &
+Permite iniciar, detener o reiniciar servicios. &
+Linux
+\\
+\hline
+
+systemctl &
+systemctl enable servicio &
+disable &
+Configura si el servicio debe iniciarse automáticamente durante el arranque. &
+Linux
+\\
+\hline
+
+systemctl &
+systemctl list-units &
+--type=service &
+Lista todos los servicios administrados por systemd. &
+Linux
+\\
+\hline
+
+systemctl &
+systemctl is-active servicio &
+is-enabled &
+Comprueba rápidamente si un servicio está activo o habilitado. &
+Linux
+\\
+\hline
+
+service &
+service servicio status &
+start, stop, restart &
+Interfaz tradicional utilizada en distribuciones sin systemd o por compatibilidad. &
+Linux
+\\
+\hline
+
+sc &
+sc query &
+queryex &
+Consulta servicios desde la línea de comandos de Windows. &
+Windows
+\\
+\hline
+
+sc &
+sc start servicio &
+stop &
+Permite iniciar o detener servicios de Windows. &
+Windows
+\\
+\hline
+
+Get-Service &
+Get-Service &
+-Name &
+Obtiene información sobre servicios mediante PowerShell. &
+Windows
+\\
+\hline
+
+Restart-Service &
+Restart-Service &
+-Name &
+Reinicia servicios desde PowerShell. &
+Windows
+\\
+\hline
+
+net &
+net start &
+stop &
+Herramienta clásica para iniciar y detener servicios en Windows. &
+Windows
+\\
+\hline
+
+launchctl &
+launchctl list &
+print &
+Permite consultar los servicios y demonios administrados por launchd en macOS. &
+macOS
+\\
+\hline
+
+launchctl &
+launchctl load &
+unload &
+Carga o descarga servicios en macOS. &
+macOS
+\\
+\hline
+
+\end{longtable}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\subsection{Paso 12. Verificación de recursos del sistema}
+
+Una vez comprobado que los servicios se encuentran en ejecución, resulta
+conveniente verificar el estado general del sistema operativo y la
+disponibilidad de sus recursos.
+
+Durante esta etapa se busca responder preguntas como:
+
+\begin{itemize}
+\item ¿Existe saturación de CPU?
+\item ¿Hay memoria RAM disponible?
+\item ¿Se está utilizando memoria swap?
+\item ¿Existe espera por operaciones de disco?
+\item ¿La carga del sistema es anormal?
+\item ¿Hay procesos consumiendo recursos excesivos?
+\end{itemize}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\subsubsection{CPU y carga del sistema}
+
+\begin{longtable}{|p{2.8cm}|p{3.2cm}|p{4cm}|p{5.4cm}|p{1.5cm}|}
+
+\hline
+Comando &
+Sintaxis &
+Argumentos útiles &
+Particularidad &
+OS
+\\
+\hline
+\endhead
+
+uptime &
+uptime &
+N/A &
+Muestra el tiempo desde el último arranque y el Load Average del sistema. Es uno de los primeros comandos utilizados para evaluar la carga general. &
+Linux/macOS
+\\
+\hline
+
+top &
+top &
+-d, -H &
+Permite observar en tiempo real el consumo de CPU por proceso y la carga global del sistema. &
+Linux/macOS
+\\
+\hline
+
+htop &
+htop &
+-d &
+Versión interactiva de top con ordenamiento, búsqueda y filtrado de procesos. &
+Linux
+\\
+\hline
+
+mpstat &
+mpstat &
+-P ALL &
+Muestra estadísticas de utilización para cada núcleo del procesador. Muy útil para detectar cargas desbalanceadas. &
+Linux
+\\
+\hline
+
+sar &
+sar -u &
+-u, -P, -q &
+Permite consultar estadísticas históricas de utilización de CPU cuando el servicio sysstat se encuentra habilitado. &
+Linux
+\\
+\hline
+
+vmstat &
+vmstat 1 &
+-s &
+Resume el estado general del sistema incluyendo CPU, memoria y procesos. &
+Linux/macOS
+\\
+\hline
+
+wmic &
+wmic cpu get loadpercentage &
+N/A &
+Obtiene el porcentaje de utilización del procesador desde CMD. &
+Windows
+\\
+\hline
+
+Get-Counter &
+Get-Counter "\textbackslash Processor(\_Total)\textbackslash \% Processor Time" &
+N/A &
+Consulta contadores de rendimiento de CPU mediante PowerShell. &
+Windows
+\\
+\hline
+
+\end{longtable}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\subsubsection{Memoria}
+
+\begin{longtable}{|p{2.8cm}|p{3.2cm}|p{4cm}|p{5.4cm}|p{1.5cm}|}
+
+\hline
+Comando &
+Sintaxis &
+Argumentos útiles &
+Particularidad &
+OS
+\\
+\hline
+\endhead
+
+free &
+free -h &
+-m, -g &
+Muestra el uso de memoria RAM y swap en formatos legibles. Constituye el comando más utilizado para comprobar disponibilidad de memoria. &
+Linux
+\\
+\hline
+
+vmstat &
+vmstat &
+1 &
+Permite observar el uso de memoria, swap y actividad del sistema en tiempo real. &
+Linux/macOS
+\\
+\hline
+
+cat &
+cat /proc/meminfo &
+N/A &
+Presenta información detallada sobre la memoria del sistema. &
+Linux
+\\
+\hline
+
+swapon &
+swapon --show &
+-s &
+Lista las áreas de swap configuradas y su utilización. &
+Linux
+\\
+\hline
+
+vm\_stat &
+vm\_stat &
+N/A &
+Consulta estadísticas de memoria virtual en macOS. &
+macOS
+\\
+\hline
+
+systeminfo &
+systeminfo &
+N/A &
+Incluye información general de memoria física instalada y disponible. &
+Windows
+\\
+\hline
+
+Get-ComputerInfo &
+Get-ComputerInfo &
+N/A &
+Obtiene información completa del sistema mediante PowerShell, incluyendo memoria instalada. &
+Windows
+\\
+\hline
+
+Get-Counter &
+Get-Counter "\textbackslash Memory\textbackslash Available MBytes" &
+N/A &
+Consulta la memoria disponible utilizando contadores de rendimiento. &
+Windows
+\\
+\hline
+
+\end{longtable}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\subsubsection{Disco e I/O}
+
+\begin{longtable}{|p{2.8cm}|p{3.2cm}|p{4cm}|p{5.4cm}|p{1.5cm}|}
+
+\hline
+Comando &
+Sintaxis &
+Argumentos útiles &
+Particularidad &
+OS
+\\
+\hline
+\endhead
+
+iostat &
+iostat &
+-x, -d &
+Presenta estadísticas de entrada y salida por dispositivo de almacenamiento. Muy útil para detectar cuellos de botella de disco. &
+Linux
+\\
+\hline
+
+iotop &
+iotop &
+-o &
+Muestra qué procesos están realizando operaciones intensivas de lectura o escritura en disco. &
+Linux
+\\
+\hline
+
+sar &
+sar -d &
+-d &
+Obtiene estadísticas históricas de utilización de dispositivos de almacenamiento. &
+Linux
+\\
+\hline
+
+dstat &
+dstat &
+-c, -d, -m, -n &
+Combina estadísticas de CPU, disco, memoria y red en una única vista. &
+Linux
+\\
+\hline
+
+vmstat &
+vmstat 1 &
+N/A &
+Permite observar bloqueos relacionados con operaciones de entrada y salida. &
+Linux/macOS
+\\
+\hline
+
+Get-PhysicalDisk &
+Get-PhysicalDisk &
+N/A &
+Consulta información sobre discos físicos desde PowerShell. &
+Windows
+\\
+\hline
+
+Get-Counter &
+Get-Counter "\textbackslash PhysicalDisk(*)\textbackslash Disk Transfers/sec" &
+N/A &
+Consulta estadísticas de actividad de disco. &
+Windows
+\\
+\hline
+
+\end{longtable}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\subsubsection{Información general del sistema}
+
+Además de los recursos, suele ser útil obtener información general del sistema
+operativo durante una incidencia.
+
+\begin{longtable}{|p{2.8cm}|p{3.2cm}|p{4cm}|p{5.4cm}|p{1.5cm}|}
+
+\hline
+Comando &
+Sintaxis &
+Argumentos útiles &
+Particularidad &
+OS
+\\
+\hline
+\endhead
+
+uname &
+uname -a &
+-r, -m &
+Muestra información del kernel, arquitectura y sistema operativo. &
+Linux/macOS
+\\
+\hline
+
+hostnamectl &
+hostnamectl &
+status &
+Presenta información del host, sistema operativo y kernel en sistemas con systemd. &
+Linux
+\\
+\hline
+
+hostname &
+hostname &
+-f, -I &
+Consulta el nombre del equipo y, según el sistema, direcciones IP asociadas. &
+Linux/macOS
+\\
+\hline
+
+lscpu &
+lscpu &
+N/A &
+Obtiene información detallada del procesador. &
+Linux
+\\
+\hline
+
+lsmem &
+lsmem &
+N/A &
+Presenta la distribución de la memoria física. &
+Linux
+\\
+\hline
+
+lsblk &
+lsblk &
+-f &
+Lista dispositivos de almacenamiento, particiones y sistemas de archivos. &
+Linux
+\\
+\hline
+
+systeminfo &
+systeminfo &
+N/A &
+Obtiene un resumen completo del sistema operativo Windows. &
+Windows
+\\
+\hline
+
+Get-ComputerInfo &
+Get-ComputerInfo &
+N/A &
+Equivalente en PowerShell para consultar información del sistema. &
+Windows
+\\
+\hline
+
+sw\_vers &
+sw\_vers &
+N/A &
+Consulta la versión del sistema operativo macOS. &
+macOS
+\\
+\hline
+
+\end{longtable}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\subsection{Paso 13. Verificación del sistema de archivos y almacenamiento}
+
+Una parte importante del proceso de troubleshooting consiste en verificar el
+estado del almacenamiento, los sistemas de archivos y los puntos de montaje.
+
+Durante esta etapa se busca responder preguntas como:
+
+\begin{itemize}
+\item ¿Existe espacio libre en disco?
+\item ¿El sistema de archivos está montado?
+\item ¿Se encuentra en modo de solo lectura?
+\item ¿Se agotaron los inodos?
+\item ¿El dispositivo fue detectado correctamente?
+\item ¿Los permisos del archivo son correctos?
+\end{itemize}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\subsubsection{Espacio en disco}
+
+\begin{longtable}{|p{2.8cm}|p{3.2cm}|p{4cm}|p{5.4cm}|p{1.5cm}|}
+
+\hline
+Comando &
+Sintaxis &
+Argumentos útiles &
+Particularidad &
+OS
+\\
+\hline
+\endhead
+
+df &
+df -h &
+-T, -i &
+Muestra el espacio utilizado y disponible por sistema de archivos. Constituye el primer comando utilizado para diagnosticar problemas de almacenamiento. &
+Linux/macOS
+\\
+\hline
+
+df &
+df -i &
+-h &
+Permite comprobar el consumo de inodos. Un sistema puede quedarse sin inodos aun teniendo espacio libre. &
+Linux
+\\
+\hline
+
+du &
+du -sh directorio &
+-h, -d &
+Calcula el espacio ocupado por archivos o directorios específicos. Muy útil para localizar consumo excesivo de almacenamiento. &
+Linux/macOS
+\\
+\hline
+
+du &
+du -sh * &
+--max-depth &
+Resume el tamaño ocupado por cada directorio del nivel actual. &
+Linux/macOS
+\\
+\hline
+
+ncdu &
+ncdu &
+N/A &
+Herramienta interactiva para explorar el uso del almacenamiento por directorios. Muy útil durante troubleshooting. &
+Linux
+\\
+\hline
+
+Get-PSDrive &
+Get-PSDrive &
+N/A &
+Consulta la utilización de las unidades de almacenamiento desde PowerShell. &
+Windows
+\\
+\hline
+
+wmic &
+wmic logicaldisk get size,freespace,caption &
+N/A &
+Obtiene el espacio libre de las unidades en Windows. &
+Windows
+\\
+\hline
+
+\end{longtable}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\subsubsection{Dispositivos y particiones}
+
+\begin{longtable}{|p{2.8cm}|p{3.2cm}|p{4cm}|p{5.4cm}|p{1.5cm}|}
+
+\hline
+Comando &
+Sintaxis &
+Argumentos útiles &
+Particularidad &
+OS
+\\
+\hline
+\endhead
+
+lsblk &
+lsblk &
+-f, -o &
+Lista discos, particiones, UUID y puntos de montaje. Constituye normalmente el primer comando para verificar almacenamiento. &
+Linux
+\\
+\hline
+
+blkid &
+blkid &
+N/A &
+Obtiene UUID, etiquetas y tipos de sistema de archivos. &
+Linux
+\\
+\hline
+
+fdisk &
+fdisk -l &
+N/A &
+Lista las particiones detectadas por el sistema. &
+Linux
+\\
+\hline
+
+parted &
+parted -l &
+N/A &
+Consulta la tabla de particiones de todos los discos disponibles. &
+Linux
+\\
+\hline
+
+mount &
+mount &
+-t &
+Lista todos los sistemas de archivos actualmente montados. &
+Linux/macOS
+\\
+\hline
+
+findmnt &
+findmnt &
+-t &
+Presenta una vista jerárquica de los sistemas de archivos montados. &
+Linux
+\\
+\hline
+
+diskutil &
+diskutil list &
+info &
+Herramienta principal para administrar discos en macOS. &
+macOS
+\\
+\hline
+
+Get-Disk &
+Get-Disk &
+N/A &
+Lista discos físicos disponibles mediante PowerShell. &
+Windows
+\\
+\hline
+
+Get-Volume &
+Get-Volume &
+N/A &
+Consulta volúmenes y sistemas de archivos montados en Windows. &
+Windows
+\\
+\hline
+
+\end{longtable}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\subsubsection{Montaje de sistemas de archivos}
+
+\begin{longtable}{|p{2.8cm}|p{3.2cm}|p{4cm}|p{5.4cm}|p{1.5cm}|}
+
+\hline
+Comando &
+Sintaxis &
+Argumentos útiles &
+Particularidad &
+OS
+\\
+\hline
+\endhead
+
+mount &
+mount dispositivo directorio &
+-o, -t &
+Permite montar manualmente un sistema de archivos. &
+Linux/macOS
+\\
+\hline
+
+umount &
+umount directorio &
+-l, -f &
+Desmonta un sistema de archivos. Muy útil antes de realizar mantenimiento o retirar dispositivos. &
+Linux/macOS
+\\
+\hline
+
+mountpoint &
+mountpoint directorio &
+-q &
+Permite comprobar si un directorio constituye un punto de montaje. &
+Linux
+\\
+\hline
+
+findmnt &
+findmnt directorio &
+N/A &
+Obtiene información específica sobre un punto de montaje. &
+Linux
+\\
+\hline
+
+fsck &
+fsck dispositivo &
+-y, -f &
+Verifica y repara inconsistencias en sistemas de archivos. Debe ejecutarse preferentemente sobre sistemas desmontados. &
+Linux
+\\
+\hline
+
+e2fsck &
+e2fsck dispositivo &
+-f &
+Versión especializada para sistemas de archivos ext2/ext3/ext4. &
+Linux
+\\
+\hline
+
+xfs\_repair &
+xfs\_repair dispositivo &
+-L &
+Repara sistemas de archivos XFS. &
+Linux
+\\
+\hline
+
+diskutil &
+diskutil verifyVolume &
+repairVolume &
+Verifica y repara volúmenes en macOS. &
+macOS
+\\
+\hline
+
+chkdsk &
+chkdsk unidad: &
+/f, /r &
+Herramienta clásica para comprobar y reparar sistemas de archivos NTFS/FAT. &
+Windows
+\\
+\hline
+
+\end{longtable}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\subsubsection{Información de archivos}
+
+\begin{longtable}{|p{2.8cm}|p{3.2cm}|p{4cm}|p{5.4cm}|p{1.5cm}|}
+
+\hline
+Comando &
+Sintaxis &
+Argumentos útiles &
+Particularidad &
+OS
+\\
+\hline
+\endhead
+
+stat &
+stat archivo &
+-c &
+Presenta información detallada sobre un archivo: permisos, propietario, tamaño, fechas e inodo. Es una de las herramientas más útiles para troubleshooting relacionado con archivos. &
+Linux/macOS
+\\
+\hline
+
+file &
+file archivo &
+-i &
+Determina el tipo real de un archivo analizando su contenido y no únicamente su extensión. &
+Linux/macOS
+\\
+\hline
+
+readlink &
+readlink enlace &
+-f &
+Resuelve enlaces simbólicos mostrando la ruta real del archivo. &
+Linux/macOS
+\\
+\hline
+
+realpath &
+realpath archivo &
+N/A &
+Obtiene la ruta absoluta y resuelve enlaces simbólicos. &
+Linux/macOS
+\\
+\hline
+
+ls &
+ls -li &
+-l, -a, -h &
+Permite consultar permisos, propietarios e inodos de archivos y directorios. &
+Linux/macOS
+\\
+\hline
+
+attrib &
+attrib archivo &
++s, -s &
+Consulta y modifica atributos de archivos en Windows. &
+Windows
+\\
+\hline
+
+Get-Item &
+Get-Item archivo &
+Force &
+Obtiene propiedades detalladas de un archivo mediante PowerShell. &
+Windows
+\\
+\hline
+
+\end{longtable}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\subsection{Paso 14. Verificación de usuarios, grupos y permisos}
+
+Una causa frecuente de incidencias corresponde a permisos insuficientes sobre
+archivos, directorios o recursos del sistema.
+
+Durante esta etapa se busca responder preguntas como:
+
+\begin{itemize}
+\item ¿Con qué usuario se está ejecutando la aplicación?
+\item ¿Quién es el propietario del archivo?
+\item ¿Qué permisos posee?
+\item ¿El usuario pertenece al grupo correcto?
+\item ¿Existen ACLs adicionales?
+\item ¿SELinux o AppArmor están restringiendo el acceso?
+\end{itemize}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\subsubsection{Usuarios y grupos}
+
+\begin{longtable}{|p{2.8cm}|p{3.2cm}|p{4cm}|p{5.4cm}|p{1.5cm}|}
+
+\hline
+Comando &
+Sintaxis &
+Argumentos útiles &
+Particularidad &
+OS
+\\
+\hline
+\endhead
+
+whoami &
+whoami &
+N/A &
+Muestra el usuario con el que se está ejecutando la sesión actual. Constituye normalmente la primera verificación relacionada con permisos. &
+Linux/macOS
+\\
+\hline
+
+id &
+id &
+-u, -g &
+Obtiene el UID, GID y grupos secundarios del usuario actual o de un usuario específico. &
+Linux/macOS
+\\
+\hline
+
+groups &
+groups usuario &
+N/A &
+Lista los grupos a los que pertenece un usuario. &
+Linux/macOS
+\\
+\hline
+
+getent &
+getent passwd usuario &
+group &
+Consulta usuarios y grupos utilizando las bases de datos configuradas por el sistema (locales, LDAP, etc.). &
+Linux
+\\
+\hline
+
+who &
+who &
+-a &
+Lista los usuarios conectados al sistema. &
+Linux/macOS
+\\
+\hline
+
+w &
+w &
+-h &
+Muestra usuarios conectados junto con la actividad que realizan. &
+Linux
+\\
+\hline
+
+users &
+users &
+N/A &
+Presenta únicamente los nombres de los usuarios conectados. &
+Linux/macOS
+\\
+\hline
+
+logname &
+logname &
+N/A &
+Obtiene el usuario que inició la sesión actual. &
+Linux/macOS
+\\
+\hline
+
+query user &
+query user &
+N/A &
+Lista las sesiones activas en Windows. &
+Windows
+\\
+\hline
+
+whoami &
+whoami /all &
+/groups, /priv &
+Muestra información completa del usuario, SID, privilegios y grupos de seguridad. Muy útil durante troubleshooting de permisos en Windows. &
+Windows
+\\
+\hline
+
+Get-LocalUser &
+Get-LocalUser &
+Name &
+Obtiene usuarios locales mediante PowerShell. &
+Windows
+\\
+\hline
+
+Get-LocalGroup &
+Get-LocalGroup &
+N/A &
+Lista los grupos locales existentes. &
+Windows
+\\
+\hline
+
+\end{longtable}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\subsubsection{Permisos y propietarios}
+
+\begin{longtable}{|p{2.8cm}|p{3.2cm}|p{4cm}|p{5.4cm}|p{1.5cm}|}
+
+\hline
+Comando &
+Sintaxis &
+Argumentos útiles &
+Particularidad &
+OS
+\\
+\hline
+\endhead
+
+ls &
+ls -l &
+-a, -h, -i &
+Permite visualizar propietario, grupo y permisos POSIX de archivos y directorios. &
+Linux/macOS
+\\
+\hline
+
+stat &
+stat archivo &
+-c &
+Presenta información detallada sobre permisos, propietario, fechas e inodo. &
+Linux/macOS
+\\
+\hline
+
+chmod &
+chmod 755 archivo &
+-R &
+Modifica permisos POSIX utilizando notación octal o simbólica. &
+Linux/macOS
+\\
+\hline
+
+chown &
+chown usuario archivo &
+-R &
+Cambia el propietario de archivos y directorios. &
+Linux/macOS
+\\
+\hline
+
+chgrp &
+chgrp grupo archivo &
+-R &
+Modifica el grupo propietario de archivos y directorios. &
+Linux/macOS
+\\
+\hline
+
+umask &
+umask &
+-S &
+Consulta o modifica la máscara de permisos por defecto utilizada al crear archivos nuevos. &
+Linux/macOS
+\\
+\hline
+
+icacls &
+icacls archivo &
+/grant, /deny, /inheritance &
+Consulta y modifica listas de control de acceso (ACL) en Windows. &
+Windows
+\\
+\hline
+
+takeown &
+takeown /F archivo &
+/R &
+Permite tomar posesión de archivos o directorios. &
+Windows
+\\
+\hline
+
+Get-Acl &
+Get-Acl archivo &
+N/A &
+Obtiene las ACL de un archivo mediante PowerShell. &
+Windows
+\\
+\hline
+
+Set-Acl &
+Set-Acl &
+N/A &
+Aplica listas de control de acceso desde PowerShell. &
+Windows
+\\
+\hline
+
+\end{longtable}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\subsubsection{ACL, SELinux y AppArmor}
+
+Además de los permisos tradicionales, algunos sistemas utilizan mecanismos de
+seguridad adicionales que pueden impedir el acceso a recursos incluso cuando
+los permisos POSIX parecen correctos.
+
+\begin{longtable}{|p{2.8cm}|p{3.2cm}|p{4cm}|p{5.4cm}|p{1.5cm}|}
+
+\hline
+Comando &
+Sintaxis &
+Argumentos útiles &
+Particularidad &
+OS
+\\
+\hline
+\endhead
+
+getfacl &
+getfacl archivo &
+-R &
+Consulta las listas de control de acceso (ACL) aplicadas a un archivo o directorio. &
+Linux
+\\
+\hline
+
+setfacl &
+setfacl &
+-m, -x, -R &
+Agrega, modifica o elimina ACLs. Muy utilizado cuando los permisos POSIX no son suficientes. &
+Linux
+\\
+\hline
+
+sestatus &
+sestatus &
+-v &
+Consulta el estado actual de SELinux. Constituye normalmente el primer comando cuando SELinux podría estar bloqueando una aplicación. &
+Linux
+\\
+\hline
+
+getenforce &
+getenforce &
+N/A &
+Indica si SELinux opera en modo Enforcing, Permissive o Disabled. &
+Linux
+\\
+\hline
+
+restorecon &
+restorecon &
+-R &
+Restaura el contexto de seguridad predeterminado sobre archivos y directorios. &
+Linux
+\\
+\hline
+
+ls &
+ls -Z &
+N/A &
+Muestra el contexto SELinux asociado a cada archivo. &
+Linux
+\\
+\hline
+
+aa-status &
+aa-status &
+N/A &
+Consulta el estado de AppArmor y los perfiles actualmente cargados. &
+Linux
+\\
+\hline
+
+aa-complain &
+aa-complain perfil &
+N/A &
+Coloca un perfil de AppArmor en modo de aprendizaje (complain). &
+Linux
+\\
+\hline
+
+aa-enforce &
+aa-enforce perfil &
+N/A &
+Activa nuevamente el modo de protección de un perfil AppArmor. &
+Linux
+\\
+\hline
+
+\end{longtable}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\subsection{Paso 15. Transferencia y compresión de archivos}
+
+Durante una incidencia suele ser necesario respaldar archivos, transferir logs,
+copiar configuraciones entre equipos o comprimir información antes de enviarla
+a otro equipo de soporte.
+
+Las siguientes herramientas permiten realizar dichas tareas de forma segura y
+eficiente.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\subsubsection{Transferencia de archivos}
+
+\begin{longtable}{|p{2.8cm}|p{3.3cm}|p{4cm}|p{5.3cm}|p{1.5cm}|}
+
+\hline
+Comando &
+Sintaxis &
+Argumentos útiles &
+Particularidad &
+OS
+\\
+\hline
+\endhead
+
+scp &
+scp archivo usuario@host:/ruta &
+-r, -P, -i, -C &
+Permite copiar archivos mediante SSH. Constituye uno de los métodos más utilizados para transferir logs entre servidores. &
+Linux/macOS
+\\
+\hline
+
+sftp &
+sftp usuario@host &
+put, get, ls, cd &
+Proporciona una sesión interactiva para transferir archivos utilizando SSH. &
+Linux/macOS
+\\
+\hline
+
+rsync &
+rsync -av origen destino &
+-z, --delete, -e, --progress &
+Sincroniza archivos y directorios transfiriendo únicamente las diferencias. Muy útil para respaldos y despliegues. &
+Linux/macOS
+\\
+\hline
+
+curl &
+curl -O URL &
+-o, -L, -u, --upload-file &
+Además de realizar solicitudes HTTP, permite descargar y enviar archivos mediante distintos protocolos (HTTP, HTTPS, FTP, SFTP, etc.). &
+Linux/macOS/Windows
+\\
+\hline
+
+wget &
+wget URL &
+-c, -O, -q, --mirror &
+Herramienta orientada principalmente a la descarga de archivos y sitios web. &
+Linux
+\\
+\hline
+
+ftp &
+ftp servidor &
+put, get &
+Cliente clásico para servidores FTP. Actualmente suele reservarse para entornos heredados debido a la ausencia de cifrado. &
+Linux/macOS/Windows
+\\
+\hline
+
+nc &
+nc host puerto &
+-l, -p &
+Puede utilizarse para transferencias simples de archivos entre dos equipos cuando no se dispone de otros servicios. &
+Linux/macOS
+\\
+\hline
+
+Copy-Item &
+Copy-Item origen destino &
+-Recurse &
+Copia archivos y directorios mediante PowerShell. &
+Windows
+\\
+\hline
+
+Start-BitsTransfer &
+Start-BitsTransfer URL &
+Destination &
+Realiza descargas utilizando el servicio BITS de Windows, permitiendo reanudación automática de transferencias. &
+Windows
+\\
+\hline
+
+robocopy &
+robocopy origen destino &
+/E, /MIR, /COPY, /MT &
+Herramienta de copia robusta para Windows. Muy utilizada para respaldos y sincronización de directorios. &
+Windows
+\\
+\hline
+
+\end{longtable}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\subsubsection{Compresión y descompresión}
+
+Durante el troubleshooting es frecuente comprimir archivos de log antes de
+compartirlos con otros equipos o almacenarlos como evidencia.
+
+\begin{longtable}{|p{2.8cm}|p{3.3cm}|p{4cm}|p{5.3cm}|p{1.5cm}|}
+
+\hline
+Comando &
+Sintaxis &
+Argumentos útiles &
+Particularidad &
+OS
+\\
+\hline
+\endhead
+
+tar &
+tar -cvf respaldo.tar directorio &
+-c, -x, -t, -v, -f &
+Empaqueta múltiples archivos en un único archivo TAR. Normalmente se combina con herramientas de compresión como gzip o xz. &
+Linux/macOS
+\\
+\hline
+
+tar &
+tar -xvf respaldo.tar &
+-C &
+Extrae el contenido de un archivo TAR. &
+Linux/macOS
+\\
+\hline
+
+gzip &
+gzip archivo &
+-d, -k &
+Comprime archivos utilizando el algoritmo Gzip. &
+Linux/macOS
+\\
+\hline
+
+gunzip &
+gunzip archivo.gz &
+-c &
+Descomprime archivos en formato Gzip. &
+Linux/macOS
+\\
+\hline
+
+bzip2 &
+bzip2 archivo &
+-d &
+Algoritmo de compresión con mayor relación de compresión que gzip, aunque más lento. &
+Linux/macOS
+\\
+\hline
+
+xz &
+xz archivo &
+-d, -T &
+Proporciona una de las mayores tasas de compresión disponibles en herramientas estándar. &
+Linux/macOS
+\\
+\hline
+
+zip &
+zip -r respaldo.zip directorio &
+-r, -9 &
+Genera archivos ZIP compatibles con la mayoría de los sistemas operativos. &
+Todos
+\\
+\hline
+
+unzip &
+unzip respaldo.zip &
+-d &
+Extrae archivos comprimidos en formato ZIP. &
+Todos
+\\
+\hline
+
+7z &
+7z a respaldo.7z directorio &
+x, l &
+Herramienta de compresión de alta eficiencia compatible con numerosos formatos. &
+Linux/Windows
+\\
+\hline
+
+Compress-Archive &
+Compress-Archive ruta archivo.zip &
+DestinationPath &
+Comprime archivos utilizando PowerShell. &
+Windows
+\\
+\hline
+
+Expand-Archive &
+Expand-Archive archivo.zip &
+DestinationPath &
+Extrae archivos ZIP mediante PowerShell. &
+Windows
+\\
+\hline
+
+\end{longtable}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\subsubsection{Verificación de integridad}
+
+Después de transferir archivos resulta recomendable comprobar que la
+información no haya sido modificada durante el proceso.
+
+\begin{longtable}{|p{2.8cm}|p{3.3cm}|p{4cm}|p{5.3cm}|p{1.5cm}|}
+
+\hline
+Comando &
+Sintaxis &
+Argumentos útiles &
+Particularidad &
+OS
+\\
+\hline
+\endhead
+
+md5sum &
+md5sum archivo &
+-c &
+Calcula el hash MD5 de un archivo. Adecuado para verificar integridad, aunque no se recomienda para fines criptográficos. &
+Linux/macOS
+\\
+\hline
+
+sha1sum &
+sha1sum archivo &
+-c &
+Calcula el hash SHA-1. Actualmente se utiliza principalmente por compatibilidad. &
+Linux/macOS
+\\
+\hline
+
+sha256sum &
+sha256sum archivo &
+-c &
+Calcula el hash SHA-256. Es el algoritmo recomendado para verificar integridad durante la transferencia de archivos. &
+Linux/macOS
+\\
+\hline
+
+shasum &
+shasum -a 256 archivo &
+-a &
+Versión disponible en macOS para calcular diferentes algoritmos SHA. &
+macOS
+\\
+\hline
+
+certutil &
+certutil -hashfile archivo SHA256 &
+MD5, SHA1 &
+Permite calcular hashes desde la línea de comandos de Windows. &
+Windows
+\\
+\hline
+
+Get-FileHash &
+Get-FileHash archivo &
+-Algorithm &
+Calcula hashes utilizando PowerShell (SHA256, SHA384, SHA512, entre otros). &
+Windows
+\\
+\hline
+
+\end{longtable}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\subsection{Paso 16. Verificación del entorno de ejecución}
+
+Durante el troubleshooting es frecuente que una aplicación falle debido a una
+configuración incorrecta del entorno de ejecución y no por un problema propio
+del software.
+
+Las siguientes herramientas permiten inspeccionar variables de entorno,
+ejecutables disponibles, historial de comandos y otros elementos que pueden
+afectar el comportamiento de una aplicación.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\subsubsection{Variables de entorno}
+
+\begin{longtable}{|p{2.8cm}|p{3.3cm}|p{4cm}|p{5.3cm}|p{1.5cm}|}
+
+\hline
+Comando &
+Sintaxis &
+Argumentos útiles &
+Particularidad &
+OS
+\\
+\hline
+\endhead
+
+env &
+env &
+-i &
+Muestra todas las variables de entorno disponibles para el proceso actual. También puede ejecutar un programa con un entorno personalizado. &
+Linux/macOS
+\\
+\hline
+
+printenv &
+printenv &
+VARIABLE &
+Permite consultar el valor de una variable de entorno específica o listar todas las existentes. &
+Linux/macOS
+\\
+\hline
+
+export &
+export VARIABLE=valor &
+-n &
+Define variables de entorno para la sesión actual y para los procesos hijos. &
+Linux/macOS
+\\
+\hline
+
+unset &
+unset VARIABLE &
+N/A &
+Elimina variables de entorno de la sesión actual. &
+Linux/macOS
+\\
+\hline
+
+set &
+set &
+-o &
+Muestra variables de shell y opciones activas. En Windows muestra las variables de entorno del sistema. &
+Linux/Windows
+\\
+\hline
+
+setx &
+setx VARIABLE valor &
+/M &
+Define variables de entorno permanentes en Windows. &
+Windows
+\\
+\hline
+
+Get-ChildItem Env: &
+Get-ChildItem Env: &
+N/A &
+Lista todas las variables de entorno disponibles mediante PowerShell. &
+Windows
+\\
+\hline
+
+\$Env:VARIABLE &
+\$Env:PATH &
+N/A &
+Permite consultar o modificar variables de entorno desde PowerShell. &
+Windows
+\\
+\hline
+
+\end{longtable}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\subsubsection{Localización de ejecutables}
+
+Una causa frecuente de incidencias consiste en ejecutar una versión diferente
+del programa esperado.
+
+\begin{longtable}{|p{2.8cm}|p{3.3cm}|p{4cm}|p{5.3cm}|p{1.5cm}|}
+
+\hline
+Comando &
+Sintaxis &
+Argumentos útiles &
+Particularidad &
+OS
+\\
+\hline
+\endhead
+
+which &
+which python &
+-a &
+Muestra el ejecutable que será utilizado al invocar un comando. &
+Linux/macOS
+\\
+\hline
+
+whereis &
+whereis nginx &
+-b, -m &
+Localiza ejecutables, código fuente y páginas del manual. &
+Linux
+\\
+\hline
+
+type &
+type ls &
+-a &
+Indica si un comando corresponde a un ejecutable, alias, función o builtin del shell. &
+Linux/macOS
+\\
+\hline
+
+command &
+command -v python &
+-V &
+Determina cómo resolverá el shell un comando determinado. &
+Linux/macOS
+\\
+\hline
+
+where &
+where python &
+N/A &
+Busca ejecutables en el PATH de Windows. &
+Windows
+\\
+\hline
+
+Get-Command &
+Get-Command git &
+-All &
+Obtiene información detallada sobre cmdlets, scripts y ejecutables disponibles en PowerShell. &
+Windows
+\\
+\hline
+
+\end{longtable}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\subsubsection{Historial y automatización}
+
+Los siguientes comandos facilitan la reproducción de problemas y la
+documentación de procedimientos.
+
+\begin{longtable}{|p{2.8cm}|p{3.3cm}|p{4cm}|p{5.3cm}|p{1.5cm}|}
+
+\hline
+Comando &
+Sintaxis &
+Argumentos útiles &
+Particularidad &
+OS
+\\
+\hline
+\endhead
+
+history &
+history &
+-c &
+Muestra el historial de comandos ejecutados por el usuario. Muy útil para reproducir acciones recientes. &
+Linux/macOS
+\\
+\hline
+
+fc &
+fc &
+-l &
+Permite listar, editar y volver a ejecutar comandos del historial. &
+Linux/macOS
+\\
+\hline
+
+alias &
+alias &
+N/A &
+Lista o define alias para comandos. Puede explicar comportamientos inesperados durante una sesión. &
+Linux/macOS
+\\
+\hline
+
+unalias &
+unalias nombre &
+-a &
+Elimina alias previamente definidos. &
+Linux/macOS
+\\
+\hline
+
+tee &
+comando | tee salida.log &
+-a &
+Guarda simultáneamente la salida de un comando en pantalla y en un archivo. Muy útil para generar evidencia durante una incidencia. &
+Linux/macOS
+\\
+\hline
+
+xargs &
+find ... | xargs comando &
+-0, -I &
+Convierte la salida de un comando en argumentos para otro. Muy utilizado en comandos compuestos de troubleshooting. &
+Linux/macOS
+\\
+\hline
+
+nohup &
+nohup comando \& &
+N/A &
+Permite que un proceso continúe ejecutándose aun cuando la sesión termine. &
+Linux/macOS
+\\
+\hline
+
+script &
+script evidencia.log &
+-a &
+Registra toda la sesión de terminal en un archivo para documentar una incidencia. &
+Linux/macOS
+\\
+\hline
+
+PowerShell Start-Transcript &
+Start-Transcript &
+Path &
+Genera un registro completo de una sesión de PowerShell. Muy útil para auditoría y documentación. &
+Windows
+\\
+\hline
+
+PowerShell Stop-Transcript &
+Stop-Transcript &
+N/A &
+Finaliza la captura iniciada con Start-Transcript. &
+Windows
+\\
+\hline
+
+\end{longtable}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\subsubsection{Información del entorno}
+
+\begin{longtable}{|p{2.8cm}|p{3.3cm}|p{4cm}|p{5.3cm}|p{1.5cm}|}
+
+\hline
+Comando &
+Sintaxis &
+Argumentos útiles &
+Particularidad &
+OS
+\\
+\hline
+\endhead
+
+pwd &
+pwd &
+-P &
+Muestra el directorio de trabajo actual. &
+Linux/macOS
+\\
+\hline
+
+echo &
+echo \$PATH &
+N/A &
+Permite visualizar variables de entorno y verificar su contenido. &
+Linux/macOS
+\\
+\hline
+
+dirname &
+dirname ruta &
+N/A &
+Obtiene el directorio asociado a una ruta determinada. &
+Linux/macOS
+\\
+\hline
+
+basename &
+basename ruta &
+-s &
+Extrae únicamente el nombre del archivo a partir de una ruta completa. &
+Linux/macOS
+\\
+\hline
+
+realpath &
+realpath archivo &
+N/A &
+Obtiene la ruta absoluta resolviendo enlaces simbólicos. &
+Linux/macOS
+\\
+\hline
+
+readlink &
+readlink -f archivo &
+N/A &
+Resuelve enlaces simbólicos y muestra el archivo real. &
+Linux/macOS
+\\
+\hline
+
+\end{longtable}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\subsection{Paso 17. Herramientas avanzadas de diagnóstico}
+
+Cuando las verificaciones tradicionales no permiten identificar la causa de una
+incidencia, resulta necesario utilizar herramientas que permitan inspeccionar
+el comportamiento interno de procesos, binarios, bibliotecas compartidas y del
+propio sistema operativo.
+
+Estas herramientas suelen emplearse durante tareas de soporte avanzado (L2/L3),
+administración de sistemas, ingeniería de confiabilidad (SRE) e ingeniería de
+software.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\subsubsection{Seguimiento de llamadas al sistema}
+
+Las siguientes herramientas permiten observar la interacción entre un proceso y
+el kernel del sistema operativo.
+
+\begin{longtable}{|p{2.8cm}|p{3.3cm}|p{4cm}|p{5.3cm}|p{1.5cm}|}
+
+\hline
+Comando &
+Sintaxis &
+Argumentos útiles &
+Particularidad &
+OS
+\\
+\hline
+\endhead
+
+strace &
+strace programa &
+-f, -p, -o, -e, -tt &
+Permite observar todas las llamadas al sistema realizadas por un proceso. Es una de las herramientas más utilizadas cuando una aplicación falla sin registrar errores en sus logs.
+&
+Linux
+\\
+\hline
+
+strace &
+strace -p PID &
+-f &
+Se conecta a un proceso que ya se encuentra ejecutándose sin necesidad de reiniciarlo.
+&
+Linux
+\\
+\hline
+
+ltrace &
+ltrace programa &
+-f, -o, -e &
+Muestra las llamadas realizadas a bibliotecas compartidas (libc, OpenSSL, etc.).
+&
+Linux
+\\
+\hline
+
+ktrace &
+ktrace comando &
+-i &
+Equivalente disponible en algunos sistemas BSD y macOS.
+&
+macOS/BSD
+\\
+\hline
+
+truss &
+truss comando &
+-p &
+Herramienta equivalente presente en Solaris y algunos Unix.
+&
+Unix
+\\
+\hline
+
+\end{longtable}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\subsubsection{Bibliotecas y ejecutables}
+
+Cuando una aplicación no inicia, resulta habitual verificar dependencias,
+bibliotecas compartidas y formato del ejecutable.
+
+\begin{longtable}{|p{2.8cm}|p{3.3cm}|p{4cm}|p{5.3cm}|p{1.5cm}|}
+
+\hline
+Comando &
+Sintaxis &
+Argumentos útiles &
+Particularidad &
+OS
+\\
+\hline
+\endhead
+
+ldd &
+ldd ejecutable &
+-v &
+Lista todas las bibliotecas dinámicas requeridas por un programa.
+&
+Linux
+\\
+\hline
+
+file &
+file ejecutable &
+-i &
+Determina el tipo real del archivo, arquitectura y formato.
+&
+Linux/macOS
+\\
+\hline
+
+strings &
+strings ejecutable &
+-a &
+Extrae cadenas ASCII presentes en archivos binarios.
+&
+Linux/macOS
+\\
+\hline
+
+readelf &
+readelf -a ejecutable &
+-h, -d, -s &
+Permite inspeccionar completamente un ejecutable ELF.
+&
+Linux
+\\
+\hline
+
+objdump &
+objdump -x ejecutable &
+-d, -p &
+Obtiene información de secciones, símbolos y código ensamblador.
+&
+Linux
+\\
+\hline
+
+nm &
+nm ejecutable &
+-D &
+Lista los símbolos definidos y requeridos por un ejecutable.
+&
+Linux/macOS
+\\
+\hline
+
+otool &
+otool -L ejecutable &
+-hv &
+Equivalente de ldd para macOS.
+&
+macOS
+\\
+\hline
+
+dumpbin &
+dumpbin /DEPENDENTS archivo.exe &
+/HEADERS &
+Permite inspeccionar ejecutables PE en Windows.
+&
+Windows
+\\
+\hline
+
+\end{longtable}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\subsubsection{Depuración y análisis de procesos}
+
+\begin{longtable}{|p{2.8cm}|p{3.3cm}|p{4cm}|p{5.3cm}|p{1.5cm}|}
+
+\hline
+Comando &
+Sintaxis &
+Argumentos útiles &
+Particularidad &
+OS
+\\
+\hline
+\endhead
+
+gdb &
+gdb ejecutable &
+-p, bt &
+Permite depurar aplicaciones, inspeccionar memoria y obtener backtraces.
+&
+Linux
+\\
+\hline
+
+gcore &
+gcore PID &
+N/A &
+Genera un core dump de un proceso sin finalizarlo.
+&
+Linux
+\\
+\hline
+
+pstack &
+pstack PID &
+N/A &
+Obtiene el stack trace de un proceso en ejecución.
+&
+Linux
+\\
+\hline
+
+coredumpctl &
+coredumpctl list &
+info, gdb &
+Administra y consulta core dumps generados por systemd.
+&
+Linux
+\\
+\hline
+
+lldb &
+lldb ejecutable &
+process attach &
+Depurador principal disponible en macOS.
+&
+macOS
+\\
+\hline
+
+WinDbg &
+windbg.exe &
+N/A &
+Depurador avanzado para Windows.
+&
+Windows
+\\
+\hline
+
+\end{longtable}
+
+
+%%%%%%%%
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\subsubsection{Análisis de rendimiento}
+
+\begin{longtable}{|p{2.8cm}|p{3.3cm}|p{4cm}|p{5.3cm}|p{1.5cm}|}
+
+\hline
+Comando &
+Sintaxis &
+Argumentos útiles &
+Particularidad &
+OS
+\\
+\hline
+\endhead
+
+perf &
+perf stat comando &
+record, report, top &
+Herramienta principal para análisis de rendimiento del kernel y aplicaciones.
+&
+Linux
+\\
+\hline
+
+pidstat &
+pidstat 1 &
+-r, -u, -d &
+Obtiene estadísticas detalladas por proceso.
+&
+Linux
+\\
+\hline
+
+sar &
+sar &
+-u, -r, -n, -d &
+Permite consultar métricas históricas de CPU, memoria, red y disco.
+&
+Linux
+\\
+\hline
+
+dstat &
+dstat &
+-c, -m, -d, -n &
+Presenta métricas de múltiples subsistemas simultáneamente.
+&
+Linux
+\\
+\hline
+
+vmstat &
+vmstat 1 &
+N/A &
+Resume continuamente el estado del sistema.
+&
+Linux/macOS
+\\
+\hline
+
+\end{longtable}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\subsubsection{Inspección binaria}
+
+\begin{longtable}{|p{2.8cm}|p{3.3cm}|p{4cm}|p{5.3cm}|p{1.5cm}|}
+
+\hline
+Comando &
+Sintaxis &
+Argumentos útiles &
+Particularidad &
+OS
+\\
+\hline
+\endhead
+
+hexdump &
+hexdump -C archivo &
+-n &
+Visualiza archivos en formato hexadecimal.
+&
+Linux/macOS
+\\
+\hline
+
+xxd &
+xxd archivo &
+-r &
+Convierte archivos binarios a hexadecimal y viceversa.
+&
+Linux/macOS
+\\
+\hline
+
+od &
+od archivo &
+-x, -c &
+Permite visualizar archivos en distintos formatos numéricos.
+&
+Linux/macOS
+\\
+\hline
+
+cmp &
+cmp archivo1 archivo2 &
+-l &
+Compara dos archivos byte por byte.
+&
+Linux/macOS
+\\
+\hline
+
+diff &
+diff archivo1 archivo2 &
+-u, -r &
+Compara archivos de texto mostrando únicamente las diferencias.
+&
+Todos
+\\
+\hline
+
+\end{longtable}
+
+%%%%%%
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\subsubsection{Herramientas de monitoreo avanzado}
+
+\begin{longtable}{|p{2.8cm}|p{3.3cm}|p{4cm}|p{5.3cm}|p{1.5cm}|}
+
+\hline
+Comando &
+Sintaxis &
+Argumentos útiles &
+Particularidad &
+OS
+\\
+\hline
+\endhead
+
+watch &
+watch comando &
+-n &
+Ejecuta periódicamente un comando mostrando las diferencias entre ejecuciones.
+&
+Linux
+\\
+\hline
+
+time &
+time comando &
+-p &
+Mide el tiempo de ejecución consumido por un programa.
+&
+Linux/macOS
+\\
+\hline
+
+timeout &
+timeout 30 comando &
+-s &
+Finaliza automáticamente un proceso después de un tiempo determinado.
+&
+Linux
+\\
+\hline
+
+stdbuf &
+stdbuf -oL comando &
+-i, -e &
+Modifica el comportamiento del buffering de entrada y salida.
+&
+Linux
+\\
+\hline
+
+lsof &
+lsof &
+-p, -i, +D &
+Lista todos los archivos abiertos por el sistema o por un proceso específico.
+&
+Linux/macOS
+\\
+\hline
+
+fuser &
+fuser archivo &
+-k &
+Determina qué proceso mantiene abierto un archivo, directorio o puerto.
+&
+Linux
+\\
+\hline
+
+sysctl &
+sysctl -a &
+-w &
+Consulta y modifica parámetros del kernel en tiempo de ejecución.
+&
+Linux/macOS
+\\
+\hline
+
+ipcs &
+ipcs &
+-q, -m, -s &
+Consulta recursos IPC (memoria compartida, colas de mensajes y semáforos).
+&
+Linux
+\\
+\hline
+
+ipcrm &
+ipcrm &
+-m, -q, -s &
+Elimina recursos IPC que hayan quedado huérfanos.
+&
+Linux
+\\
+\hline
+
+\end{longtable}
+
+
+
+
+
+\end{document}
